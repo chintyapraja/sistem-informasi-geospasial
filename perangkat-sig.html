@@ -106,9 +106,20 @@ footer{color:var(--muted);text-align:center;padding:25px 15px 40px;font-size:13p
   body{background:white}
   section{box-shadow:none;break-inside:avoid}
 }
+.course-nav{background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.course-nav a{color:var(--navy);text-decoration:none;font-weight:700;padding:8px 11px;border-radius:7px}
+.course-nav a:hover,.course-nav a[aria-current]{background:var(--light)}
+.chapter-nav-label{font-size:12px;font-weight:700;color:var(--muted);margin-right:4px}
 </style>
 </head>
 <body>
+<div class="course-nav">
+  <a href="index.html">← Halaman utama</a>
+  <a href="silabus.html">Silabus / RPS</a>
+  <a href="model-data-spasial.html">3 · Model data spasial</a>
+  <a href="data-atribut.html">4 · Basis data atribut</a>
+  <a href="perangkat-sig.html" aria-current="page">5 · Perangkat SIG</a>
+</div>
 <header>
   <div class="header-inner">
     <div class="kicker">Sistem Informasi Geospasial · Materi 5</div>
@@ -118,7 +129,7 @@ footer{color:var(--muted);text-align:center;padding:25px 15px 40px;font-size:13p
 </header>
 
 <nav>
-  <div class="wrap">
+  <div class="wrap"><span class="chapter-nav-label">Pada materi ini:</span>
     <a href="#tujuan">Tujuan</a>
     <a href="#konsep">Konsep</a>
     <a href="#hardware">Hardware</a>
