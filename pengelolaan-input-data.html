@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pengelolaan dan Input Data SIG | Sistem Informasi Geospasial</title>
+<meta name="description" content="Pertemuan 6 Sistem Informasi Geospasial: akuisisi, input, georeferensi, konversi, editing, snapping, dan quality control.">
+<style>
+:root{--ink:#26323e;--blue:#075175;--blue-2:#0a6f85;--muted:#5d6b76;--line:#dce3e8;--paper:#fff;--tint:#f4f7f9;--pale:#edf5f8;--green:#1d7656;--amber:#9a6b12}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:2rem}
+body{margin:0;font:18px/1.72 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+a{color:var(--blue);text-underline-offset:3px}
+.sidebar{position:fixed;inset:0 auto 0 0;width:270px;border-right:1px solid var(--line);padding:36px 25px;overflow:auto;background:var(--tint)}
+.brand{font-size:24px;line-height:1.28;font-weight:700;display:block;text-decoration:none;margin-bottom:8px}.meta{font-size:14px;color:var(--muted)}
+.sidebar nav{margin-top:34px}.sidebar nav a{display:block;padding:8px 11px;margin:3px 0;border-radius:3px;font-size:15px;line-height:1.45;text-decoration:none}
+.sidebar nav a[aria-current]{background:#deebf1;border-left:3px solid var(--blue);font-weight:700}
+.layout{margin-left:270px;display:grid;grid-template-columns:minmax(0,850px) 190px;gap:44px;max-width:1220px;padding:52px 48px 80px}
+main{min-width:0} h1{font-size:43px;line-height:1.18;font-weight:680;letter-spacing:-.8px;margin:12px 0 24px}
+h2{font-size:29px;line-height:1.3;margin:54px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+h3{font-size:23px;line-height:1.4;margin:34px 0 11px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:13px;font-weight:750;color:var(--blue)}
+.lead{font-size:21px;line-height:1.65;color:#465866}.toc{align-self:start;position:sticky;top:28px;font-size:14px;line-height:1.45;border-left:1px solid var(--line);padding-left:19px}
+.toc a{display:block;margin:11px 0;text-decoration:none;color:var(--muted)}.toc strong{font-size:14px}
+.material6 section{padding:28px 0;border-bottom:1px solid var(--line)}.material6 section:first-of-type{padding-top:10px}
+.grid,.grid-3{display:grid;gap:14px;margin:18px 0}.grid{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}
+.card{padding:18px;border:1px solid var(--line);background:#fbfcfd}.card small{display:block;font-size:11px;letter-spacing:.1em;color:var(--blue-2);font-weight:800}
+.card b{display:block;font-size:18px;margin:5px 0}.card p{font-size:15px;color:var(--muted);margin:4px 0}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0}.flow span{padding:10px 13px;background:var(--pale);border:1px solid var(--line);font-weight:700}
+.arrow{color:var(--blue)}.note{padding:16px 20px;border-left:4px solid var(--blue);background:#f0f6f9;margin:18px 0}
+.warning{padding:16px 20px;border-left:4px solid #b98218;background:#fff8e8;margin:18px 0}.key-message{padding:24px 27px;background:#083f59;color:#fff;border-radius:8px;margin:24px 0}
+.key-message strong{display:block;font-size:23px}.key-message span{display:block;margin-top:7px;color:#eef7fa}
+table{border-collapse:collapse;width:100%;font-size:16px;margin:24px 0}th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:var(--tint)}
+figure{margin:28px 0}figure>a{display:block}figure img{display:block;width:100%;height:auto;max-height:760px;object-fit:contain;border:1px solid var(--line);background:#fff}
+figcaption{font-size:14px;line-height:1.55;color:var(--muted);margin-top:10px}.source{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:15px}
+.case-question{margin:22px 0 30px;padding:22px 26px;background:#083f59;color:#fff}.case-question strong{font-size:23px;line-height:1.4}
+.answer{padding:15px 18px;background:#eef7f1;border-left:4px solid var(--green);margin:12px 0}
+.checks{list-style:none;padding:0;border-top:1px solid var(--line)}.checks li{position:relative;margin:0;padding:11px 8px 11px 35px;border-bottom:1px solid var(--line)}.checks li:before{content:'✓';position:absolute;left:8px;color:var(--green);font-weight:900}
+.badge{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--blue);margin-bottom:5px}
+footer{border-top:1px solid var(--line);margin-top:55px;padding-top:20px;font-size:14px;color:var(--muted)}
+@media(max-width:1150px){.toc{display:none}.layout{grid-template-columns:minmax(0,1fr);padding:44px 35px}}
+@media(max-width:800px){.sidebar{position:static;width:auto;padding:22px;border-right:0;border-bottom:1px solid var(--line)}.sidebar nav{margin-top:18px;display:flex;flex-wrap:wrap;gap:3px;max-height:230px;overflow-y:auto}.sidebar nav a{padding:6px 8px;font-size:14px}.layout{margin:0;padding:30px 21px 60px}.grid,.grid-3{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}}
+
+.equipment-table img.equipment-thumb{
+  width:82px;
+  height:82px;
+  object-fit:contain;
+  display:block;
+  margin:auto;
+  border:0;
+  background:#fff;
+}
+.equipment-table td{vertical-align:middle}
+.equipment-table small{color:var(--muted)}
+
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <a class="brand" href="https://chintyapraja.github.io/sistem-informasi-geospasial/">Sistem Informasi<br>Geospasial</a>
+  <div class="meta">Bahan perkuliahan</div>
+  <nav aria-label="Navigasi mata kuliah">
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/">Pengantar</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/#pengajar">Profil pengajar</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html">Silabus / RPS</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/kilas-balik-1-2.html">Kilas balik pertemuan 1–2</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/kilas-balik-1-2.html#minggu-1">1 · Data, informasi, dan SIG</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/kilas-balik-1-2.html#minggu-2">2 · Kedudukan dan komponen SIG</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/model-data-spasial.html">3 · Model data spasial</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/data-atribut.html">4 · Basis data atribut</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/perangkat-sig.html">5 · Perangkat SIG</a>
+    <a href="pengelolaan-input-data.html" aria-current="page">6 · Pengelolaan dan input data</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-7">7 · Topologi dan integrasi data</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-8">8 · Ujian Tengah Semester</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-9">9 · Retrieval, klasifikasi, pengukuran</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-10">10 · Overlay dan neighborhood</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-11">11 · Proximity dan network</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-12">12 · Pemodelan dan analisis SIG</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-13">13 · Penyajian dan distribusi</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-14">14 · Pertukaran dan standardisasi</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-15">15 · Evaluasi kualitas SIG</a>
+    <a href="https://chintyapraja.github.io/sistem-informasi-geospasial/silabus.html#minggu-16">16 · Ujian Akhir Semester</a>
+  </nav>
+</aside>
+
+<div class="layout">
+<main id="materi" class="material6">
+<div class="eyebrow">Pertemuan 6 · Materi 6</div>
+<h1>Pengelolaan dan Input Data SIG</h1>
+<p class="lead">Bagaimana data dari berbagai sumber dimasukkan, diberi referensi spasial, dikonversi, diedit, dan diperiksa hingga siap digunakan dalam analisis SIG.</p>
+
+<section id="tujuan">
+<span class="badge">CPMK2</span>
+<h2>Tujuan Pembelajaran</h2>
+<p>Setelah mempelajari materi ini, mahasiswa mampu menjelaskan sumber dan proses akuisisi data, melakukan georeferensi, membedakan bentuk konversi data, serta menjelaskan proses editing untuk menyiapkan data SIG.</p>
+</section>
+
+<section id="alur">
+<h2>1. Dari Dunia Nyata Menjadi Data SIG</h2>
+<div class="flow"><span>Dunia nyata</span><b class="arrow">→</b><span>Akuisisi</span><b class="arrow">→</b><span>Input</span><b class="arrow">→</b><span>Referensi spasial</span><b class="arrow">→</b><span>Konversi</span><b class="arrow">→</b><span>Editing</span><b class="arrow">→</b><span>Quality control</span></div>
+<div class="note"><b>Pertanyaan utama:</b> apa yang harus kita lakukan agar data dari sumber yang berbeda dapat berada pada lokasi yang benar dan digunakan bersama di dalam GIS?</div>
+</section>
+
+
+<section id="akuisisi">
+<h2>2. Akuisisi Data</h2>
+<p class="lead"><b>Akuisisi data</b> adalah proses memperoleh atau mengumpulkan data yang akan digunakan dalam SIG. Sumber data dapat berupa pengukuran langsung di lapangan maupun data yang sudah tersedia.</p>
+
+<div class="grid">
+<div class="card"><small>PRIMARY DATA</small><b>Dikumpulkan langsung</b><p>GNSS (Global Navigation Satellite System) / GPS (Global Positioning System), total station, UAV, field survey, mobile mapping.</p></div>
+<div class="card"><small>SECONDARY DATA</small><b>Sudah tersedia</b><p>Citra satelit, orthophoto, peta analog, existing vector, open/government data.</p></div>
+</div>
+
+
+<h3>Contoh perangkat akuisisi yang digunakan dalam pekerjaan geospasial</h3>
+
+<table class="equipment-table">
+<thead>
+<tr>
+<th style="width:110px">Contoh</th>
+<th>Perangkat</th>
+<th>Kegunaan dalam pekerjaan geospasial</th>
+<th>Output ke GIS</th>
+<th>Sumber</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><img src="https://images.ctfassets.net/1nvkn1423yot/2w0Qemv2xqnk7YGWNR7dTe/8d01c8033eedb13dc62d8f0d7901a350/geo-r12-productpage-fullbackgroundproducthero-800x960.png" alt="Trimble R12 GNSS receiver" class="equipment-thumb"></td>
+<td><b>GNSS Receiver</b><br><small>Contoh: Trimble R12</small></td>
+<td>Memperoleh posisi atau koordinat titik di lapangan untuk survei dan pemetaan.</td>
+<td>Point coordinates, control points, tracks, atau hasil survei posisi.</td>
+<td class="source"><a href="https://geospatial.trimble.com/en/products/hardware/trimble-r12">Trimble Geospatial — R12 GNSS Receiver</a></td>
+</tr>
+
+<tr>
+<td><img src="https://spatialtechnologies.ca/cdn/shop/products/LeicaFlexLineTS10-Frontview-MainMenu-081828.jpg?v=1742503614&width=1920" alt="Leica FlexLine TS10 total station" class="equipment-thumb"></td>
+<td><b>Total Station</b><br><small>Contoh: Leica FlexLine TS10</small></td>
+<td>Mengukur sudut dan jarak untuk menentukan posisi titik, detail survey, dan pekerjaan stakeout.</td>
+<td>Koordinat titik dan hasil pengukuran survei.</td>
+<td class="source"><a href="https://leica-geosystems.com/en-us/products/total-stations/manual-total-stations/leica-flexline-ts10">Leica Geosystems — FlexLine TS10</a></td>
+</tr>
+
+<tr>
+<td><img src="https://cdn.shopify.com/s/files/1/0480/3146/5632/files/m350_h20t_drone_only.png?v=1732720677" alt="DJI Matrice 350 RTK UAV" class="equipment-thumb"></td>
+<td><b>UAV / Drone</b><br><small>Contoh: DJI Matrice 350 RTK</small></td>
+<td>Mengambil foto udara atau data sensor dari udara untuk pemetaan dan monitoring.</td>
+<td>Foto udara yang dapat diproses menjadi orthomosaic, DSM, atau point cloud.</td>
+<td class="source"><a href="https://enterprise.dji.com/matrice-350-rtk/specs">DJI Enterprise — Matrice 350 RTK</a></td>
+</tr>
+
+<tr>
+<td><img src="https://prod-swisstopoch-hcms-sdweb.imgix.net/dam/fr/sd-web/I649B059Mq07/Satellite_Sentinel2-Lead-19201080-FR.jpg?auto=format" alt="Sentinel-2 satellite" class="equipment-thumb"></td>
+<td><b>Satellite Remote Sensing</b><br><small>Contoh: Sentinel-2</small></td>
+<td>Mengamati permukaan bumi secara berulang menggunakan sensor multispektral.</td>
+<td>Raster multispektral untuk land cover, vegetation, coastal, dan environmental monitoring.</td>
+<td class="source"><a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-2">ESA — Copernicus Sentinel-2</a></td>
+</tr>
+
+</tbody>
+</table>
+<h3>Perangkat berbeda menghasilkan jenis data yang berbeda</h3>
+<table>
+<thead><tr><th>Sumber</th><th>Apa yang diperoleh?</th><th>Contoh penggunaan dalam GIS</th><th>Apa yang perlu diperiksa?</th></tr></thead>
+<tbody>
+<tr><td>GNSS</td><td>Koordinat titik / track</td><td>Control point, asset location, survey point</td><td>CRS, ketelitian, waktu survei</td></tr>
+<tr><td>Total station</td><td>Sudut, jarak, koordinat</td><td>Detail survey, boundary, engineering survey</td><td>Datum/reference, station setup, control</td></tr>
+<tr><td>UAV</td><td>Foto udara</td><td>Orthomosaic, DSM, point cloud setelah photogrammetry</td><td>Overlap, GCP, sensor, tanggal, kualitas citra</td></tr>
+<tr><td>Satellite</td><td>Citra raster multispektral</td><td>Land cover, vegetation, environmental monitoring</td><td>Resolution, cloud, acquisition date, projection/product level</td></tr>
+<tr><td>Existing dataset</td><td>Vector/raster/database</td><td>Reference dan secondary data</td><td>Sumber, tahun, skala/resolusi, CRS, metadata</td></tr>
+</tbody>
+</table>
+
+<div class="note"><b>Intinya:</b> akuisisi bukan hanya “mengambil data”. Jenis sensor/perangkat menentukan bentuk data yang masuk ke workflow GIS berikutnya.</div>
+<p class="source">Konsep primary dan secondary data capture juga dibahas dalam <a href="https://saylordotorg.github.io/text_essentials-of-geographic-information-systems/s09-geospatial-data-management.html">Essentials of Geographic Information Systems — Geospatial Data Management</a>.</p>
+</section>
+
+<section id="input">
+<h2>3. Akuisisi ≠ Input Data</h2>
+<div class="grid-3">
+<div class="card"><small>ACQUISITION</small><b>Mendapatkan data</b><p>UAV → foto<br>GNSS → koordinat</p></div>
+<div class="card"><small>INPUT</small><b>Memasukkan ke GIS</b><p>CSV → point<br>GeoTIFF → raster<br>SHP → vector</p></div>
+<div class="card"><small>MANAGEMENT</small><b>Menyiapkan data</b><p>CRS → conversion → editing → QC</p></div>
+</div>
+</section>
+
+
+<section id="lokasi">
+<h2>4. Sebelum CRS: Bagaimana GIS Mengetahui Lokasi?</h2>
+<p>Data spasial tidak cukup hanya memiliki bentuk. GIS juga harus mengetahui <b>di mana</b> feature tersebut berada di bumi.</p>
+
+<div class="grid">
+<div class="card">
+<small>CONTOH 1</small>
+<b>Longitude / Latitude</b>
+<p>Contoh: 110.3725°, −7.7956°. Angka ini menunjukkan posisi menggunakan sistem koordinat geografis.</p>
+</div>
+<div class="card">
+<small>CONTOH 2</small>
+<b>Easting / Northing</b>
+<p>Contoh: 437250 m, 9138050 m. Angka ini menunjukkan posisi pada sistem koordinat yang sudah diproyeksikan ke bidang datar.</p>
+</div>
+</div>
+
+<div class="note">
+<b>Masalahnya:</b> angka koordinat tidak mempunyai arti yang lengkap jika kita tidak mengetahui sistem referensinya. Karena itu GIS membutuhkan <b>Coordinate Reference System</b>.
+</div>
+</section>
+
+<section id="crs">
+<h2>5. Coordinate Reference System (CRS)</h2>
+<p><b>CRS</b> adalah singkatan dari <b>Coordinate Reference System</b>. CRS adalah sistem yang menghubungkan angka koordinat dengan posisi tertentu di permukaan bumi.</p>
+
+<p>QGIS menjelaskan CRS sebagai metode untuk mengasosiasikan koordinat numerik dengan posisi di permukaan bumi. Satu dataset harus mempunyai CRS yang benar agar GIS dapat menempatkannya pada lokasi yang benar. </p>
+
+<div class="key-message">
+<strong>CRS menjawab pertanyaan:</strong>
+<span>“Angka koordinat ini harus dibaca dengan sistem apa agar GIS tahu lokasi sebenarnya?”</span>
+</div>
+
+<h3>5.1 Geographic Coordinate System (GCS)</h3>
+<p><b>GCS</b> adalah singkatan dari <b>Geographic Coordinate System</b>. GCS merepresentasikan posisi di permukaan bumi menggunakan koordinat sudut, biasanya <b>longitude</b> dan <b>latitude</b>.</p>
+
+<div class="card">
+<small>CONTOH</small>
+<b>WGS 84 — EPSG:4326</b>
+<p>Longitude = 110.3725°<br>Latitude = −7.7956°</p>
+<p>Unitnya adalah derajat, bukan meter.</p>
+</div>
+
+<p><b>WGS 84</b> adalah singkatan dari <b>World Geodetic System 1984</b>. Sistem ini banyak digunakan oleh GNSS dan data global.</p>
+
+<h3>5.2 Mengapa perlu proyeksi?</h3>
+<p>Bumi berbentuk mendekati ellipsoid, sedangkan layar komputer dan peta cetak bersifat datar. Untuk melakukan pengukuran dan pemetaan pada bidang datar, posisi dari permukaan bumi perlu direpresentasikan melalui suatu <b>map projection</b>.</p>
+
+<div class="note">
+<b>Map projection</b> adalah cara matematis untuk memindahkan posisi dari permukaan bumi yang melengkung ke bidang datar. Setiap proyeksi mempunyai kelebihan, keterbatasan, dan potensi distorsi.
+</div>
+
+<h3>5.3 Projected Coordinate System (PCS)</h3>
+<p><b>PCS</b> adalah singkatan dari <b>Projected Coordinate System</b>. PCS menggunakan bidang datar dan umumnya menggunakan unit linear seperti meter.</p>
+
+<div class="card">
+<small>CONTOH</small>
+<b>UTM</b>
+<p><b>UTM</b> adalah singkatan dari <b>Universal Transverse Mercator</b>. UTM membagi bumi menjadi zona-zona agar pemetaan wilayah tertentu dapat dilakukan dengan distorsi yang relatif terkendali.</p>
+<p>Contoh koordinat: Easting = 437250 m, Northing = 9138050 m.</p>
+</div>
+
+<h3>5.4 Apa itu EPSG?</h3>
+<p><b>EPSG code</b> adalah identifier numerik yang digunakan untuk mengenali CRS tertentu. Dalam GIS, kita sering memilih CRS dengan nama atau kode EPSG.</p>
+
+<table>
+<thead><tr><th>CRS</th><th>Contoh kode</th><th>Jenis</th><th>Unit</th></tr></thead>
+<tbody>
+<tr><td>WGS 84</td><td>EPSG:4326</td><td>Geographic</td><td>Degree</td></tr>
+<tr><td>WGS 84 / UTM zone tertentu</td><td>Contoh EPSG:32749</td><td>Projected</td><td>Meter</td></tr>
+<tr><td>Web Mercator</td><td>EPSG:3857</td><td>Projected</td><td>Meter</td></tr>
+</tbody>
+</table>
+
+<div class="warning">
+<b>Penting:</b> jangan memilih CRS hanya karena namanya familiar. CRS harus sesuai dengan sumber data dan area yang dipetakan.
+</div>
+
+<p class="source">Referensi: QGIS Documentation, <a href="https://docs.qgis.org/testing/en/docs/user_manual/working_with_projections/working_with_projections.html">Working with Projections</a>. QGIS menyatakan bahwa CRS mengasosiasikan koordinat numerik dengan posisi di permukaan bumi dan membedakan geographic, projected, serta custom CRS.</p>
+</section>
+
+<section id="assign">
+<h2>6. Assign CRS dan Reprojection</h2>
+<p>Setelah memahami CRS, kita baru dapat membedakan dua operasi yang sering tertukar: <b>assign CRS</b> dan <b>reproject</b>.</p>
+
+<h3>6.1 Assign CRS</h3>
+<p><b>Assign CRS</b> digunakan ketika koordinat pada data sudah ada, tetapi GIS belum mengetahui CRS-nya atau informasi CRS-nya salah.</p>
+
+<div class="note">
+<b>Assign CRS tidak menghitung ulang koordinat.</b> Kita hanya memberi tahu GIS bagaimana angka yang sudah ada harus ditafsirkan.
+</div>
+
+<p>Contoh: sebuah CSV berisi longitude 110.37 dan latitude −7.79. Jika angka tersebut memang WGS 84 longitude/latitude, maka saat memasukkan data kita harus mendefinisikan source CRS yang sesuai.</p>
+
+<h3>6.2 Reprojection</h3>
+<p><b>Reprojection</b> digunakan ketika data sudah mempunyai source CRS yang benar, tetapi kita ingin menghasilkan koordinat dalam CRS lain.</p>
+
+<div class="flow">
+<span>Source CRS benar</span><b class="arrow">→</b><span>Coordinate transformation</span><b class="arrow">→</b><span>Target CRS</span>
+</div>
+
+<p>Contoh: data point dari GNSS berada pada WGS 84 longitude/latitude. Untuk analisis jarak dalam meter pada wilayah tertentu, data dapat direproject ke projected CRS yang sesuai.</p>
+
+<div class="key-message">
+<strong>Perbedaan sederhana</strong>
+<span>Assign CRS = memberi label sistem koordinat yang benar pada angka yang sudah ada.<br>Reproject = menghitung representasi koordinat baru dalam CRS target.</span>
+</div>
+
+<p class="source">Referensi: QGIS Documentation, <a href="https://docs.qgis.org/3.44/en/docs/user_manual/processing_algs/qgis/vectorgeneral.html">Assign Projection and Reproject Layer</a>.</p>
+</section>
+
+<section id="georef">
+<h2>7. Georeferencing</h2>
+<p>Sekarang kita masuk ke situasi yang berbeda. Bagaimana jika data kita bukan tabel koordinat atau vector, tetapi <b>peta hasil scan</b> atau image lama yang belum mempunyai posisi spasial yang benar?</p>
+
+<div class="case-question">
+<strong>Contoh:</strong> kita mempunyai peta penggunaan lahan tahun 2005 dalam bentuk JPG. Ketika dibuka di GIS, gambar tersebut tidak berada pada lokasi yang benar.
+</div>
+
+<p>Untuk kasus seperti ini kita menggunakan <b>georeferencing</b>.</p>
+
+<p><b>Georeferencing</b> adalah proses menghubungkan titik pada image/peta dengan lokasi atau koordinat yang diketahui di dunia nyata sehingga image tersebut dapat ditempatkan pada sistem koordinat yang benar.</p>
+
+<div class="flow">
+<span>Scanned map</span><b class="arrow">→</b><span>Reference data</span><b class="arrow">→</b><span>Control points</span><b class="arrow">→</b><span>Transformation</span><b class="arrow">→</b><span>Georeferenced raster</span>
+</div>
+
+<h3>7.1 Ground Control Point (GCP)</h3>
+<p><b>GCP</b> adalah singkatan dari <b>Ground Control Point</b>. Dalam konteks georeferencing, GCP adalah pasangan titik yang menghubungkan lokasi pada source image dengan lokasi yang diketahui pada reference data.</p>
+
+<p>Contoh feature yang dapat digunakan:</p>
+<ul>
+<li>persimpangan jalan,</li>
+<li>sudut bangunan permanen,</li>
+<li>benchmark,</li>
+<li>jembatan atau feature lain yang dapat dikenali pada kedua data.</li>
+</ul>
+
+<h3>7.2 Mengapa distribusi GCP penting?</h3>
+<p>Jika semua GCP berkumpul di satu sisi peta, bagian lain tidak mempunyai kontrol yang baik. Karena itu control points sebaiknya tersebar pada area yang akan direferensikan.</p>
+
+<h3>7.3 Transformation</h3>
+<p><b>Transformation</b> adalah metode matematis yang digunakan untuk menyesuaikan raster berdasarkan pasangan control points.</p>
+
+<p>Mahasiswa tidak perlu menghafalkan seluruh jenis transformasi pada tahap ini. Yang perlu dipahami adalah bahwa metode transformasi memengaruhi bagaimana raster digeser, diputar, diskalakan, atau didistorsi agar sesuai dengan reference data.</p>
+
+<h3>7.4 Residual dan RMSE</h3>
+<p><b>Residual</b> menunjukkan perbedaan antara posisi control point hasil transformasi dengan posisi referensinya.</p>
+
+<p><b>RMSE</b> adalah singkatan dari <b>Root Mean Square Error</b>. Nilai ini merangkum error dari sekumpulan control points.</p>
+
+<div class="warning">
+<b>RMSE kecil tidak otomatis berarti georeferencing sempurna.</b> Tetap periksa distribusi GCP dan lakukan visual overlay dengan reference data.
+</div>
+
+<h3>7.5 Bagaimana mengecek hasilnya?</h3>
+<ul class="checks">
+<li>Apakah jalan pada raster align dengan jalan pada reference layer?</li>
+<li>Apakah persimpangan yang tidak dipakai sebagai GCP juga cocok?</li>
+<li>Apakah ada area yang tampak terdistorsi?</li>
+<li>Apakah control point dengan residual besar perlu diperiksa kembali?</li>
+</ul>
+
+<p class="source">Referensi: QGIS Training Manual, <a href="https://docs.qgis.org/testing/en/docs/training_manual/forestry/map_georeferencing.html">Georeferencing a Map</a>; QGIS Documentation, Georeferencer.</p>
+</section>
+
+<section id="ringkas-crs">
+<h2>8. Tiga Operasi yang Sering Tertukar</h2>
+<table>
+<thead><tr><th>Masalah</th><th>Operasi</th><th>Apa yang terjadi?</th></tr></thead>
+<tbody>
+<tr><td>Koordinat sudah ada, tetapi CRS belum didefinisikan dengan benar</td><td><b>Assign CRS</b></td><td>Nilai koordinat tetap</td></tr>
+<tr><td>Data mempunyai CRS yang benar, tetapi kita membutuhkan CRS lain</td><td><b>Reproject</b></td><td>Koordinat dihitung ulang ke target CRS</td></tr>
+<tr><td>Image/peta tidak mempunyai posisi spasial yang benar</td><td><b>Georeference</b></td><td>Image ditempatkan menggunakan reference/GCP</td></tr>
+</tbody>
+</table>
+
+<div class="key-message">
+<strong>Urutan berpikir</strong>
+<span>Kenali dulu masalah datanya → baru pilih operasi yang tepat.</span>
+</div>
+</section>
+<section id="digitizing">
+<h2>9. Digitizing: Reference Map → Vector Feature</h2>
+<p>Setelah peta sudah berada pada posisi yang benar, feature pada peta atau imagery dapat ditelusuri menjadi vector.</p>
+
+<h3>Contoh nyata: forest map di QGIS</h3>
+<figure class="concept-figure">
+<img src="https://docs.qgis.org/3.44/en/_images/forest_stands_to_digitize.png" alt="Forest stands map di QGIS sebelum digitizing">
+<figcaption>Forest stands yang belum selesai didigitasi. Data raster hasil georeferencing digunakan sebagai reference. Sumber: QGIS Training Manual 3.44, <i>Digitizing Forest Stands</i>.</figcaption>
+</figure>
+
+<figure class="concept-figure">
+<img src="https://docs.qgis.org/3.44/en/_images/dgitizing_357_1.png" alt="Digitizing forest stand 357 dengan snapping">
+<figcaption>Digitizing polygon stand 357. Tanda snapping membantu vertex feature baru mengikuti feature yang sudah ada. Sumber: QGIS Training Manual 3.44.</figcaption>
+</figure>
+
+<div class="note"><b>Hubungan dengan materi sebelumnya:</b> vertex membentuk geometry → geometry menjadi feature → feature mempunyai attribute.</div>
+<p class="source">Referensi: QGIS Training Manual 3.44, <a href="https://docs.qgis.org/3.44/en/docs/training_manual/forestry/stands_digitizing.html">Digitizing Forest Stands</a>.</p>
+</section>
+
+<section id="konversi">
+<h2>10. Konversi Data</h2>
+<div class="grid-3">
+<div class="card"><small>FORMAT</small><b>SHP → GeoPackage</b><p>Geometry dan konsep data tetap, format penyimpanan berubah.</p></div>
+<div class="card"><small>TABULAR → SPATIAL</small><b>CSV X,Y → Point</b><p>Kolom koordinat membentuk geometry.</p></div>
+<div class="card"><small>DATA MODEL</small><b>Vector ↔ Raster</b><p>Representasi data berubah.</p></div>
+</div>
+<table><thead><tr><th>ID</th><th>Longitude</th><th>Latitude</th><th>Landuse</th></tr></thead><tbody>
+<tr><td>P01</td><td>110.370</td><td>-7.790</td><td>Residential</td></tr>
+<tr><td>P02</td><td>110.380</td><td>-7.800</td><td>Agriculture</td></tr>
+</tbody></table>
+<div class="warning"><b>Format conversion bukan reprojection.</b> Mengubah SHP menjadi GeoPackage tidak otomatis mengubah CRS.</div>
+</section>
+
+<section id="editing">
+<h2>11. Editing Geometry dan Attribute</h2>
+<div class="grid-3">
+<div class="card"><b>Create / Delete</b><p>Membuat atau menghapus feature.</p></div>
+<div class="card"><b>Move / Reshape</b><p>Memperbaiki posisi atau boundary.</p></div>
+<div class="card"><b>Vertex</b><p>Add, move, delete vertex.</p></div>
+<div class="card"><b>Split</b><p>1 feature → 2 features.</p></div>
+<div class="card"><b>Merge</b><p>2 features → 1 feature.</p></div>
+<div class="card"><b>Attribute</b><p>Edit value, field, NULL, duplicate ID.</p></div>
+</div>
+<table><thead><tr><th>ID</th><th>Landuse</th><th>Masalah</th></tr></thead><tbody>
+<tr><td>001</td><td>residental</td><td>Typo / kategori tidak konsisten</td></tr>
+<tr><td>002</td><td>NULL</td><td>Perlu dicek apakah benar tidak diketahui</td></tr>
+<tr><td>002</td><td>Agriculture</td><td>Duplicate ID</td></tr>
+</tbody></table>
+<p class="source">Referensi: QGIS Documentation 3.44, <a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/editing_geometry_attributes.html">Editing</a>.</p>
+</section>
+
+<section id="snapping">
+<h2>12. Snapping</h2>
+<p>Snapping membantu feature baru atau vertex yang dipindahkan benar-benar menempel pada vertex/segment target.</p>
+
+<h3>Contoh nyata: land-use map sebelum digitizing</h3>
+<figure class="concept-figure">
+<img src="https://docs.qgis.org/3.10/en/_images/zoom_to.png" alt="Landuse map untuk latihan snapping QGIS">
+<figcaption>Area land-use yang akan diedit. Sumber: QGIS Training Manual, Feature Topology.</figcaption>
+</figure>
+
+<h3>Polygon baru dengan snapping</h3>
+<figure class="concept-figure">
+<img src="https://docs.qgis.org/3.10/en/_images/new_park_area1.png" alt="Polygon baru dengan snapping di QGIS">
+<figcaption>Polygon baru didigitasi dengan snapping ke vertex feature bersebelahan sehingga tidak meninggalkan gap. Sumber: QGIS Training Manual, Feature Topology.</figcaption>
+</figure>
+
+<div class="note"><b>Pesan penting:</b> dua feature dapat terlihat menyambung pada skala kecil, tetapi saat diperbesar ternyata ada gap. Karena itu editing harus memperhatikan snapping dan topology.</div>
+<p class="source">Referensi: QGIS Training Manual, <a href="https://docs.qgis.org/3.10/en/docs/training_manual/create_vector_data/topo_editing.html">Feature Topology</a>.</p>
+</section>
+
+<section id="qc">
+<h2>13. Quality Control</h2>
+<ul class="checks">
+<li><b>CRS:</b> source CRS dan target CRS benar?</li>
+<li><b>Position:</b> layer align dengan reference?</li>
+<li><b>Geometry:</b> ada feature hilang, duplicate, gap, atau bentuk yang tidak masuk akal?</li>
+<li><b>Attribute:</b> ID unik? NULL valid? kategori konsisten?</li>
+<li><b>Completeness:</b> semua objek yang diperlukan sudah masuk?</li>
+<li><b>Metadata:</b> sumber dan waktu data diketahui?</li>
+</ul>
+<div class="key-message"><strong>No software error ≠ correct geospatial data.</strong><span>Software dapat menjalankan proses tanpa error, tetapi hasilnya tetap bisa salah secara spasial.</span></div>
+</section>
+
+<section id="kasus">
+<h2>14. Kasus: Perubahan Penggunaan Lahan 2005–2026</h2>
+<div class="case-question"><strong>Bagaimana menyatukan data lama dan data terbaru dari format serta CRS yang berbeda menjadi satu dataset yang siap dianalisis?</strong></div>
+<table><thead><tr><th>Data</th><th>Kondisi</th></tr></thead><tbody>
+<tr><td>Land-use map 2005</td><td>JPG, belum mempunyai spatial reference yang dapat digunakan</td></tr>
+<tr><td>Reference points</td><td>8 titik GNSS</td></tr>
+<tr><td>Administrative boundary 2026</td><td>SHP, EPSG:32749</td></tr>
+<tr><td>Field survey 2026</td><td>CSV Longitude/Latitude, WGS84</td></tr>
+<tr><td>UAV orthomosaic 2026</td><td>GeoTIFF, EPSG:32749</td></tr>
+<tr><td>Roads</td><td>KML</td></tr>
+</tbody></table>
+
+<h3>Problem 1 — JPG tidak berada di lokasi benar</h3>
+<div class="answer"><b>Jawaban:</b> georeference peta 2005 menggunakan reference/GCP. Periksa distribusi GCP, transformation settings, residual, dan alignment hasil.</div>
+
+<h3>Problem 2 — CSV tidak align dengan UAV</h3>
+<div class="answer"><b>Jawaban:</b> cek kolom X/Y dan source CRS terlebih dahulu. Jika CSV benar-benar WGS84 longitude/latitude, definisikan source CRS tersebut dengan benar, kemudian reproject jika perlu.</div>
+
+<h3>Problem 3 — Roads masih KML</h3>
+<div class="answer"><b>Jawaban:</b> lakukan format conversion ke format proyek, misalnya GeoPackage. Setelah itu tetap periksa CRS dan attribute.</div>
+
+<h3>Problem 4 — Polygon hasil digitizing mempunyai gap kecil</h3>
+<div class="answer"><b>Jawaban:</b> perbaiki geometry menggunakan vertex editing dan snapping. Pemeriksaan topology lengkap dilanjutkan pada Pertemuan 7.</div>
+
+<h3>Problem 5 — Duplicate ID dan NULL</h3>
+<div class="answer"><b>Jawaban:</b> lakukan attribute QC. Pastikan ID yang memang harus unik tidak duplikat dan tentukan apakah NULL merupakan nilai valid atau error input.</div>
+
+<h3>Final workflow</h3>
+<div class="flow"><span>Inspect data</span><b class="arrow">→</b><span>Check format + CRS</span><b class="arrow">→</b><span>Georeference</span><b class="arrow">→</b><span>Digitize</span><b class="arrow">→</b><span>Import / Convert</span><b class="arrow">→</b><span>Reproject</span><b class="arrow">→</b><span>Edit + Snap</span><b class="arrow">→</b><span>QC</span></div>
+</section>
+
+<section id="ringkasan">
+<h2>15. Ringkasan</h2>
+<div class="flow"><span>Acquire</span><b class="arrow">→</b><span>Input</span><b class="arrow">→</b><span>Reference</span><b class="arrow">→</b><span>Convert</span><b class="arrow">→</b><span>Edit</span><b class="arrow">→</b><span>Validate</span></div>
+<div class="note"><b>Pertemuan berikutnya:</b> Topologi dan Integrasi Data. Setelah data masuk dan diedit, kita akan melihat apakah hubungan spasial antar-feature sudah benar.</div>
+</section>
+
+<footer>
+Sistem Informasi Geospasial · Pertemuan 6 · Ni Putu Praja Chintya
+</footer>
+</main>
+
+<aside class="toc">
+<strong>Pada halaman ini</strong>
+<a href="#tujuan">Tujuan</a>
+<a href="#alur">Alur data</a>
+<a href="#akuisisi">Akuisisi</a>
+<a href="#input">Input data</a>
+<a href="#lokasi">Lokasi</a><a href="#crs">CRS</a><a href="#assign">Assign/Reproject</a>
+<a href="#georef">Georeferencing</a>
+<a href="#ringkas-crs">Ringkasan CRS</a>
+<a href="#digitizing">Digitizing</a>
+<a href="#konversi">Konversi</a>
+<a href="#editing">Editing</a>
+<a href="#snapping">Snapping</a>
+<a href="#qc">Quality control</a>
+<a href="#kasus">Kasus</a>
+<a href="#ringkasan">Ringkasan</a>
+</aside>
+</div>
+</body>
+</html>
