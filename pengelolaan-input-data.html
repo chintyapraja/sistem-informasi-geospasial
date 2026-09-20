@@ -453,34 +453,141 @@ footer{border-top:1px solid var(--line);margin-top:55px;padding-top:20px;font-si
 </section>
 
 <section id="kasus">
-<h2>14. Kasus: Perubahan Penggunaan Lahan 2005–2026</h2>
-<div class="case-question"><strong>Bagaimana menyatukan data lama dan data terbaru dari format serta CRS yang berbeda menjadi satu dataset yang siap dianalisis?</strong></div>
-<table><thead><tr><th>Data</th><th>Kondisi</th></tr></thead><tbody>
-<tr><td>Land-use map 2005</td><td>JPG, belum mempunyai spatial reference yang dapat digunakan</td></tr>
-<tr><td>Reference points</td><td>8 titik GNSS</td></tr>
-<tr><td>Administrative boundary 2026</td><td>SHP, EPSG:32749</td></tr>
-<tr><td>Field survey 2026</td><td>CSV Longitude/Latitude, WGS84</td></tr>
-<tr><td>UAV orthomosaic 2026</td><td>GeoTIFF, EPSG:32749</td></tr>
-<tr><td>Roads</td><td>KML</td></tr>
-</tbody></table>
+<h2>14. Latihan Kasus: Menyiapkan Data Perubahan Penggunaan Lahan 2005–2026</h2>
 
-<h3>Problem 1 — JPG tidak berada di lokasi benar</h3>
-<div class="answer"><b>Jawaban:</b> georeference peta 2005 menggunakan reference/GCP. Periksa distribusi GCP, transformation settings, residual, dan alignment hasil.</div>
+<div class="case-question">
+<strong>Situasi</strong>
+<p>Sebuah pemerintah kabupaten ingin membandingkan perubahan penggunaan lahan antara tahun 2005 dan 2026. Data berasal dari beberapa instansi, survei lapangan, dan pemetaan UAV. Sebelum analisis perubahan dilakukan, seluruh data harus disiapkan agar dapat digunakan bersama dalam satu proyek SIG.</p>
+</div>
 
-<h3>Problem 2 — CSV tidak align dengan UAV</h3>
-<div class="answer"><b>Jawaban:</b> cek kolom X/Y dan source CRS terlebih dahulu. Jika CSV benar-benar WGS84 longitude/latitude, definisikan source CRS tersebut dengan benar, kemudian reproject jika perlu.</div>
+<div class="note"><b>Kasus ini bersifat hipotetik untuk latihan kelas.</b> Fokus latihan bukan mencari tombol software, tetapi menyusun prosedur pengelolaan dan input data yang benar.</div>
 
-<h3>Problem 3 — Roads masih KML</h3>
-<div class="answer"><b>Jawaban:</b> lakukan format conversion ke format proyek, misalnya GeoPackage. Setelah itu tetap periksa CRS dan attribute.</div>
+<h3>A. Data yang tersedia</h3>
+<table>
+<thead><tr><th>Dataset</th><th>Format / kondisi</th><th>Informasi yang diketahui</th></tr></thead>
+<tbody>
+<tr>
+<td><b>Peta penggunaan lahan 2005</b></td>
+<td>JPG hasil scan peta cetak skala 1:25.000</td>
+<td>Tidak mempunyai world file. Grid koordinat pada peta masih terlihat. Empat kelas utama: permukiman, pertanian, badan air, dan lahan terbuka.</td>
+</tr>
+<tr>
+<td><b>Titik referensi lapangan</b></td>
+<td>CSV dari survei GNSS</td>
+<td>8 titik persimpangan jalan dan sudut bangunan permanen. Kolom koordinat: longitude dan latitude. Datum survei: WGS 84.</td>
+</tr>
+<tr>
+<td><b>Batas administrasi 2026</b></td>
+<td>Shapefile</td>
+<td>CRS tercatat sebagai EPSG:32749.</td>
+</tr>
+<tr>
+<td><b>Survei penggunaan lahan 2026</b></td>
+<td>CSV</td>
+<td>Kolom: ID, Longitude, Latitude, Landuse. Koordinat dicatat menggunakan GNSS. Beberapa baris mempunyai Landuse = NULL.</td>
+</tr>
+<tr>
+<td><b>UAV orthomosaic 2026</b></td>
+<td>GeoTIFF</td>
+<td>CRS: EPSG:32749. Digunakan sebagai referensi kondisi terbaru.</td>
+</tr>
+<tr>
+<td><b>Jaringan jalan</b></td>
+<td>KML</td>
+<td>Diperoleh dari instansi lain. Metadata terbatas.</td>
+</tr>
+<tr>
+<td><b>Target penyimpanan</b></td>
+<td>Satu project GIS</td>
+<td>Tim ingin menyimpan data hasil akhir secara terorganisasi dan mudah digunakan kembali.</td>
+</tr>
+</tbody>
+</table>
 
-<h3>Problem 4 — Polygon hasil digitizing mempunyai gap kecil</h3>
-<div class="answer"><b>Jawaban:</b> perbaiki geometry menggunakan vertex editing dan snapping. Pemeriksaan topology lengkap dilanjutkan pada Pertemuan 7.</div>
+<h3>B. Kondisi yang ditemukan saat data pertama kali dibuka</h3>
+<div class="grid">
+<div class="card">
+<b>Kondisi 1</b>
+<p>Peta JPG 2005 muncul, tetapi tidak berada pada lokasi yang sama dengan batas administrasi dan UAV orthomosaic.</p>
+</div>
+<div class="card">
+<b>Kondisi 2</b>
+<p>Delapan titik GNSS dapat dikenali pada peta 2005, tetapi titik-titik tersebut tidak tersebar merata. Sebagian besar berada di bagian utara peta.</p>
+</div>
+<div class="card">
+<b>Kondisi 3</b>
+<p>CSV survei 2026 dapat dibuka sebagai tabel, tetapi belum menjadi layer point.</p>
+</div>
+<div class="card">
+<b>Kondisi 4</b>
+<p>Setelah CSV diubah menjadi point, titik tidak langsung align dengan UAV orthomosaic.</p>
+</div>
+<div class="card">
+<b>Kondisi 5</b>
+<p>Jaringan jalan masih dalam KML, sedangkan tim ingin seluruh hasil akhir tersimpan dalam satu format proyek yang konsisten.</p>
+</div>
+<div class="card">
+<b>Kondisi 6</b>
+<p>Setelah digitizing peta 2005, beberapa polygon mempunyai vertex yang tidak mengikuti batas pada reference image dan beberapa atribut kelas belum terisi.</p>
+</div>
+</div>
 
-<h3>Problem 5 — Duplicate ID dan NULL</h3>
-<div class="answer"><b>Jawaban:</b> lakukan attribute QC. Pastikan ID yang memang harus unik tidak duplikat dan tentukan apakah NULL merupakan nilai valid atau error input.</div>
+<h3>C. Pertanyaan latihan</h3>
 
-<h3>Final workflow</h3>
-<div class="flow"><span>Inspect data</span><b class="arrow">→</b><span>Check format + CRS</span><b class="arrow">→</b><span>Georeference</span><b class="arrow">→</b><span>Digitize</span><b class="arrow">→</b><span>Import / Convert</span><b class="arrow">→</b><span>Reproject</span><b class="arrow">→</b><span>Edit + Snap</span><b class="arrow">→</b><span>QC</span></div>
+<h4>Bagian 1 — Pemeriksaan awal data</h4>
+<ol>
+<li>Dataset mana yang termasuk <b>primary data</b> dan mana yang termasuk <b>secondary/existing data</b>? Jelaskan alasannya.</li>
+<li>Sebelum melakukan editing atau analisis, informasi apa saja yang perlu diperiksa pada setiap dataset?</li>
+<li>Dataset mana yang sudah mempunyai referensi spasial yang jelas, dan dataset mana yang masih memerlukan tindakan tambahan?</li>
+</ol>
+
+<h4>Bagian 2 — Georeferensi peta 2005</h4>
+<ol start="4">
+<li>Susun prosedur untuk menempatkan peta JPG 2005 pada posisi yang benar di dalam GIS.</li>
+<li>Dari 8 titik GNSS yang tersedia, bagaimana Anda memilih titik yang layak digunakan sebagai Ground Control Point?</li>
+<li>Apakah semua 8 titik harus digunakan? Apa yang perlu diperhatikan mengenai distribusi GCP?</li>
+<li>Setelah proses georeferencing selesai, bagaimana Anda mengecek apakah hasilnya sudah cukup baik untuk digitizing?</li>
+</ol>
+
+<h4>Bagian 3 — Input dan konversi data</h4>
+<ol start="8">
+<li>Jelaskan langkah yang diperlukan agar CSV survei 2026 menjadi point layer.</li>
+<li>Apa yang harus diperiksa sebelum menentukan CRS pada CSV tersebut?</li>
+<li>Jika point CSV dan UAV orthomosaic menggunakan CRS berbeda tetapi source CRS keduanya benar, tindakan apa yang perlu dipertimbangkan agar data dapat digunakan bersama?</li>
+<li>Bagaimana Anda menangani data jalan dalam format KML agar konsisten dengan struktur penyimpanan proyek?</li>
+</ol>
+
+<h4>Bagian 4 — Digitizing dan editing</h4>
+<ol start="12">
+<li>Data apa yang Anda gunakan sebagai reference ketika mendigitasi penggunaan lahan tahun 2005?</li>
+<li>Geometry apa yang paling sesuai untuk menyimpan kelas penggunaan lahan?</li>
+<li>Apa yang perlu dilakukan jika boundary polygon hasil digitizing tidak mengikuti objek pada reference image?</li>
+<li>Apa fungsi snapping ketika membuat atau memperbaiki feature yang saling berbatasan?</li>
+<li>Bagaimana Anda menangani nilai Landuse yang kosong dan ID yang berpotensi tidak unik?</li>
+</ol>
+
+<h4>Bagian 5 — Menyusun prosedur akhir</h4>
+<ol start="17">
+<li>Susun <b>workflow lengkap</b> mulai dari data mentah sampai seluruh dataset siap digunakan untuk analisis perubahan penggunaan lahan.</li>
+<li>Untuk setiap tahap, tuliskan: <b>input → proses → output → pemeriksaan kualitas</b>.</li>
+<li>Tentukan pada tahap mana Anda melakukan georeferencing, conversion, reprojection, digitizing, dan editing. Jelaskan alasan urutannya.</li>
+</ol>
+
+<h3>D. Format hasil latihan</h3>
+<p>Buat satu diagram alur yang menunjukkan prosedur pengelolaan data. Gunakan format berikut untuk setiap tahap:</p>
+
+<table>
+<thead><tr><th>Tahap</th><th>Input</th><th>Proses yang dipilih</th><th>Output</th><th>Apa yang diperiksa?</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>2</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>3</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>4</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>5</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+</tbody>
+</table>
+
+<div class="warning"><b>Batas latihan:</b> belum perlu membahas aturan topology secara lengkap. Fokus Pertemuan 6 adalah akuisisi, georeferensi, konversi, dan editing. Topology dibahas pada Pertemuan 7.</div>
 </section>
 
 <section id="ringkasan">
