@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Retrieval, Klasifikasi, dan Pengukuran | Sistem Informasi Geospasial</title>
-  <meta name="description" content="Materi pertemuan 9 tentang retrieval, klasifikasi, dan pengukuran dalam SIG.">
+  <title>Penelusuran Data, Klasifikasi, dan Pengukuran | Sistem Informasi Geospasial</title>
+  <meta name="description" content="Materi pertemuan 9 tentang penelusuran data (retrieval), klasifikasi, dan pengukuran dalam SIG.">
   <link rel="stylesheet" href="lecture.css?v=20261018c">
-  <script defer src="script.js?v=20261018b"></script>
+  <script defer src="script.js?v=20261018c"></script>
 </head>
 <body>
 <a class="skip" href="#materi">Langsung ke materi</a>
@@ -14,12 +14,12 @@
 <div class="layout">
 <main id="materi">
   <div class="eyebrow">Pertemuan 9 · Materi 8 · 100 menit · CPMK3</div>
-  <h1>Retrieval, klasifikasi, dan pengukuran</h1>
+  <h1>Penelusuran data, klasifikasi, dan pengukuran</h1>
   <p class="lead">Materi ini membahas prinsip penelusuran dan pemilihan data, pembentukan kelas, serta pengukuran geometris dalam analisis sistem informasi geospasial.</p>
 
   <h2 id="tujuan">1. Tujuan pembelajaran</h2>
   <div class="concept-strip">
-    <article><b>Retrieval</b><strong>Penelusuran dan pemilihan data</strong><p>Menyusun kriteria atribut dan spasial untuk memperoleh objek yang relevan.</p></article>
+    <article><b>Penelusuran data</b><strong>Retrieval dan pemilihan data</strong><p>Menyusun kriteria atribut dan spasial untuk memperoleh objek yang relevan.</p></article>
     <article><b>Klasifikasi</b><strong>Pembentukan kelas data</strong><p>Menentukan metode pengelompokan berdasarkan jenis data dan tujuan analisis.</p></article>
     <article><b>Pengukuran</b><strong>Perhitungan besaran geometris</strong><p>Menghitung jarak, panjang, luas, dan keliling menggunakan CRS dan satuan yang sesuai.</p></article>
   </div>
@@ -28,12 +28,12 @@
   <h2 id="alur">2. Kerangka proses analisis</h2>
   <figure class="visual-board">
     <svg viewBox="0 0 960 290" role="img" aria-labelledby="alur-title alur-desc">
-      <title id="alur-title">Alur retrieval, klasifikasi, dan pengukuran</title><desc id="alur-desc">Pertanyaan diterjemahkan menjadi kriteria, objek dipilih, dikelompokkan, diukur, lalu ditafsirkan.</desc>
+      <title id="alur-title">Alur penelusuran, klasifikasi, dan pengukuran</title><desc id="alur-desc">Pertanyaan diterjemahkan menjadi kriteria, objek dipilih, dikelompokkan, diukur, lalu ditafsirkan.</desc>
       <rect width="960" height="290" fill="#f5f8fa"/>
       <g font-family="system-ui,sans-serif" text-anchor="middle">
         <g transform="translate(25 70)"><rect width="160" height="125" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="80" y="34" fill="#075175" font-weight="700">RUMUSAN</text><text x="80" y="66" fill="#26323e" font-size="16">Objek yang dianalisis</text><text x="80" y="90" fill="#26323e" font-size="16">Dasar klasifikasi</text><text x="80" y="114" fill="#26323e" font-size="16">Besaran geometris</text></g>
         <text x="210" y="139" fill="#075175" font-size="28">→</text>
-        <g transform="translate(235 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700">RETRIEVAL</text><circle cx="45" cy="83" r="13" fill="#b64c42"/><circle cx="75" cy="76" r="13" fill="#b64c42"/><circle cx="105" cy="92" r="13" fill="#b8c5ca"/></g>
+        <g transform="translate(235 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700" font-size="14">PENELUSURAN</text><circle cx="45" cy="83" r="13" fill="#b64c42"/><circle cx="75" cy="76" r="13" fill="#b64c42"/><circle cx="105" cy="92" r="13" fill="#b8c5ca"/></g>
         <text x="410" y="139" fill="#075175" font-size="28">→</text>
         <g transform="translate(435 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700">KLASIFIKASI</text><rect x="27" y="67" width="30" height="35" fill="#d6e8ed"/><rect x="60" y="67" width="30" height="35" fill="#75aeca"/><rect x="93" y="67" width="30" height="35" fill="#075175"/></g>
         <text x="610" y="139" fill="#075175" font-size="28">→</text>
@@ -45,8 +45,8 @@
     <figcaption>Alur analisis: pertanyaan menentukan kriteria, operasi, dan bentuk hasil yang diperlukan.</figcaption>
   </figure>
 
-  <h2 id="retrieval">3. Retrieval data</h2>
-  <p><strong>Retrieval data</strong> merupakan proses penelusuran dan pengambilan record atau objek berdasarkan kriteria tertentu. Hasil retrieval dapat berupa objek terpilih pada peta, record terpilih pada tabel, tampilan data yang telah difilter, atau dataset baru.</p>
+  <h2 id="retrieval">3. Penelusuran data (retrieval)</h2>
+  <p><strong>Penelusuran data</strong> atau <em>data retrieval</em> merupakan proses mencari dan mengambil record atau objek berdasarkan kriteria tertentu. Hasilnya dapat berupa objek terpilih pada peta, record terpilih pada tabel, tampilan data yang telah difilter, atau dataset baru.</p>
   <div class="two-definitions">
     <article><small>BERDASARKAN ATRIBUT</small><strong>Attribute query</strong><p>Kriteria memakai nilai dalam field, misalnya <code>jenis = 'sekolah'</code> atau <code>kapasitas &gt; 300</code>.</p></article>
     <article><small>BERDASARKAN LOKASI</small><strong>Spatial query</strong><p>Kriteria memakai hubungan spasial, misalnya sekolah yang berada di dalam Kecamatan A atau bangunan yang memotong zona banjir.</p></article>
@@ -88,29 +88,118 @@
     <article><b>Data berurutan</b><strong>Kelas ordinal</strong><p>Kategori mempunyai urutan. Contoh: rendah, sedang, tinggi.</p></article>
     <article><b>Data numerik</b><strong>Rentang nilai</strong><p>Nilai dibagi ke beberapa interval. Contoh: kepadatan penduduk atau curah hujan.</p></article>
   </div>
+  <div class="two-definitions">
+    <article><small>UNTUK PENYAJIAN</small><strong>Klasifikasi simbol</strong><p>Nilai asli tetap disimpan. Kelas digunakan untuk menentukan warna atau ukuran simbol pada peta, misalnya kepadatan rendah, sedang, dan tinggi.</p></article>
+    <article><small>UNTUK ANALISIS</small><strong>Reklasifikasi nilai</strong><p>Nilai asli diterjemahkan menjadi nilai kelas baru, misalnya kemiringan 0–8% menjadi kelas kesesuaian 3. Hasil dapat disimpan sebagai field atau dataset baru.</p></article>
+  </div>
+  <p><strong>Perbedaannya:</strong> klasifikasi simbol mengubah cara data ditampilkan, sedangkan reklasifikasi menghasilkan kategori atau nilai baru yang dapat digunakan pada analisis berikutnya. Keduanya tetap memerlukan aturan kelas yang dinyatakan secara eksplisit.</p>
 
   <h3 id="metode-kelas">4.2 Metode pembentukan kelas numerik</h3>
-  <div class="operation-list">
-    <article><strong>Equal interval</strong><p>Rentang total dibagi sama lebar. Mudah dibandingkan, tetapi jumlah objek per kelas dapat sangat berbeda.</p></article>
-    <article><strong>Quantile</strong><p>Setiap kelas berisi jumlah objek yang hampir sama. Cocok untuk peringkat, tetapi nilai yang mirip dapat terpisah.</p></article>
-    <article><strong>Natural breaks</strong><p>Batas kelas mengikuti kelompok alami dan kesenjangan dalam distribusi. Baik untuk satu dataset, tetapi sulit dibandingkan antarwaktu.</p></article>
-    <article><strong>Standard deviation</strong><p>Kelas menunjukkan jarak nilai terhadap rata-rata. Cocok untuk melihat nilai yang berada di atas atau di bawah kondisi umum.</p></article>
+  <p>Metode pembentukan kelas menentukan letak <strong>batas kelas</strong> (<em>class breaks</em>). Perubahan batas kelas tidak mengubah nilai asli, tetapi dapat mengubah warna suatu wilayah dan pola yang terlihat pada peta. Karena itu, metode tidak dipilih hanya berdasarkan tampilan yang menarik.</p>
+
+  <h3>4.2.1 Langkah sebelum membentuk kelas</h3>
+  <ol>
+    <li><strong>Tentukan variabel.</strong> Nilai absolut, persentase, rasio, dan kepadatan menyampaikan makna yang berbeda. Jumlah penduduk tidak dapat langsung menggantikan kepadatan penduduk.</li>
+    <li><strong>Periksa distribusi.</strong> Urutkan nilai dan amati histogram, nilai minimum–maksimum, pencilan, nilai yang sama, serta kesenjangan antarnilai.</li>
+    <li><strong>Tentukan tujuan peta.</strong> Peta dapat digunakan untuk membandingkan besar nilai, menunjukkan peringkat, menemukan kelompok alami, atau mengenali penyimpangan dari rata-rata.</li>
+    <li><strong>Tentukan jumlah kelas.</strong> Terlalu sedikit kelas menyembunyikan variasi; terlalu banyak kelas menyulitkan pembacaan. Jumlah kelas harus sesuai dengan variasi data dan tujuan peta.</li>
+    <li><strong>Catat metode dan batas kelas.</strong> Legenda harus memperlihatkan rentang dengan jelas, termasuk aturan nilai yang tepat berada pada batas kelas.</li>
+  </ol>
+
+  <div class="concept-example">
+    <small>DATA CONTOH</small>
+    <p>Sepuluh wilayah mempunyai nilai: <strong>2, 3, 4, 5, 6, 7, 15, 16, 17, dan 25</strong>. Data yang sama akan dibagi menggunakan beberapa metode agar perbedaannya dapat diamati.</p>
+  </div>
+
+  <h3>4.2.2 Equal interval — interval sama</h3>
+  <p>Metode <em>equal interval</em> membagi selisih nilai maksimum dan minimum menjadi kelas yang sama lebar. Posisi setiap objek dalam urutan data tidak memengaruhi letak batas kelas.</p>
+  <p class="equation">Lebar kelas = (nilai maksimum − nilai minimum) ÷ jumlah kelas</p>
+  <p>Pada data contoh, rentang nilai adalah 25 − 2 = 23. Untuk tiga kelas, lebarnya 23 ÷ 3 = 7,67. Batas kelas dapat dibulatkan menjadi 2–9, 10–17, dan 18–25 karena seluruh nilai berupa bilangan bulat.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang</th><th>Nilai yang masuk</th><th>Jumlah objek</th></tr></thead><tbody>
+    <tr><td>Rendah</td><td>2–9</td><td>2, 3, 4, 5, 6, 7</td><td>6</td></tr>
+    <tr><td>Sedang</td><td>10–17</td><td>15, 16, 17</td><td>3</td></tr>
+    <tr><td>Tinggi</td><td>18–25</td><td>25</td><td>1</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Rentang yang telah dikenal</strong><p>Contohnya persentase 0–100, suhu, atau indeks dengan skala tetap. Batas yang sama juga memudahkan perbandingan beberapa peta.</p></article>
+    <article><small>KETERBATASAN</small><strong>Kelas dapat tidak seimbang</strong><p>Data yang mengelompok pada rentang sempit dapat menumpuk dalam satu kelas, sedangkan kelas lain hanya berisi sedikit objek atau bahkan kosong.</p></article>
+  </div>
+
+  <h3>4.2.3 Quantile — jumlah objek sama</h3>
+  <p>Metode <em>quantile</em> mengurutkan nilai, kemudian membagi jumlah objek agar setiap kelas berisi anggota yang hampir sama banyak. Untuk 10 objek dan tiga kelas, setiap kelas berisi sekitar tiga atau empat objek.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang hasil</th><th>Nilai yang masuk</th><th>Jumlah objek</th></tr></thead><tbody>
+    <tr><td>Kelompok bawah</td><td>2–5</td><td>2, 3, 4, 5</td><td>4</td></tr>
+    <tr><td>Kelompok tengah</td><td>6–15</td><td>6, 7, 15</td><td>3</td></tr>
+    <tr><td>Kelompok atas</td><td>16–25</td><td>16, 17, 25</td><td>3</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Menunjukkan posisi relatif</strong><p>Cocok untuk menyatakan kelompok sepertiga bawah, tengah, dan atas atau untuk menyusun peringkat wilayah.</p></article>
+    <article><small>KETERBATASAN</small><strong>Jarak nilai tidak diperhitungkan</strong><p>Nilai 15 dan 16 yang hampir sama terpisah ke kelas berbeda, sedangkan 16 dan 25 yang berjauhan justru berada dalam kelas yang sama. Nilai yang sama juga tidak seharusnya dipisah hanya untuk menyeimbangkan jumlah.</p></article>
+  </div>
+
+  <h3>4.2.4 Natural breaks (Jenks) — kelompok alami</h3>
+  <p>Metode <em>natural breaks</em> mencari batas pada kesenjangan nilai yang relatif besar. Algoritma Jenks berupaya membuat variasi nilai di dalam setiap kelas sekecil mungkin dan perbedaan antarkelas sebesar mungkin.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang hasil</th><th>Nilai yang masuk</th><th>Dasar pemisahan</th></tr></thead><tbody>
+    <tr><td>Kelompok 1</td><td>2–7</td><td>2, 3, 4, 5, 6, 7</td><td>Kumpulan nilai rendah yang berdekatan</td></tr>
+    <tr><td>Kelompok 2</td><td>15–17</td><td>15, 16, 17</td><td>Kumpulan nilai menengah yang berdekatan</td></tr>
+    <tr><td>Kelompok 3</td><td>25</td><td>25</td><td>Terpisah oleh kesenjangan besar</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Mengungkap struktur satu dataset</strong><p>Cocok ketika data mempunyai kelompok dan kesenjangan yang jelas serta tujuan peta adalah memperlihatkan pola internal dataset tersebut.</p></article>
+    <article><small>KETERBATASAN</small><strong>Batas bergantung pada dataset</strong><p>Ketika data tahun berikutnya berubah, batas kelas dapat ikut berubah. Dua peta tidak dapat dibandingkan langsung apabila menggunakan batas natural breaks yang dihitung secara terpisah.</p></article>
+  </div>
+
+  <h3>4.2.5 Standard deviation — jarak dari rata-rata</h3>
+  <p>Metode <em>standard deviation</em> tidak terutama membagi rentang atau jumlah objek. Kelas dibentuk berdasarkan jarak nilai terhadap rata-rata menggunakan satuan simpangan baku. Metode ini menjawab apakah suatu nilai berada di bawah, mendekati, atau di atas kondisi umum.</p>
+  <p class="equation">Simpangan baku menunjukkan besar penyebaran nilai terhadap rata-rata (μ)</p>
+  <p>Pada data contoh, rata-rata μ = 10 dan simpangan baku populasi σ ≈ 7,3. Batas satu simpangan baku terletak sekitar 2,7 dan 17,3. Dengan demikian, nilai 2 berada lebih dari satu simpangan baku di bawah rata-rata, sedangkan nilai 25 berada lebih dari satu simpangan baku di atas rata-rata.</p>
+  <div class="table-wrap"><table><thead><tr><th>Posisi terhadap rata-rata</th><th>Batas pendekatan</th><th>Nilai contoh</th><th>Makna</th></tr></thead><tbody>
+    <tr><td>Di bawah −1σ</td><td>&lt;2,7</td><td>2</td><td>Jauh di bawah rata-rata</td></tr>
+    <tr><td>−1σ sampai rata-rata</td><td>2,7–10</td><td>3, 4, 5, 6, 7</td><td>Di bawah rata-rata, tetapi masih dalam satu simpangan baku</td></tr>
+    <tr><td>Rata-rata sampai +1σ</td><td>10–17,3</td><td>15, 16, 17</td><td>Di atas rata-rata, tetapi masih dalam satu simpangan baku</td></tr>
+    <tr><td>Di atas +1σ</td><td>&gt;17,3</td><td>25</td><td>Jauh di atas rata-rata</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Mencari penyimpangan</strong><p>Cocok untuk menunjukkan wilayah yang berada jauh di atas atau di bawah rata-rata, terutama ketika rata-rata merupakan acuan analisis yang bermakna.</p></article>
+    <article><small>KETERBATASAN</small><strong>Peka terhadap distribusi dan pencilan</strong><p>Rata-rata dan simpangan baku dapat berubah karena nilai ekstrem. Interpretasi juga kurang tepat apabila distribusi sangat menceng atau rata-rata tidak mewakili kondisi umum.</p></article>
   </div>
 
   <figure class="visual-board">
-    <svg viewBox="0 0 960 330" role="img" aria-labelledby="class-title class-desc">
-      <title id="class-title">Nilai sama diklasifikasikan dengan tiga metode</title><desc id="class-desc">Sepuluh nilai dibagi menggunakan equal interval, quantile, dan natural breaks sehingga batas kelas berbeda.</desc>
-      <rect width="960" height="330" fill="#fff"/>
+    <svg viewBox="0 0 960 440" role="img" aria-labelledby="class-title class-desc">
+      <title id="class-title">Nilai yang sama diklasifikasikan dengan empat metode</title><desc id="class-desc">Sepuluh nilai dibagi menggunakan equal interval, quantile, natural breaks, dan standard deviation sehingga batas kelas dan jumlah anggota berbeda.</desc>
+      <rect width="960" height="440" fill="#fff"/>
       <g font-family="system-ui,sans-serif" fill="#26323e">
         <text x="28" y="38" font-size="18" font-weight="700">Nilai: 2, 3, 4, 5, 6, 7, 15, 16, 17, 25</text>
-        <text x="28" y="92" font-weight="700" fill="#075175">Equal interval</text><rect x="205" y="67" width="218" height="42" fill="#d6e8ed"/><rect x="423" y="67" width="218" height="42" fill="#75aeca"/><rect x="641" y="67" width="218" height="42" fill="#075175"/><text x="314" y="94" text-anchor="middle">2–9</text><text x="532" y="94" text-anchor="middle">10–17</text><text x="750" y="94" text-anchor="middle" fill="#fff">18–25</text>
-        <text x="28" y="172" font-weight="700" fill="#075175">Quantile</text><rect x="205" y="147" width="218" height="42" fill="#d6e8ed"/><rect x="423" y="147" width="218" height="42" fill="#75aeca"/><rect x="641" y="147" width="218" height="42" fill="#075175"/><text x="314" y="174" text-anchor="middle">2–5</text><text x="532" y="174" text-anchor="middle">6–15</text><text x="750" y="174" text-anchor="middle" fill="#fff">16–25</text>
-        <text x="28" y="252" font-weight="700" fill="#075175">Natural breaks</text><rect x="205" y="227" width="218" height="42" fill="#d6e8ed"/><rect x="423" y="227" width="218" height="42" fill="#75aeca"/><rect x="641" y="227" width="218" height="42" fill="#075175"/><text x="314" y="254" text-anchor="middle">2–7</text><text x="532" y="254" text-anchor="middle">15–17</text><text x="750" y="254" text-anchor="middle" fill="#fff">25</text>
-        <text x="205" y="308" font-size="14" fill="#5d6b76">Dataset tidak berubah; yang berubah adalah batas kelas dan pesan visual peta.</text>
+        <text x="28" y="92" font-weight="700" fill="#075175">Equal interval</text><rect x="225" y="64" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="64" width="210" height="46" fill="#75aeca"/><rect x="645" y="64" width="210" height="46" fill="#075175"/><text x="330" y="86" text-anchor="middle">2–9</text><text x="330" y="103" text-anchor="middle" font-size="12">6 objek</text><text x="540" y="86" text-anchor="middle">10–17</text><text x="540" y="103" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="86" text-anchor="middle" fill="#fff">18–25</text><text x="750" y="103" text-anchor="middle" fill="#fff" font-size="12">1 objek</text>
+        <text x="28" y="172" font-weight="700" fill="#075175">Quantile</text><rect x="225" y="144" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="144" width="210" height="46" fill="#75aeca"/><rect x="645" y="144" width="210" height="46" fill="#075175"/><text x="330" y="166" text-anchor="middle">2–5</text><text x="330" y="183" text-anchor="middle" font-size="12">4 objek</text><text x="540" y="166" text-anchor="middle">6–15</text><text x="540" y="183" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="166" text-anchor="middle" fill="#fff">16–25</text><text x="750" y="183" text-anchor="middle" fill="#fff" font-size="12">3 objek</text>
+        <text x="28" y="252" font-weight="700" fill="#075175">Natural breaks</text><rect x="225" y="224" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="224" width="210" height="46" fill="#75aeca"/><rect x="645" y="224" width="210" height="46" fill="#075175"/><text x="330" y="246" text-anchor="middle">2–7</text><text x="330" y="263" text-anchor="middle" font-size="12">6 objek</text><text x="540" y="246" text-anchor="middle">15–17</text><text x="540" y="263" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="246" text-anchor="middle" fill="#fff">25</text><text x="750" y="263" text-anchor="middle" fill="#fff" font-size="12">1 objek</text>
+        <text x="28" y="332" font-weight="700" fill="#075175">Standard deviation</text><rect x="225" y="304" width="157" height="46" fill="#edf1f2"/><rect x="382" y="304" width="157" height="46" fill="#d6e8ed"/><rect x="539" y="304" width="158" height="46" fill="#75aeca"/><rect x="697" y="304" width="158" height="46" fill="#075175"/><text x="303" y="326" text-anchor="middle">&lt;2,7</text><text x="303" y="343" text-anchor="middle" font-size="12">di bawah −1σ</text><text x="460" y="326" text-anchor="middle">2,7–10</text><text x="460" y="343" text-anchor="middle" font-size="12">di bawah μ</text><text x="618" y="326" text-anchor="middle">10–17,3</text><text x="618" y="343" text-anchor="middle" font-size="12">di atas μ</text><text x="776" y="326" text-anchor="middle" fill="#fff">&gt;17,3</text><text x="776" y="343" text-anchor="middle" fill="#fff" font-size="12">di atas +1σ</text>
+        <text x="225" y="406" font-size="14" fill="#5d6b76">Dataset tetap sama; metode mengubah batas kelas, jumlah anggota, dan pesan visual peta.</text>
       </g>
     </svg>
-    <figcaption>Ilustrasi perbedaan batas kelas. Satu dataset dapat menghasilkan pembagian kelas yang berbeda.</figcaption>
+    <figcaption>Perbandingan pembentukan kelas dari satu dataset yang sama. Equal interval menyamakan lebar rentang; quantile menyeimbangkan jumlah anggota; natural breaks mengikuti kesenjangan nilai; standard deviation memakai jarak terhadap rata-rata.</figcaption>
   </figure>
+
+  <h3>4.2.6 Pedoman pemilihan metode</h3>
+  <div class="table-wrap"><table><thead><tr><th>Tujuan utama</th><th>Metode yang dapat dipertimbangkan</th><th>Pemeriksaan yang diperlukan</th></tr></thead><tbody>
+    <tr><td>Membandingkan nilai terhadap rentang tetap atau membandingkan beberapa tahun</td><td>Equal interval atau batas manual yang sama</td><td>Pastikan batas kelas konsisten pada seluruh peta.</td></tr>
+    <tr><td>Membagi wilayah menjadi kelompok peringkat dengan anggota seimbang</td><td>Quantile</td><td>Periksa nilai yang sama dan nilai berdekatan di sekitar batas kelas.</td></tr>
+    <tr><td>Menunjukkan kelompok yang terbentuk pada satu dataset</td><td>Natural breaks (Jenks)</td><td>Periksa histogram dan hindari perbandingan langsung dengan peta yang mempunyai batas berbeda.</td></tr>
+    <tr><td>Menunjukkan penyimpangan dari kondisi rata-rata</td><td>Standard deviation</td><td>Periksa pencilan, kemencengan distribusi, dan kelayakan rata-rata sebagai acuan.</td></tr>
+  </tbody></table></div>
+  <p class="analysis-question"><strong>Prinsip utama:</strong> tidak terdapat satu metode yang selalu paling benar. Metode yang tepat adalah metode yang sesuai dengan distribusi data, tujuan analisis, dan pesan yang harus dibaca dari peta.</p>
+
+  <h3>4.2.7 Latihan perbandingan metode</h3>
+  <p>Enam wilayah mempunyai nilai indeks 12, 13, 14, 15, 16, dan 48. Nilai akan dibagi menjadi tiga kelas.</p>
+  <ol>
+    <li>Hitung lebar kelas <em>equal interval</em> dan tentukan anggota setiap kelas.</li>
+    <li>Bentuk tiga kelas <em>quantile</em> dengan dua wilayah pada setiap kelas.</li>
+    <li>Jelaskan mengapa kedua metode menghasilkan gambaran yang berbeda.</li>
+    <li>Tentukan pendekatan yang lebih tepat apabila peta tahun 2026 akan dibandingkan dengan peta tahun 2027.</li>
+  </ol>
+  <details><summary>Pembahasan latihan klasifikasi</summary>
+    <p>Rentang data adalah 48 − 12 = 36, sehingga lebar tiga kelas <em>equal interval</em> adalah 12. Pembagian praktis untuk data bilangan bulat dapat ditulis 12–23, 24–35, dan 36–48. Kelas tersebut berisi 5, 0, dan 1 wilayah. Pada <em>quantile</em>, kelas dapat dibentuk menjadi 12–13, 14–15, dan 16–48 sehingga setiap kelas berisi dua wilayah. Hasil <em>equal interval</em> menonjolkan nilai 48 sebagai nilai ekstrem, sedangkan <em>quantile</em> menjamin jumlah anggota seimbang tetapi menempatkan 16 dan 48 dalam kelas yang sama. Untuk perbandingan antarwaktu, gunakan batas kelas tetap yang diterapkan pada kedua tahun; batas tidak boleh dihitung ulang secara terpisah apabila tujuan utamanya adalah membandingkan perubahan.</p>
+  </details>
 
   <div class="source-image-pair">
     <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html"><img src="https://docs.qgis.org/3.44/en/_images/categorisation_result.png" alt="Hasil klasifikasi kategori pada QGIS"></a><figcaption>Klasifikasi kategorikal memakai nilai unik. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</figcaption></figure>
@@ -164,7 +253,7 @@
   <p><strong>Contoh sistem resmi:</strong> <a href="https://inarisk.bnpb.go.id/">InaRISK BNPB</a> memungkinkan pengguna memilih wilayah dan jenis bencana, menampilkan kelas risiko, serta membaca indikator penduduk dan fasilitas yang terpapar. Sistem tersebut menunjukkan bahwa penelusuran, klasifikasi, dan pengukuran digunakan bersama untuk menyampaikan informasi wilayah.</p>
 
   <h2 id="contoh-terstruktur">7. Contoh terstruktur</h2>
-  <h3>7.1 Retrieval, klasifikasi, dan pengukuran kecamatan</h3>
+  <h3>7.1 Penelusuran, klasifikasi, dan pengukuran kecamatan</h3>
   <p>Empat kecamatan mempunyai data penduduk, luas wilayah, dan jumlah puskesmas sebagai berikut.</p>
   <div class="table-wrap"><table><thead><tr><th>Kecamatan</th><th>Penduduk</th><th>Luas (km²)</th><th>Puskesmas</th><th>Kepadatan (jiwa/km²)</th></tr></thead><tbody>
     <tr><td>A</td><td>12.000</td><td>6</td><td>1</td><td>2.000</td></tr>
@@ -173,7 +262,7 @@
     <tr><td>D</td><td>7.000</td><td>2</td><td>0</td><td>3.500</td></tr>
   </tbody></table></div>
   <div class="operation-list">
-    <article><strong>Retrieval</strong><p>Ekspresi <code>kepadatan &gt;= 3000 AND puskesmas = 0</code> memilih Kecamatan B dan D.</p></article>
+    <article><strong>Penelusuran data</strong><p>Ekspresi <code>kepadatan &gt;= 3000 AND puskesmas = 0</code> memilih Kecamatan B dan D.</p></article>
     <article><strong>Klasifikasi</strong><p>Kelas rendah: &lt;2.000; sedang: 2.000–2.999; tinggi: ≥3.000 jiwa/km². Kecamatan B dan D termasuk kelas tinggi.</p></article>
     <article><strong>Pengukuran</strong><p>Luas poligon digunakan sebagai penyebut kepadatan. Perhitungan memerlukan CRS proyeksi yang sesuai dan satuan luas yang konsisten.</p></article>
     <article><strong>Interpretasi</strong><p>Hasil menunjukkan wilayah yang memenuhi kriteria awal, bukan keputusan akhir pembangunan fasilitas.</p></article>
@@ -193,7 +282,7 @@
 
   <h2 id="ringkasan">9. Ringkasan</h2>
   <ul class="summary-list">
-    <li><b>Retrieval</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial.</span></li>
+    <li><b>Penelusuran data</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial; istilah <em>retrieval</em> digunakan dalam RPS.</span></li>
     <li><b>Klasifikasi</b><span>mengelompokkan nilai; metode kelas dapat mengubah pola yang terlihat.</span></li>
     <li><b>Pengukuran</b><span>mengubah geometri menjadi nilai jarak, panjang, keliling, atau luas.</span></li>
     <li><b>CRS</b><span>menentukan satuan dan karakter distorsi, sehingga harus dipilih sebelum mengukur.</span></li>
@@ -205,6 +294,10 @@
     <li><a href="https://ltb.itc.utwente.nl/498/concept/81478">University of Twente, ITC Living Textbook — Classification, Measurement and Retrieval Functions</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html">QGIS User Guide — Working with the Attribute Table</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/help/mapping/layer-properties/data-classification-methods.htm">ArcGIS Pro Documentation — Data Classification Methods</a>.</li>
+    <li><a href="https://www.fao.org/4/w0615e/w0615e06.htm">FAO — The Functioning of a GIS: Generalisation, Classification, Searching, and Retrieval</a>.</li>
+    <li><a href="https://ftp.itc.nl/pub/ilwis/pdf/usrch07.pdf">ITC — ILWIS User's Guide, Chapter 7: Spatial Data Analysis</a>.</li>
+    <li><a href="https://maps.unomaha.community/Peterson/gis/notes/GISAnal1.html">University of Nebraska Omaha — GIS Analysis Functions</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/creating-and-using-layer-selections.htm">ArcGIS Pro Documentation — Creating and Using Layer Selections</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/select-layer-by-location.htm">ArcGIS Pro Documentation — Select Layer by Location</a>.</li>
     <li><a href="https://www.big.go.id/content/produk/ina-geoportal">Badan Informasi Geospasial — Ina-Geoportal</a>.</li>
@@ -212,7 +305,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Retrieval data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#pengukuran">Pengukuran spasial</a><a href="#kasus">Penerapan di Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Penelusuran data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#metode-kelas">Metode pembentukan kelas</a><a href="#pengukuran">Pengukuran spasial</a><a href="#kasus">Penerapan di Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
 </div>
 </body>
 </html>
