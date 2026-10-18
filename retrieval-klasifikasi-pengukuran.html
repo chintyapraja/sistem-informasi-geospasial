@@ -147,18 +147,31 @@
     <dt>Planimetrik</dt><dd>Perhitungan dilakukan pada bidang proyeksi; sesuai apabila proyeksi dan cakupan wilayah telah dipilih dengan tepat.</dd>
   </dl>
 
-  <h2 id="kasus">6. Contoh terpadu</h2>
-  <p class="analysis-question"><strong>Kasus:</strong> pemerintah kabupaten memerlukan desa prioritas untuk penambahan fasilitas kesehatan.</p>
-  <ol>
-    <li><strong>Retrieval atribut:</strong> pilih desa dengan jumlah penduduk lebih dari 5.000 jiwa.</li>
-    <li><strong>Retrieval spasial:</strong> dari hasil tersebut, pilih desa yang belum memiliki puskesmas.</li>
-    <li><strong>Klasifikasi:</strong> kelompokkan kepadatan penduduk menjadi rendah, sedang, dan tinggi.</li>
-    <li><strong>Pengukuran:</strong> hitung luas setiap desa dan jarak ke fasilitas kesehatan terdekat.</li>
-    <li><strong>Interpretasi:</strong> desa padat, belum memiliki puskesmas, dan jauh dari fasilitas menjadi kandidat prioritas. Hasil ini masih perlu diperiksa dengan kriteria lain.</li>
-  </ol>
-  <p><strong>Catatan:</strong> operasi SIG menghasilkan bukti spasial, bukan keputusan otomatis. Kriteria, kualitas data, dan konteks lapangan tetap menentukan kesimpulan.</p>
+  <h2 id="kasus">6. Studi kasus di Indonesia</h2>
+  <p class="analysis-question"><strong>Pertanyaan:</strong> kecamatan mana yang perlu ditelaah lebih lanjut sebagai prioritas peningkatan pelayanan kesehatan dasar?</p>
+  <p>Contoh ini memperlihatkan hubungan antara penelusuran data, klasifikasi, dan pengukuran. Contoh tidak menyatakan suatu kecamatan benar-benar menjadi prioritas; hasil akhir hanya dapat ditentukan setelah data mutakhir, kebijakan pelayanan, dan kondisi lapangan diperiksa.</p>
+  <div class="table-wrap"><table><thead><tr><th>Tahap</th><th>Data atau operasi</th><th>Hasil yang dibaca</th></tr></thead><tbody>
+    <tr><td>1. Menyiapkan data</td><td>Batas kecamatan dari <a href="https://www.big.go.id/content/produk/ina-geoportal">Ina-Geoportal BIG</a>, data penduduk dari <a href="https://www.bps.go.id/">BPS</a>, serta lokasi fasilitas kesehatan dari sumber pemerintah yang berwenang.</td><td>Setiap kecamatan mempunyai geometri, jumlah penduduk, luas, dan informasi fasilitas.</td></tr>
+    <tr><td>2. Menghitung indikator</td><td>Kepadatan penduduk = jumlah penduduk ÷ luas wilayah. Luas dihitung menggunakan CRS proyeksi yang sesuai.</td><td>Nilai kepadatan dapat dibandingkan antarkecamatan.</td></tr>
+    <tr><td>3. Penelusuran atribut</td><td>Pilih kecamatan dengan kepadatan di atas nilai ambang yang ditetapkan dalam kajian.</td><td>Daftar kecamatan yang memenuhi kriteria kepadatan.</td></tr>
+    <tr><td>4. Penelusuran spasial</td><td>Periksa kecamatan yang tidak mempunyai fasilitas kesehatan di dalam wilayahnya.</td><td>Objek terpilih berdasarkan hubungan lokasi, bukan hanya nilai tabel.</td></tr>
+    <tr><td>5. Klasifikasi</td><td>Kelompokkan rasio penduduk terhadap fasilitas ke dalam kelas rendah, sedang, dan tinggi. Metode serta batas kelas harus dicantumkan.</td><td>Peta memperlihatkan perbedaan beban pelayanan secara konsisten.</td></tr>
+    <tr><td>6. Pengukuran</td><td>Ukur jarak ke fasilitas terdekat. Jarak lurus hanya menjadi pendekatan awal; waktu tempuh memerlukan analisis jaringan.</td><td>Ukuran kedekatan yang dapat dibandingkan, beserta keterbatasannya.</td></tr>
+  </tbody></table></div>
+  <p><strong>Interpretasi:</strong> kecamatan dengan kepadatan dan rasio penduduk per fasilitas yang tinggi serta akses yang jauh dapat ditandai sebagai wilayah yang perlu ditelaah. Penetapan prioritas tetap memerlukan kapasitas fasilitas, kondisi jalan, tenaga kesehatan, kebijakan, dan verifikasi lapangan.</p>
+  <p><strong>Contoh sistem resmi:</strong> <a href="https://inarisk.bnpb.go.id/">InaRISK BNPB</a> memungkinkan pengguna memilih wilayah dan jenis bencana, menampilkan kelas risiko, serta membaca indikator penduduk dan fasilitas yang terpapar. Sistem tersebut menunjukkan bahwa penelusuran, klasifikasi, dan pengukuran digunakan bersama untuk menyampaikan informasi wilayah.</p>
 
-  <h2 id="ringkasan">7. Ringkasan</h2>
+  <h2 id="latihan">7. Lembar kerja analisis 1</h2>
+  <p><strong>Waktu:</strong> 15 menit. <strong>Bentuk:</strong> satu tabel singkat, dikerjakan berkelompok. Tidak memerlukan penggunaan perangkat lunak.</p>
+  <p class="analysis-question"><strong>Situasi:</strong> tersedia layer kecamatan dengan field <code>nama</code>, <code>penduduk</code>, dan <code>luas_km2</code>, serta layer titik puskesmas dengan field <code>status</code> dan <code>kapasitas</code>.</p>
+  <ol>
+    <li>Rumuskan satu pertanyaan analisis yang dapat dijawab oleh kedua layer tersebut.</li>
+    <li>Tulis satu kriteria atribut dan satu kriteria spasial yang diperlukan.</li>
+    <li>Pilih metode klasifikasi untuk memetakan kepadatan penduduk dan jelaskan alasannya.</li>
+    <li>Sebutkan besaran yang harus diukur, CRS yang sesuai, dan satu keterbatasan hasil.</li>
+  </ol>
+
+  <h2 id="ringkasan">8. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Retrieval</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial.</span></li>
     <li><b>Klasifikasi</b><span>mengelompokkan nilai; metode kelas dapat mengubah pola yang terlihat.</span></li>
@@ -167,16 +180,19 @@
     <li><b>Interpretasi</b><span>selalu menghubungkan hasil operasi dengan pertanyaan awal dan keterbatasan data.</span></li>
   </ul>
 
-  <h2 id="referensi">8. Referensi</h2>
+  <h2 id="referensi">9. Referensi</h2>
   <ul class="reference">
+    <li><a href="https://ltb.itc.utwente.nl/498/concept/81478">University of Twente, ITC Living Textbook — Classification, Measurement and Retrieval Functions</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html">QGIS User Guide — Working with the Attribute Table</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/creating-and-using-layer-selections.htm">ArcGIS Pro Documentation — Creating and Using Layer Selections</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/select-layer-by-location.htm">ArcGIS Pro Documentation — Select Layer by Location</a>.</li>
+    <li><a href="https://www.big.go.id/content/produk/ina-geoportal">Badan Informasi Geospasial — Ina-Geoportal</a>.</li>
+    <li><a href="https://inarisk.bnpb.go.id/">BNPB — InaRISK</a>.</li>
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#alur">Alur analisis</a><a href="#retrieval">Retrieval</a><a href="#klasifikasi">Klasifikasi</a><a href="#pengukuran">Pengukuran</a><a href="#kasus">Contoh terpadu</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#alur">Alur analisis</a><a href="#retrieval">Penelusuran data</a><a href="#klasifikasi">Klasifikasi</a><a href="#pengukuran">Pengukuran</a><a href="#kasus">Studi kasus Indonesia</a><a href="#latihan">Lembar kerja</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
 </div>
 </body>
 </html>
