@@ -22,6 +22,153 @@ document.addEventListener('DOMContentLoaded', () => {
     if (img.complete && !img.naturalWidth) replaceBrokenImage(img);
   });
 
+  const installAnnotationTools = () => {
+    if (document.querySelector('.annotation-tools')) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .annotation-layer{position:absolute;inset:0;z-index:9000;pointer-events:none;overflow:visible}
+      .annotation-layer.is-drawing{pointer-events:auto;cursor:crosshair;touch-action:none}
+      .annotation-tools{position:fixed;right:22px;bottom:22px;z-index:9010;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .annotation-launcher,.annotation-panel button{appearance:none;border:1px solid #0a5878;border-radius:999px;background:#fff;color:#083f59;padding:10px 14px;font:700 14px/1.2 inherit;box-shadow:0 4px 16px #17313e2e;cursor:pointer}
+      .annotation-launcher{background:#075175;color:#fff;border-color:#075175}
+      .annotation-panel{display:none;align-items:center;gap:7px;margin-bottom:9px;padding:8px;border:1px solid #c5d1d7;border-radius:12px;background:#fff;box-shadow:0 8px 28px #17313e35}
+      .annotation-tools.is-open .annotation-panel{display:flex}
+      .annotation-panel button:hover,.annotation-panel button:focus-visible,.annotation-launcher:hover,.annotation-launcher:focus-visible{outline:3px solid #9bc9d7;outline-offset:2px}
+      .annotation-panel button[aria-pressed="true"]{background:#b9322c;border-color:#b9322c;color:#fff}
+      .annotation-panel button:disabled{opacity:.42;cursor:not-allowed}
+      .annotation-status{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+      @media(max-width:800px){.annotation-tools{right:12px;bottom:12px}.annotation-panel{max-width:calc(100vw - 24px);flex-wrap:wrap;justify-content:flex-end}.annotation-launcher,.annotation-panel button{padding:9px 12px;font-size:13px}}
+      @media print{.annotation-tools,.annotation-layer{display:none!important}}
+    `;
+    document.head.appendChild(style);
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const layer = document.createElementNS(svgNS, 'svg');
+    layer.classList.add('annotation-layer');
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+
+    const tools = document.createElement('div');
+    tools.className = 'annotation-tools';
+    tools.innerHTML = `
+      <div class="annotation-panel" role="toolbar" aria-label="Alat corat-coret">
+        <button type="button" class="annotation-pen" aria-pressed="false">Pena</button>
+        <button type="button" class="annotation-undo" disabled>Urungkan</button>
+        <button type="button" class="annotation-clear" disabled>Hapus semua</button>
+      </div>
+      <button type="button" class="annotation-launcher" aria-expanded="false">Corat-coret</button>
+      <span class="annotation-status" aria-live="polite"></span>
+    `;
+    document.body.appendChild(tools);
+
+    const launcher = tools.querySelector('.annotation-launcher');
+    const pen = tools.querySelector('.annotation-pen');
+    const undo = tools.querySelector('.annotation-undo');
+    const clear = tools.querySelector('.annotation-clear');
+    const status = tools.querySelector('.annotation-status');
+    const strokes = [];
+    let drawing = false;
+    let activePath = null;
+    let pathData = '';
+
+    const sizeLayer = () => {
+      const width = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth, innerWidth);
+      const height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight, innerHeight);
+      layer.setAttribute('width', width);
+      layer.setAttribute('height', height);
+      layer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      layer.style.width = `${width}px`;
+      layer.style.height = `${height}px`;
+    };
+
+    const setStatus = (message) => {
+      status.textContent = '';
+      requestAnimationFrame(() => { status.textContent = message; });
+    };
+
+    const updateButtons = () => {
+      const hasStrokes = strokes.length > 0;
+      undo.disabled = !hasStrokes;
+      clear.disabled = !hasStrokes;
+    };
+
+    const setPen = (active) => {
+      drawing = active;
+      pen.setAttribute('aria-pressed', String(active));
+      pen.textContent = active ? 'Pena aktif' : 'Pena';
+      layer.classList.toggle('is-drawing', active);
+      if (active) sizeLayer();
+      setStatus(active ? 'Pena diaktifkan' : 'Pena dinonaktifkan');
+    };
+
+    const point = (event) => ({ x: event.clientX + scrollX, y: event.clientY + scrollY });
+
+    layer.addEventListener('pointerdown', (event) => {
+      if (!drawing || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      event.preventDefault();
+      const start = point(event);
+      activePath = document.createElementNS(svgNS, 'path');
+      pathData = `M ${start.x.toFixed(1)} ${start.y.toFixed(1)}`;
+      activePath.setAttribute('d', pathData);
+      activePath.setAttribute('fill', 'none');
+      activePath.setAttribute('stroke', '#d92d20');
+      activePath.setAttribute('stroke-width', '4');
+      activePath.setAttribute('stroke-linecap', 'round');
+      activePath.setAttribute('stroke-linejoin', 'round');
+      layer.appendChild(activePath);
+      layer.setPointerCapture(event.pointerId);
+    });
+
+    layer.addEventListener('pointermove', (event) => {
+      if (!activePath) return;
+      event.preventDefault();
+      const next = point(event);
+      pathData += ` L ${next.x.toFixed(1)} ${next.y.toFixed(1)}`;
+      activePath.setAttribute('d', pathData);
+    });
+
+    const finishStroke = (event) => {
+      if (!activePath) return;
+      if (layer.hasPointerCapture(event.pointerId)) layer.releasePointerCapture(event.pointerId);
+      strokes.push(activePath);
+      activePath = null;
+      pathData = '';
+      updateButtons();
+      setStatus('Satu goresan ditambahkan');
+    };
+    layer.addEventListener('pointerup', finishStroke);
+    layer.addEventListener('pointercancel', finishStroke);
+
+    launcher.addEventListener('click', () => {
+      const open = !tools.classList.contains('is-open');
+      tools.classList.toggle('is-open', open);
+      launcher.setAttribute('aria-expanded', String(open));
+      launcher.textContent = open ? 'Tutup alat' : 'Corat-coret';
+      if (!open) setPen(false);
+    });
+    pen.addEventListener('click', () => setPen(!drawing));
+    undo.addEventListener('click', () => {
+      const last = strokes.pop();
+      if (last) last.remove();
+      updateButtons();
+      setStatus('Goresan terakhir dibatalkan');
+    });
+    clear.addEventListener('click', () => {
+      strokes.splice(0).forEach((stroke) => stroke.remove());
+      updateButtons();
+      setStatus('Semua coretan dihapus');
+    });
+    addEventListener('resize', sizeLayer);
+    addEventListener('load', sizeLayer, { once: true });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && drawing) setPen(false);
+    });
+    sizeLayer();
+  };
+
+  installAnnotationTools();
+
   const sidebar = document.querySelector('.sidebar');
   if (!sidebar) return;
 
