@@ -13,7 +13,7 @@ body{margin:0;font:18px/1.72 system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
 a{color:var(--blue);text-underline-offset:3px}
 .sidebar{position:fixed;inset:0 auto 0 0;width:270px;border-right:1px solid var(--line);padding:36px 25px;overflow:auto;background:var(--tint)}
 .brand{font-size:24px;line-height:1.28;font-weight:700;display:block;text-decoration:none;margin-bottom:8px}.meta{font-size:14px;color:var(--muted)}
-.sidebar nav{margin-top:34px}.sidebar nav a{display:block;padding:8px 11px;margin:3px 0;border-radius:3px;font-size:15px;line-height:1.45;text-decoration:none}
+.sidebar nav{margin-top:34px}.sidebar nav a{display:grid;grid-template-columns:27px minmax(0,1fr);column-gap:8px;align-items:start;padding:8px 11px;margin:3px 0;border-radius:3px;font-size:15px;line-height:1.45;text-decoration:none}.sidebar nav a b{display:block;min-width:0;text-align:right;color:var(--blue);font-variant-numeric:tabular-nums}.sidebar nav a span{display:block}
 .sidebar nav a[aria-current]{background:#deebf1;border-left:3px solid var(--blue);font-weight:700}
 .layout{margin-left:270px;display:grid;grid-template-columns:minmax(0,850px) 190px;gap:44px;max-width:1220px;padding:52px 48px 80px}
 main{min-width:0} h1{font-size:43px;line-height:1.18;font-weight:680;letter-spacing:-.8px;margin:12px 0 24px}
