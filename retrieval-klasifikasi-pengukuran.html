@@ -15,23 +15,23 @@
 <main id="materi">
   <div class="eyebrow">Pertemuan 9 · Materi 8 · 100 menit · CPMK3</div>
   <h1>Retrieval, klasifikasi, dan pengukuran</h1>
-  <p class="lead">Data SIG menjadi berguna ketika objek yang relevan dapat ditemukan, dikelompokkan secara tepat, dan diukur dengan satuan serta acuan spasial yang benar.</p>
+  <p class="lead">Materi ini membahas prinsip penelusuran dan pemilihan data, pembentukan kelas, serta pengukuran geometris dalam analisis sistem informasi geospasial.</p>
 
   <h2 id="tujuan">1. Tujuan pembelajaran</h2>
   <div class="concept-strip">
-    <article><b>Retrieval</b><strong>Menemukan data</strong><p>Menyusun kriteria atribut dan spasial untuk mengambil objek yang menjawab pertanyaan.</p></article>
-    <article><b>Klasifikasi</b><strong>Membentuk kelompok</strong><p>Memilih cara pengelompokan yang sesuai dengan jenis data dan tujuan peta.</p></article>
-    <article><b>Pengukuran</b><strong>Menghasilkan nilai</strong><p>Mengukur jarak, panjang, luas, dan keliling dengan CRS dan satuan yang tepat.</p></article>
+    <article><b>Retrieval</b><strong>Penelusuran dan pemilihan data</strong><p>Menyusun kriteria atribut dan spasial untuk memperoleh objek yang relevan.</p></article>
+    <article><b>Klasifikasi</b><strong>Pembentukan kelas data</strong><p>Menentukan metode pengelompokan berdasarkan jenis data dan tujuan analisis.</p></article>
+    <article><b>Pengukuran</b><strong>Perhitungan besaran geometris</strong><p>Menghitung jarak, panjang, luas, dan keliling menggunakan CRS dan satuan yang sesuai.</p></article>
   </div>
-  <p class="analysis-question"><strong>Contoh pertanyaan:</strong> desa mana yang penduduknya lebih dari 5.000 jiwa, termasuk kelas kepadatan tinggi, dan memiliki luas kurang dari 10 km²?</p>
+  <p class="analysis-question"><strong>Contoh rumusan analisis:</strong> identifikasi desa dengan jumlah penduduk lebih dari 5.000 jiwa, termasuk kelas kepadatan tinggi, dan memiliki luas kurang dari 10 km².</p>
 
-  <h2 id="alur">2. Dari pertanyaan menuju jawaban</h2>
+  <h2 id="alur">2. Kerangka proses analisis</h2>
   <figure class="visual-board">
     <svg viewBox="0 0 960 290" role="img" aria-labelledby="alur-title alur-desc">
       <title id="alur-title">Alur retrieval, klasifikasi, dan pengukuran</title><desc id="alur-desc">Pertanyaan diterjemahkan menjadi kriteria, objek dipilih, dikelompokkan, diukur, lalu ditafsirkan.</desc>
       <rect width="960" height="290" fill="#f5f8fa"/>
       <g font-family="system-ui,sans-serif" text-anchor="middle">
-        <g transform="translate(25 70)"><rect width="160" height="125" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="80" y="34" fill="#075175" font-weight="700">PERTANYAAN</text><text x="80" y="66" fill="#26323e" font-size="16">Objek mana?</text><text x="80" y="90" fill="#26323e" font-size="16">Termasuk kelas apa?</text><text x="80" y="114" fill="#26323e" font-size="16">Berapa ukurannya?</text></g>
+        <g transform="translate(25 70)"><rect width="160" height="125" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="80" y="34" fill="#075175" font-weight="700">RUMUSAN</text><text x="80" y="66" fill="#26323e" font-size="16">Objek yang dianalisis</text><text x="80" y="90" fill="#26323e" font-size="16">Dasar klasifikasi</text><text x="80" y="114" fill="#26323e" font-size="16">Besaran geometris</text></g>
         <text x="210" y="139" fill="#075175" font-size="28">→</text>
         <g transform="translate(235 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700">RETRIEVAL</text><circle cx="45" cy="83" r="13" fill="#b64c42"/><circle cx="75" cy="76" r="13" fill="#b64c42"/><circle cx="105" cy="92" r="13" fill="#b8c5ca"/></g>
         <text x="410" y="139" fill="#075175" font-size="28">→</text>
@@ -45,14 +45,14 @@
     <figcaption>Alur analisis: pertanyaan menentukan kriteria, operasi, dan bentuk hasil yang diperlukan.</figcaption>
   </figure>
 
-  <h2 id="retrieval">3. Retrieval: mengambil bagian data yang relevan</h2>
-  <p><strong>Retrieval</strong> adalah proses menemukan dan mengambil record atau objek yang memenuhi kriteria tertentu. Hasilnya dapat berupa objek yang terpilih pada peta, baris terpilih pada tabel, atau dataset baru.</p>
+  <h2 id="retrieval">3. Retrieval data</h2>
+  <p><strong>Retrieval data</strong> merupakan proses penelusuran dan pengambilan record atau objek berdasarkan kriteria tertentu. Hasil retrieval dapat berupa objek terpilih pada peta, record terpilih pada tabel, tampilan data yang telah difilter, atau dataset baru.</p>
   <div class="two-definitions">
     <article><small>BERDASARKAN ATRIBUT</small><strong>Attribute query</strong><p>Kriteria memakai nilai dalam field, misalnya <code>jenis = 'sekolah'</code> atau <code>kapasitas &gt; 300</code>.</p></article>
     <article><small>BERDASARKAN LOKASI</small><strong>Spatial query</strong><p>Kriteria memakai hubungan spasial, misalnya sekolah yang berada di dalam Kecamatan A atau bangunan yang memotong zona banjir.</p></article>
   </div>
 
-  <h3 id="logika">Logika query</h3>
+  <h3 id="logika">3.1 Operator logika dalam query</h3>
   <div class="operation-list">
     <article><strong>AND</strong><p>Semua syarat harus benar. <code>jenis = 'sekolah' AND siswa &gt; 500</code>.</p></article>
     <article><strong>OR</strong><p>Salah satu syarat boleh benar. <code>status = 'rusak' OR status = 'perbaikan'</code>.</p></article>
@@ -61,7 +61,7 @@
   </div>
   <p class="equation">Objek terpilih = objek yang membuat ekspresi bernilai TRUE</p>
 
-  <h3 id="contoh-retrieval">Contoh sederhana</h3>
+  <h3 id="contoh-retrieval">3.2 Penerapan query atribut</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>ID</th><th>Fasilitas</th><th>Jenis</th><th>Kapasitas</th><th>Status</th></tr></thead>
     <tbody><tr><td>F01</td><td>SD Melati</td><td>Sekolah</td><td>420</td><td>Aktif</td></tr><tr class="selected-row"><td>F02</td><td>SMP Merdeka</td><td>Sekolah</td><td>760</td><td>Aktif</td></tr><tr><td>F03</td><td>Puskesmas Utama</td><td>Kesehatan</td><td>120</td><td>Aktif</td></tr><tr><td>F04</td><td>SD Harapan</td><td>Sekolah</td><td>540</td><td>Perbaikan</td></tr></tbody>
@@ -73,22 +73,23 @@
     <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html"><img src="https://docs.qgis.org/3.44/en/_images/query_builder_example.png" alt="Contoh Query Builder resmi QGIS"></a><figcaption>Query Builder menyusun ekspresi dari field, operator, dan nilai. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</figcaption></figure>
   </div>
 
-  <h3 id="selection-filter">Selection, filter, dan output baru</h3>
+  <h3 id="selection-filter">3.3 Perbedaan selection, filter, dan ekspor data</h3>
   <dl class="reading-result">
     <dt>Selection</dt><dd>Objek ditandai sebagai pilihan, tetapi dataset asal tetap berisi seluruh objek.</dd>
     <dt>Filter</dt><dd>Hanya objek yang memenuhi kriteria yang ditampilkan atau dibaca oleh layer.</dd>
     <dt>Ekspor</dt><dd>Objek terpilih disimpan sebagai dataset baru sehingga menjadi hasil permanen.</dd>
   </dl>
 
-  <h2 id="klasifikasi">4. Klasifikasi: mengubah banyak nilai menjadi kelompok bermakna</h2>
+  <h2 id="klasifikasi">4. Klasifikasi data</h2>
   <p><strong>Klasifikasi</strong> menyusun objek ke dalam kelas berdasarkan kesamaan atribut. Kelas yang dipilih memengaruhi pola yang terlihat pada peta, sehingga metode harus disesuaikan dengan jenis data dan tujuan komunikasi.</p>
+  <h3>4.1 Dasar klasifikasi menurut jenis data</h3>
   <div class="concept-strip">
     <article><b>Data kategori</b><strong>Nilai unik</strong><p>Setiap kategori memperoleh simbol berbeda. Contoh: sekolah, rumah sakit, terminal.</p></article>
     <article><b>Data berurutan</b><strong>Kelas ordinal</strong><p>Kategori mempunyai urutan. Contoh: rendah, sedang, tinggi.</p></article>
     <article><b>Data numerik</b><strong>Rentang nilai</strong><p>Nilai dibagi ke beberapa interval. Contoh: kepadatan penduduk atau curah hujan.</p></article>
   </div>
 
-  <h3 id="metode-kelas">Metode pembentukan kelas numerik</h3>
+  <h3 id="metode-kelas">4.2 Metode pembentukan kelas numerik</h3>
   <div class="operation-list">
     <article><strong>Equal interval</strong><p>Rentang total dibagi sama lebar. Mudah dibandingkan, tetapi jumlah objek per kelas dapat sangat berbeda.</p></article>
     <article><strong>Quantile</strong><p>Setiap kelas berisi jumlah objek yang hampir sama. Cocok untuk peringkat, tetapi nilai yang mirip dapat terpisah.</p></article>
@@ -116,8 +117,9 @@
     <figure><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/vector_properties.html"><img src="https://docs.qgis.org/3.44/en/_images/graduatedsymbol_ng_line.png" alt="Panel simbol bertingkat pada QGIS"></a><figcaption>Simbol bertingkat digunakan untuk atribut numerik. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/vector_properties.html">QGIS User Guide — Vector Properties</a>.</figcaption></figure>
   </div>
 
-  <h2 id="pengukuran">5. Pengukuran dalam SIG</h2>
+  <h2 id="pengukuran">5. Pengukuran spasial</h2>
   <p>Pengukuran menerjemahkan geometri menjadi nilai. Titik dapat menghasilkan jarak antarlokasi; garis menghasilkan panjang; poligon menghasilkan luas dan keliling. Nilai tersebut bergantung pada geometri, CRS, satuan, dan metode perhitungan.</p>
+  <h3>5.1 Besaran geometris</h3>
   <div class="operation-list">
     <article><strong>Jarak</strong><p>Panjang garis lurus antara dua lokasi atau panjang lintasan melalui beberapa segmen.</p></article>
     <article><strong>Panjang</strong><p>Total panjang geometri garis, misalnya panjang sungai atau ruas jalan.</p></article>
@@ -139,7 +141,7 @@
     <figcaption>Ilustrasi objek dan besaran yang diukur dalam SIG.</figcaption>
   </figure>
 
-  <h3 id="crs-pengukuran">Mengapa CRS menentukan hasil?</h3>
+  <h3 id="crs-pengukuran">5.2 Pengaruh sistem referensi koordinat</h3>
   <dl class="reading-result">
     <dt>CRS geografis</dt><dd>Koordinat dinyatakan dalam derajat. Derajat bukan satuan panjang yang tetap, sehingga pengukuran planar langsung dapat menyesatkan.</dd>
     <dt>CRS proyeksi</dt><dd>Koordinat dinyatakan dalam satuan linear, misalnya meter. Pilih proyeksi yang sesuai dengan lokasi dan tujuan pengukuran.</dd>
@@ -147,8 +149,8 @@
     <dt>Planimetrik</dt><dd>Perhitungan dilakukan pada bidang proyeksi; sesuai apabila proyeksi dan cakupan wilayah telah dipilih dengan tepat.</dd>
   </dl>
 
-  <h2 id="kasus">6. Studi kasus di Indonesia</h2>
-  <p class="analysis-question"><strong>Pertanyaan:</strong> kecamatan mana yang perlu ditelaah lebih lanjut sebagai prioritas peningkatan pelayanan kesehatan dasar?</p>
+  <h2 id="kasus">6. Penerapan pada konteks Indonesia</h2>
+  <p class="analysis-question"><strong>Rumusan kasus:</strong> identifikasi kecamatan yang memerlukan penelaahan lebih lanjut sebagai prioritas peningkatan pelayanan kesehatan dasar.</p>
   <p>Contoh ini memperlihatkan hubungan antara penelusuran data, klasifikasi, dan pengukuran. Contoh tidak menyatakan suatu kecamatan benar-benar menjadi prioritas; hasil akhir hanya dapat ditentukan setelah data mutakhir, kebijakan pelayanan, dan kondisi lapangan diperiksa.</p>
   <div class="table-wrap"><table><thead><tr><th>Tahap</th><th>Data atau operasi</th><th>Hasil yang dibaca</th></tr></thead><tbody>
     <tr><td>1. Menyiapkan data</td><td>Batas kecamatan dari <a href="https://www.big.go.id/content/produk/ina-geoportal">Ina-Geoportal BIG</a>, data penduduk dari <a href="https://www.bps.go.id/">BPS</a>, serta lokasi fasilitas kesehatan dari sumber pemerintah yang berwenang.</td><td>Setiap kecamatan mempunyai geometri, jumlah penduduk, luas, dan informasi fasilitas.</td></tr>
@@ -161,9 +163,9 @@
   <p><strong>Interpretasi:</strong> kecamatan dengan kepadatan dan rasio penduduk per fasilitas yang tinggi serta akses yang jauh dapat ditandai sebagai wilayah yang perlu ditelaah. Penetapan prioritas tetap memerlukan kapasitas fasilitas, kondisi jalan, tenaga kesehatan, kebijakan, dan verifikasi lapangan.</p>
   <p><strong>Contoh sistem resmi:</strong> <a href="https://inarisk.bnpb.go.id/">InaRISK BNPB</a> memungkinkan pengguna memilih wilayah dan jenis bencana, menampilkan kelas risiko, serta membaca indikator penduduk dan fasilitas yang terpapar. Sistem tersebut menunjukkan bahwa penelusuran, klasifikasi, dan pengukuran digunakan bersama untuk menyampaikan informasi wilayah.</p>
 
-  <h2 id="latihan">7. Lembar kerja analisis 1</h2>
-  <p><strong>Waktu:</strong> 15 menit. <strong>Bentuk:</strong> satu tabel singkat, dikerjakan berkelompok. Tidak memerlukan penggunaan perangkat lunak.</p>
-  <p class="analysis-question"><strong>Situasi:</strong> tersedia layer kecamatan dengan field <code>nama</code>, <code>penduduk</code>, dan <code>luas_km2</code>, serta layer titik puskesmas dengan field <code>status</code> dan <code>kapasitas</code>.</p>
+  <h2 id="latihan">7. Latihan konseptual</h2>
+  <p><strong>Alokasi waktu:</strong> 15 menit. <strong>Bentuk kegiatan:</strong> penyusunan tabel analisis secara berkelompok tanpa menggunakan perangkat lunak.</p>
+  <p class="analysis-question"><strong>Data yang tersedia:</strong> layer kecamatan dengan field <code>nama</code>, <code>penduduk</code>, dan <code>luas_km2</code>, serta layer titik puskesmas dengan field <code>status</code> dan <code>kapasitas</code>.</p>
   <ol>
     <li>Rumuskan satu pertanyaan analisis yang dapat dijawab oleh kedua layer tersebut.</li>
     <li>Tulis satu kriteria atribut dan satu kriteria spasial yang diperlukan.</li>
@@ -192,7 +194,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#alur">Alur analisis</a><a href="#retrieval">Penelusuran data</a><a href="#klasifikasi">Klasifikasi</a><a href="#pengukuran">Pengukuran</a><a href="#kasus">Studi kasus Indonesia</a><a href="#latihan">Lembar kerja</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Retrieval data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#pengukuran">Pengukuran spasial</a><a href="#kasus">Penerapan di Indonesia</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
 </div>
 </body>
 </html>
