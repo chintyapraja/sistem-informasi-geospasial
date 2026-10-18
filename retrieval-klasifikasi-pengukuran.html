@@ -21,11 +21,17 @@
   <div class="concept-strip">
     <article><b>Penelusuran data</b><strong>Retrieval dan pemilihan data</strong><p>Menyusun kriteria atribut dan spasial untuk memperoleh objek yang relevan.</p></article>
     <article><b>Klasifikasi</b><strong>Pembentukan kelas data</strong><p>Menentukan metode pengelompokan berdasarkan jenis data dan tujuan analisis.</p></article>
-    <article><b>Pengukuran</b><strong>Perhitungan besaran geometris</strong><p>Menghitung jarak, panjang, luas, dan keliling menggunakan CRS dan satuan yang sesuai.</p></article>
+    <article><b>Pengukuran</b><strong>Perhitungan besaran spasial</strong><p>Menghitung jarak, panjang, luas, keliling, jumlah, kepadatan, dan volume menggunakan satuan yang sesuai.</p></article>
   </div>
   <p class="analysis-question"><strong>Contoh rumusan analisis:</strong> identifikasi desa dengan jumlah penduduk lebih dari 5.000 jiwa, termasuk kelas kepadatan tinggi, dan memiliki luas kurang dari 10 km².</p>
 
   <h2 id="alur">2. Kerangka proses analisis</h2>
+  <p>Penelusuran, reklasifikasi, dan pengukuran merupakan operasi awal untuk memeriksa satu kumpulan data spasial beserta atributnya. Ketiganya menggunakan objek yang sudah ada: lokasi geometri tidak dipindahkan dan objek spasial baru tidak dibentuk.</p>
+  <div class="table-wrap"><table><thead><tr><th>Operasi</th><th>Pertanyaan utama</th><th>Perubahan yang dihasilkan</th></tr></thead><tbody>
+    <tr><td><strong>Penelusuran</strong></td><td>Objek mana yang dicari atau informasi apa yang terdapat pada suatu lokasi?</td><td>Objek atau nilai yang memenuhi kriteria ditemukan dan dapat dipilih.</td></tr>
+    <tr><td><strong>Reklasifikasi</strong></td><td>Nilai atau kategori baru apa yang diberikan kepada objek yang sama?</td><td>Nilai tematik berubah, tetapi letak dan bentuk objek tetap.</td></tr>
+    <tr><td><strong>Pengukuran</strong></td><td>Berapa jarak, panjang, luas, keliling, jumlah, atau volume?</td><td>Geometri atau sel raster menghasilkan ukuran numerik.</td></tr>
+  </tbody></table></div>
   <figure class="visual-board">
     <svg viewBox="0 0 960 290" role="img" aria-labelledby="alur-title alur-desc">
       <title id="alur-title">Alur penelusuran, klasifikasi, dan pengukuran</title><desc id="alur-desc">Pertanyaan diterjemahkan menjadi kriteria, objek dipilih, dikelompokkan, diukur, lalu ditafsirkan.</desc>
@@ -42,17 +48,24 @@
         <g transform="translate(835 70)"><rect width="100" height="125" rx="8" fill="#083f59"/><text x="50" y="50" fill="#fff" font-weight="700">HASIL</text><text x="50" y="78" fill="#d9edf3" font-size="14">peta</text><text x="50" y="99" fill="#d9edf3" font-size="14">tabel</text></g>
       </g>
     </svg>
-    <figcaption>Alur analisis: pertanyaan menentukan kriteria, operasi, dan bentuk hasil yang diperlukan.</figcaption>
+    <figcaption>Ketiga operasi dapat digunakan secara terpisah atau digabungkan sesuai pertanyaan analisis.</figcaption>
   </figure>
+  <p class="source-note">Pembagian operasi mengacu pada <a href="https://ftp.itc.nl/pub/ilwis/pdf/usrch07.pdf">ITC–ILWIS User’s Guide, Chapter 7: Spatial Data Analysis</a>. Overlay menggabungkan beberapa peta, sedangkan operasi ketetanggaan menilai lingkungan di sekitar suatu lokasi; keduanya dibahas pada pertemuan berikutnya.</p>
 
   <h2 id="retrieval">3. Penelusuran data (retrieval)</h2>
   <p><strong>Penelusuran data</strong> atau <em>data retrieval</em> merupakan proses mencari dan mengambil baris data atau objek berdasarkan kriteria tertentu. Hasilnya dapat berupa objek terpilih pada peta, baris terpilih pada tabel, tampilan data yang telah disaring, atau kumpulan data baru.</p>
+
+  <h3>3.1 Dua pertanyaan dasar dalam penelusuran</h3>
   <div class="two-definitions">
-    <article><small>BERDASARKAN ATRIBUT</small><strong>Kueri atribut</strong><p>Kriteria menggunakan nilai dalam kolom tabel, misalnya <code>jenis = 'sekolah'</code> atau <code>kapasitas &gt; 300</code>.</p></article>
-    <article><small>BERDASARKAN LOKASI</small><strong>Kueri spasial</strong><p>Kriteria menggunakan hubungan lokasi, misalnya sekolah yang berada di dalam Kecamatan A atau bangunan yang memotong zona banjir.</p></article>
+    <article><small>MULAI DARI LOKASI</small><strong>Apa yang terdapat di lokasi ini?</strong><p>Koordinat atau posisi pada peta ditentukan terlebih dahulu. SIG kemudian membaca objek dan atribut pada posisi tersebut, misalnya nama desa, jenis penggunaan lahan, serta nilai elevasi pada satu titik.</p></article>
+    <article><small>MULAI DARI KRITERIA</small><strong>Di mana objek yang dicari?</strong><p>Kondisi ditentukan terlebih dahulu. SIG kemudian menunjukkan lokasi yang memenuhi kondisi tersebut, misalnya kawasan hutan atau sekolah aktif dengan lebih dari 500 siswa.</p></article>
   </div>
 
-  <h3 id="logika">3.1 Operator logika dalam kueri</h3>
+  <h3 id="logika">3.2 Dasar dan operator dalam kueri</h3>
+  <div class="two-definitions">
+    <article><small>BERDASARKAN ATRIBUT</small><strong>Kueri atribut</strong><p>Kriteria menggunakan nilai dalam kolom tabel, misalnya <code>jenis = 'sekolah'</code> atau <code>kapasitas &gt; 300</code>.</p></article>
+    <article><small>BERDASARKAN HUBUNGAN LOKASI</small><strong>Kueri spasial</strong><p>Kriteria menggunakan hubungan spasial, misalnya sekolah yang berada di dalam Kecamatan A atau bangunan yang memotong zona banjir.</p></article>
+  </div>
   <div class="operation-list">
     <article><strong>AND</strong><p>Semua syarat harus benar. <code>jenis = 'sekolah' AND siswa &gt; 500</code>.</p></article>
     <article><strong>OR</strong><p>Salah satu syarat boleh benar. <code>status = 'rusak' OR status = 'perbaikan'</code>.</p></article>
@@ -61,7 +74,7 @@
   </div>
   <p class="equation">Objek terpilih = objek yang membuat ekspresi bernilai TRUE</p>
 
-  <h3 id="contoh-retrieval">3.2 Penerapan kueri atribut</h3>
+  <h3 id="contoh-retrieval">3.3 Penerapan kueri atribut</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>ID</th><th>Fasilitas</th><th>Jenis</th><th>Kapasitas</th><th>Status</th></tr></thead>
     <tbody><tr><td>F01</td><td>SD Melati</td><td>Sekolah</td><td>420</td><td>Aktif</td></tr><tr class="selected-row"><td>F02</td><td>SMP Merdeka</td><td>Sekolah</td><td>760</td><td>Aktif</td></tr><tr><td>F03</td><td>Puskesmas Utama</td><td>Kesehatan</td><td>120</td><td>Aktif</td></tr><tr><td>F04</td><td>SD Harapan</td><td>Sekolah</td><td>540</td><td>Perbaikan</td></tr></tbody>
@@ -73,7 +86,7 @@
     <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html"><img src="https://docs.qgis.org/3.44/en/_images/query_builder_example.png" alt="Contoh Query Builder resmi QGIS"></a><figcaption><em>Query Builder</em> pada QGIS menyusun ekspresi dari kolom, operator, dan nilai. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</figcaption></figure>
   </div>
 
-  <h3 id="selection-filter">3.3 Perbedaan pemilihan, penyaringan, dan ekspor data</h3>
+  <h3 id="selection-filter">3.4 Perbedaan pemilihan, penyaringan, dan ekspor data</h3>
   <dl class="reading-result">
     <dt>Pemilihan</dt><dd>Objek ditandai sebagai pilihan, tetapi kumpulan data asal tetap berisi seluruh objek. Istilah pada perangkat lunak biasanya <em>selection</em>.</dd>
     <dt>Penyaringan</dt><dd>Hanya objek yang memenuhi kriteria yang ditampilkan oleh lapisan data. Istilah pada perangkat lunak biasanya <em>filter</em>.</dd>
@@ -94,6 +107,15 @@
     <article><small>UNTUK ANALISIS</small><strong>Reklasifikasi nilai</strong><p>Nilai asli diterjemahkan menjadi nilai kelas baru, misalnya kemiringan 0–8% menjadi kelas kesesuaian 3. Hasil dapat disimpan sebagai kolom atau kumpulan data baru.</p></article>
   </div>
   <p><strong>Perbedaannya:</strong> klasifikasi simbol mengubah cara data ditampilkan, sedangkan reklasifikasi menghasilkan kategori atau nilai baru yang dapat digunakan pada analisis berikutnya. Keduanya tetap memerlukan aturan kelas yang dinyatakan secara eksplisit.</p>
+  <h3>4.1.1 Contoh reklasifikasi</h3>
+  <p>Reklasifikasi mempertahankan lokasi setiap sel atau objek, kemudian mengganti nilai asal dengan kelas baru berdasarkan suatu aturan.</p>
+  <div class="table-wrap"><table><thead><tr><th>Nilai kemiringan asal</th><th>Aturan kelas</th><th>Nilai kelas baru</th></tr></thead><tbody>
+    <tr><td>0–8%</td><td>Masuk rentang 0–8%</td><td>Datar</td></tr>
+    <tr><td>&gt;8–15%</td><td>Masuk rentang &gt;8–15%</td><td>Landai</td></tr>
+    <tr><td>&gt;15–25%</td><td>Masuk rentang &gt;15–25%</td><td>Agak curam</td></tr>
+    <tr><td>&gt;25%</td><td>Lebih dari 25%</td><td>Curam</td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> raster kemiringan yang semula menyimpan nilai persentase menghasilkan raster kelas kemiringan. Ukuran dan posisi sel tetap sama; nilai sel yang berubah.</p>
 
   <h3 id="metode-kelas">4.2 Metode pembentukan kelas numerik</h3>
   <p>Metode pembentukan kelas menentukan letak <strong>batas kelas</strong> (<em>class breaks</em>). Perubahan batas kelas tidak mengubah nilai asli, tetapi dapat mengubah warna suatu wilayah dan pola yang terlihat pada peta. Karena itu, metode tidak dipilih hanya berdasarkan tampilan yang menarik.</p>
@@ -204,7 +226,16 @@
     <article><strong>Panjang</strong><p>Total panjang geometri garis, misalnya panjang sungai atau ruas jalan.</p></article>
     <article><strong>Keliling</strong><p>Total panjang batas poligon, misalnya batas desa atau perimeter danau.</p></article>
     <article><strong>Luas</strong><p>Ukuran bidang yang ditutupi poligon, misalnya luas sawah atau kawasan terdampak.</p></article>
+    <article><strong>Jumlah dan kepadatan</strong><p>Jumlah titik atau objek dalam suatu wilayah, misalnya jumlah sekolah dan kepadatan titik kejadian.</p></article>
+    <article><strong>Volume</strong><p>Besaran tiga dimensi yang dihitung dari permukaan dan bidang acuan, misalnya volume galian atau tampungan.</p></article>
   </div>
+
+  <div class="table-wrap"><table><thead><tr><th>Jenis data</th><th>Pengukuran yang umum</th><th>Contoh hasil</th></tr></thead><tbody>
+    <tr><td>Titik</td><td>Jumlah, kepadatan, dan jarak antartitik</td><td>12 sekolah; 3 sekolah/km²; jarak 850 m</td></tr>
+    <tr><td>Garis</td><td>Jumlah segmen, panjang, dan arah</td><td>Panjang jalan 4,2 km</td></tr>
+    <tr><td>Poligon</td><td>Luas dan keliling</td><td>Luas sawah 2,1 km²</td></tr>
+    <tr><td>Raster</td><td>Jumlah sel, luas per kelas, serta statistik nilai</td><td>2.500 sel kelas hutan × luas satu sel</td></tr>
+  </tbody></table></div>
 
   <figure class="visual-board">
     <svg viewBox="0 0 960 360" role="img" aria-labelledby="measure-title measure-desc">
@@ -351,8 +382,8 @@
   <h2 id="ringkasan">8. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Penelusuran data</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial; istilah <em>retrieval</em> digunakan dalam RPS.</span></li>
-    <li><b>Klasifikasi</b><span>mengelompokkan nilai; metode kelas dapat mengubah pola yang terlihat.</span></li>
-    <li><b>Pengukuran</b><span>mengubah geometri menjadi nilai jarak, panjang, keliling, atau luas.</span></li>
+    <li><b>Klasifikasi dan reklasifikasi</b><span>mengelompokkan nilai untuk penyajian atau menghasilkan nilai tematik baru pada lokasi yang sama.</span></li>
+    <li><b>Pengukuran</b><span>menghasilkan jarak, panjang, keliling, luas, jumlah, kepadatan, atau volume dari data spasial.</span></li>
     <li><b>CRS</b><span>menentukan satuan dan karakter distorsi, sehingga harus dipilih sebelum mengukur.</span></li>
     <li><b>Interpretasi</b><span>selalu menghubungkan hasil operasi dengan pertanyaan awal dan keterbatasan data.</span></li>
   </ul>
