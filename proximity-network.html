@@ -23,7 +23,7 @@
   </div>
   <p class="analysis-question"><strong>Contoh pertanyaan:</strong> rumah sakit mana yang paling cepat dicapai dari lokasi kecelakaan, melalui ruas jalan mana, dan wilayah mana yang dapat dilayani dalam 15 menit?</p>
 
-  <h2 id="proximity">2. Apa yang dimaksud dengan proximity?</h2>
+  <h2 id="proximity">2. Konsep proximity</h2>
   <p><strong>Proximity</strong> menyatakan tingkat kedekatan antarobjek berdasarkan jarak. “Dekat” harus selalu disertai definisi: dekat menurut jarak lurus, jarak permukaan bumi, waktu tempuh, atau biaya perjalanan.</p>
   <figure class="visual-board">
     <svg viewBox="0 0 960 390" role="img" aria-labelledby="distance-title distance-desc">
@@ -38,7 +38,7 @@
     <figcaption>Satu pasangan lokasi dapat mempunyai nilai kedekatan berbeda menurut cara jarak didefinisikan.</figcaption>
   </figure>
 
-  <h3 id="jenis-jarak">Jenis jarak</h3>
+  <h3 id="jenis-jarak">2.1 Jenis jarak</h3>
   <div class="operation-list">
     <article><strong>Euclidean distance</strong><p>Jarak lurus pada bidang datar. Sesuai untuk wilayah terbatas dengan CRS proyeksi yang tepat.</p></article>
     <article><strong>Geodesic distance</strong><p>Jarak terpendek pada permukaan elipsoid bumi. Sesuai untuk jarak panjang atau cakupan luas.</p></article>
@@ -83,7 +83,7 @@
     <figcaption>Komponen jaringan: node, edge, arah, konektivitas, dan impedance.</figcaption>
   </figure>
 
-  <h3 id="komponen">Komponen yang menentukan rute</h3>
+  <h3 id="komponen">4.1 Komponen jaringan dan penentuan rute</h3>
   <div class="operation-list">
     <article><strong>Node</strong><p>Titik yang menghubungkan edge, misalnya persimpangan, terminal, atau katup.</p></article>
     <article><strong>Edge</strong><p>Ruas yang dapat dilalui atau mengalirkan sesuatu, misalnya ruas jalan atau pipa.</p></article>
@@ -125,8 +125,8 @@
   </ul>
   <p class="equation">Waktu tempuh = panjang ruas ÷ kecepatan ruas</p>
 
-  <h2 id="kasus">8. Studi kasus di Indonesia</h2>
-  <p class="analysis-question"><strong>Pertanyaan:</strong> seberapa mudah penduduk kepulauan mencapai puskesmas atau rumah sakit?</p>
+  <h2 id="kasus">8. Penerapan pada konteks Indonesia</h2>
+  <p class="analysis-question"><strong>Rumusan kasus:</strong> evaluasi kemudahan penduduk wilayah kepulauan dalam mencapai puskesmas atau rumah sakit.</p>
   <p>Penelitian Leosari, Uelmen, dan Carney (2023) di Provinsi Maluku menggunakan SIG untuk menggabungkan pusat permukiman, fasilitas kesehatan, jalan, pelabuhan, dan rute antarpulau. Kasus ini penting karena fasilitas yang tampak dekat dalam jarak lurus belum tentu mudah dicapai apabila perjalanan harus mengikuti jaringan jalan dan laut.</p>
   <div class="table-wrap"><table><thead><tr><th>Tahap</th><th>Data atau analisis</th><th>Informasi yang diperoleh</th></tr></thead><tbody>
     <tr><td>1. Menentukan asal dan tujuan</td><td>Pusat permukiman menjadi titik asal; puskesmas dan rumah sakit menjadi tujuan.</td><td>Pasangan lokasi yang akan dibandingkan.</td></tr>
@@ -137,17 +137,29 @@
   </tbody></table></div>
   <p><strong>Pelajaran utama:</strong> definisi “terdekat” harus sesuai dengan cara penduduk benar-benar bergerak. Penelitian lain di Jakarta juga menggunakan jaringan jalan dan wilayah jangkauan berbasis waktu untuk mengevaluasi akses rumah sakit rujukan. Kedua contoh menunjukkan bahwa jarak lurus, jarak jaringan, dan waktu tempuh tidak boleh diperlakukan sebagai ukuran yang sama.</p>
 
-  <h2 id="latihan">9. Lembar kerja analisis 3</h2>
-  <p><strong>Waktu:</strong> 15 menit. <strong>Bentuk:</strong> satu rancangan analisis, dikerjakan berkelompok.</p>
-  <p class="analysis-question"><strong>Situasi:</strong> sebuah kabupaten mempunyai data permukiman, puskesmas, rumah sakit, jaringan jalan, sungai, jembatan, kelas jalan, dan kecepatan rencana.</p>
+  <h2 id="contoh-terstruktur">9. Contoh terstruktur</h2>
+  <h3>9.1 Perbedaan rute terpendek dan tercepat</h3>
+  <p>Dua alternatif rute menghubungkan titik A dan D. Waktu tempuh dihitung dari panjang ruas dan kecepatan rata-rata.</p>
+  <div class="table-wrap"><table><thead><tr><th>Rute</th><th>Ruas</th><th>Jarak total</th><th>Kecepatan</th><th>Waktu total</th></tr></thead><tbody>
+    <tr><td>A–B–D</td><td>4 km + 4 km</td><td>8 km</td><td>20 km/jam pada kedua ruas</td><td>24 menit</td></tr>
+    <tr><td>A–C–D</td><td>6 km + 6 km</td><td>12 km</td><td>60 km/jam pada kedua ruas</td><td>12 menit</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions"><article><small>SHORTEST PATH</small><strong>A–B–D</strong><p>Jarak paling pendek adalah 8 km, tetapi waktu tempuhnya 24 menit.</p></article><article><small>FASTEST PATH</small><strong>A–C–D</strong><p>Jarak lebih panjang, tetapi waktu tempuh lebih singkat karena kecepatan ruas lebih tinggi.</p></article></div>
+  <h3>9.2 Buffer dan service area</h3>
+  <div class="table-wrap"><table><thead><tr><th>Analisis</th><th>Parameter</th><th>Makna hasil</th></tr></thead><tbody><tr><td>Buffer puskesmas</td><td>Radius 5 km</td><td>Zona geometris 5 km; tidak memperhitungkan jalan, sungai, atau arah perjalanan.</td></tr><tr><td>Service area</td><td>Waktu 15 menit</td><td>Bagian jaringan yang dapat dicapai dalam 15 menit berdasarkan konektivitas dan impedance.</td></tr></tbody></table></div>
+
+  <h2 id="latihan">10. Latihan konseptual</h2>
+  <p><strong>Alokasi waktu:</strong> 20 menit. <strong>Bentuk kegiatan:</strong> penyusunan rancangan analisis secara berkelompok.</p>
+  <p class="analysis-question"><strong>Data yang tersedia:</strong> permukiman, puskesmas, rumah sakit, jaringan jalan, sungai, jembatan, kelas jalan, arah, dan kecepatan rencana.</p>
   <ol>
     <li>Bedakan pertanyaan yang dijawab oleh buffer 5 km dan wilayah layanan 15 menit.</li>
     <li>Tentukan node, edge, hambatan, dan pembatas jaringan yang diperlukan.</li>
     <li>Pilih analisis yang sesuai untuk menentukan fasilitas tercepat dan wilayah yang belum terlayani.</li>
     <li>Sebutkan dua kesalahan data yang dapat menghasilkan rute keliru serta cara memeriksanya.</li>
   </ol>
+  <details><summary>Pembahasan ringkas</summary><p>Buffer 5 km menjawab kedekatan geometris, sedangkan service area 15 menit menjawab keterjangkauan melalui jaringan. Node berupa simpang atau ujung ruas; edge berupa ruas jalan; impedance dapat berupa waktu tempuh; restriction dapat berupa jalan satu arah, larangan belok, atau ruas tertutup. Closest facility menentukan fasilitas tercepat, sedangkan service area menunjukkan wilayah yang terlayani. Undershoot, simpang yang tidak terhubung, arah yang salah, dan kecepatan yang tidak wajar dapat menghasilkan rute keliru.</p></details>
 
-  <h2 id="ringkasan">10. Ringkasan</h2>
+  <h2 id="ringkasan">11. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Proximity</b><span>menilai kedekatan; arti jarak harus didefinisikan dengan jelas.</span></li>
     <li><b>Buffer</b><span>membentuk zona pada jarak tertentu dari suatu objek.</span></li>
@@ -156,7 +168,7 @@
     <li><b>Kualitas</b><span>topologi, arah, restriction, dan atribut ruas menentukan keandalan hasil.</span></li>
   </ul>
 
-  <h2 id="referensi">11. Referensi</h2>
+  <h2 id="referensi">12. Referensi</h2>
   <ul class="reference">
     <li><a href="https://doi.org/10.1371/journal.pgph.0001600">Leosari, Uelmen, dan Carney (2023) — Spatial Evaluation of Healthcare Accessibility across Archipelagic Communities of Maluku Province, Indonesia</a>.</li>
     <li><a href="https://doi.org/10.1186/s12913-020-05896-x">Silalahi dkk. (2020) — GIS-based Approaches on the Accessibility of Referral Hospitals in Jakarta</a>.</li>
@@ -168,7 +180,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#proximity">Kedekatan</a><a href="#buffer">Buffer</a><a href="#network">Jaringan</a><a href="#operasi">Jenis analisis</a><a href="#beda">Perbandingan jarak</a><a href="#kualitas">Kualitas data</a><a href="#kasus">Studi kasus Indonesia</a><a href="#latihan">Lembar kerja</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#proximity">Kedekatan</a><a href="#buffer">Buffer</a><a href="#network">Jaringan</a><a href="#operasi">Jenis analisis</a><a href="#beda">Perbandingan jarak</a><a href="#kualitas">Kualitas data</a><a href="#kasus">Penerapan Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
