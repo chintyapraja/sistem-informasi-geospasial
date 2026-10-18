@@ -247,9 +247,8 @@
   </tbody></table></div>
   <p><strong>Contoh untuk Yogyakarta:</strong> data lintang–bujur dapat ditampilkan menggunakan EPSG:4326. Untuk pengukuran planar lokal, data dapat diproyeksikan ke UTM zona 49 Selatan (EPSG:32749). Daerah lain di Indonesia dapat berada pada zona UTM yang berbeda, sehingga CRS dipilih berdasarkan lokasi data.</p>
   <p class="analysis-question"><strong>Urutan yang benar:</strong> periksa CRS → tentukan satuan yang diperlukan → pilih pengukuran planar atau geodesik → hitung dan tuliskan satuannya.</p>
-  <p>Penelusuran, klasifikasi, dan pengukuran tidak harus berdiri sendiri. Contoh berikut menggabungkan ketiganya dalam satu pertanyaan yang mempunyai data, kriteria, perhitungan, dan hasil yang jelas.</p>
-
-  <h2 id="kasus">6. Contoh: memilih wilayah yang memenuhi tiga kriteria</h2>
+  <h2 id="kasus">6. Contoh</h2>
+  <h3>Memilih wilayah yang memenuhi tiga kriteria</h3>
   <p>Pemerintah daerah ingin mengetahui wilayah yang perlu diperiksa lebih lanjut untuk penambahan layanan kesehatan. Dalam contoh pembelajaran ini, suatu wilayah masuk daftar awal apabila memenuhi seluruh kriteria berikut:</p>
   <ol>
     <li>kepadatan penduduk sekurang-kurangnya 3.000 jiwa/km²;</li>
@@ -265,7 +264,7 @@
     <tr><td>D</td><td>7.000</td><td>2</td><td>0</td><td>6,2</td></tr>
   </tbody></table></div>
 
-  <h3>6.1 Menghitung kepadatan penduduk</h3>
+  <h3>Langkah 1 — Menghitung kepadatan penduduk</h3>
   <p class="equation">Kepadatan penduduk = jumlah penduduk ÷ luas wilayah</p>
   <div class="table-wrap"><table><thead><tr><th>Wilayah</th><th>Perhitungan</th><th>Kepadatan</th><th>Kelas latihan</th></tr></thead><tbody>
     <tr><td>A</td><td>12.000 ÷ 6</td><td>2.000 jiwa/km²</td><td>Sedang</td></tr>
@@ -275,7 +274,7 @@
   </tbody></table></div>
   <p>Kelas latihan menggunakan batas rendah &lt;2.000, sedang 2.000–2.999, dan tinggi ≥3.000 jiwa/km². Karena batas berasal dari kriteria latihan, metode ini termasuk <strong>batas manual</strong>, bukan quantile atau natural breaks.</p>
 
-  <h3>6.2 Menelusuri data dengan tiga syarat</h3>
+  <h3>Langkah 2 — Menelusuri data dengan tiga syarat</h3>
   <p>Ketiga kriteria diterjemahkan menjadi ekspresi berikut:</p>
   <p class="equation"><code>kepadatan &gt;= 3000 AND puskesmas_aktif = 0 AND jarak_km &gt; 5</code></p>
   <div class="table-wrap"><table><thead><tr><th>Wilayah</th><th>Kepadatan ≥3.000?</th><th>Puskesmas = 0?</th><th>Jarak &gt;5 km?</th><th>Hasil</th></tr></thead><tbody>
@@ -286,8 +285,7 @@
   </tbody></table></div>
   <p><strong>Kesimpulan contoh:</strong> hanya Wilayah D memenuhi ketiga syarat. Wilayah B tidak terpilih karena jaraknya 4,8 km, meskipun kepadatannya tinggi dan tidak mempunyai puskesmas aktif. Hasil ini merupakan daftar awal untuk pemeriksaan lebih lanjut, bukan keputusan otomatis untuk membangun fasilitas.</p>
 
-  <h2 id="latihan">7. Latihan berdasarkan materi</h2>
-  <p>Latihan berikut menggunakan angka yang tersedia pada soal. Jawaban dapat diperoleh melalui penelusuran, pembentukan kelas, dan pengukuran yang telah dibahas.</p>
+  <h2 id="latihan">7. Latihan</h2>
 
   <h3>Latihan A — penelusuran atribut dan spasial</h3>
   <p>Pilih sekolah yang berstatus aktif, mempunyai sekurang-kurangnya 400 siswa, dan berada di dalam zona banjir.</p>
@@ -303,7 +301,16 @@
     <li>Tentukan ID sekolah yang terpilih.</li>
     <li>Jelaskan objek mana yang gugur pada setiap syarat.</li>
   </ol>
-  <details><summary>Jawaban Latihan A</summary><p>Ekspresi: <code>status = 'Aktif' AND siswa &gt;= 400 AND dalam_banjir = 'Ya'</code>. Sekolah yang terpilih adalah S2 dan S5. S1 gugur karena jumlah siswa kurang dari 400; S3 gugur karena tidak berstatus aktif; S4 gugur karena berada di luar zona banjir.</p></details>
+  <p><strong>Pembahasan Latihan A</strong></p>
+  <p class="equation"><code>status = 'Aktif' AND siswa &gt;= 400 AND dalam_banjir = 'Ya'</code></p>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Status aktif?</th><th>Siswa ≥400?</th><th>Di zona banjir?</th><th>Hasil</th></tr></thead><tbody>
+    <tr><td>S1</td><td>Ya</td><td><strong>Tidak</strong></td><td>Ya</td><td>Tidak terpilih</td></tr>
+    <tr class="selected-row"><td>S2</td><td>Ya</td><td>Ya</td><td>Ya</td><td><strong>Terpilih</strong></td></tr>
+    <tr><td>S3</td><td><strong>Tidak</strong></td><td>Ya</td><td>Ya</td><td>Tidak terpilih</td></tr>
+    <tr><td>S4</td><td>Ya</td><td>Ya</td><td><strong>Tidak</strong></td><td>Tidak terpilih</td></tr>
+    <tr class="selected-row"><td>S5</td><td>Ya</td><td>Ya</td><td>Ya</td><td><strong>Terpilih</strong></td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> S2 dan S5 memenuhi seluruh syarat.</p>
 
   <h3>Latihan B — membandingkan metode klasifikasi</h3>
   <p>Gunakan nilai 2, 3, 4, 5, 6, 7, 15, 16, 17, dan 25 seperti pada contoh klasifikasi di bagian 4.2.</p>
@@ -313,7 +320,12 @@
     <li>Sebutkan satu perbedaan penting antara kedua hasil.</li>
     <li>Pilih metode untuk membuat peta peringkat sepertiga bawah, tengah, dan atas.</li>
   </ol>
-  <details><summary>Jawaban Latihan B</summary><p><em>Equal interval</em>: 2–9 berisi enam objek, 10–17 berisi tiga objek, dan 18–25 berisi satu objek. <em>Quantile</em>: 2–5 berisi empat objek, 6–15 berisi tiga objek, dan 16–25 berisi tiga objek. Equal interval menyamakan lebar rentang, sedangkan quantile menyeimbangkan jumlah anggota. Untuk menunjukkan peringkat sepertiga bawah, tengah, dan atas, quantile lebih sesuai.</p></details>
+  <p><strong>Pembahasan Latihan B</strong></p>
+  <div class="table-wrap"><table><thead><tr><th>Metode</th><th>Kelas 1</th><th>Kelas 2</th><th>Kelas 3</th><th>Makna hasil</th></tr></thead><tbody>
+    <tr><td><em>Equal interval</em></td><td>2–9<br><strong>6 objek</strong></td><td>10–17<br><strong>3 objek</strong></td><td>18–25<br><strong>1 objek</strong></td><td>Lebar rentang sama; jumlah anggota dapat berbeda.</td></tr>
+    <tr><td><em>Quantile</em></td><td>2–5<br><strong>4 objek</strong></td><td>6–15<br><strong>3 objek</strong></td><td>16–25<br><strong>3 objek</strong></td><td>Jumlah anggota hampir sama; lebar rentang dapat berbeda.</td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> gunakan <em>quantile</em> apabila tujuan peta adalah membentuk kelompok peringkat bawah, tengah, dan atas.</p>
 
   <h3>Latihan C — pengukuran dan satuan koordinat</h3>
   <p>Empat titik sudut sebidang tanah disimpan dalam CRS proyeksi bersatuan meter:</p>
@@ -328,7 +340,13 @@
     <li>Hitung luas bidang P–Q–R–S dalam m² dan km².</li>
     <li>Jelaskan mengapa perhitungan yang sama tidak boleh langsung diterapkan apabila koordinat masih dinyatakan dalam derajat.</li>
   </ol>
-  <details><summary>Jawaban Latihan C</summary><p>P–Q = 1.500 m dan Q–R = 1.000 m. Luas bidang = 1.500 × 1.000 = 1.500.000 m² atau 1,5 km². Jika koordinat masih berupa lintang dan bujur, selisih angkanya bersatuan derajat dan bukan meter; data perlu diproyeksikan ke CRS yang sesuai atau diukur menggunakan metode geodesik.</p></details>
+  <p><strong>Pembahasan Latihan C</strong></p>
+  <div class="table-wrap"><table><thead><tr><th>Besaran</th><th>Perhitungan</th><th>Hasil</th></tr></thead><tbody>
+    <tr><td>Panjang P–Q</td><td>401.500 − 400.000</td><td><strong>1.500 m</strong></td></tr>
+    <tr><td>Panjang Q–R</td><td>9.131.000 − 9.130.000</td><td><strong>1.000 m</strong></td></tr>
+    <tr><td>Luas bidang</td><td>1.500 m × 1.000 m</td><td><strong>1.500.000 m² = 1,5 km²</strong></td></tr>
+  </tbody></table></div>
+  <p><strong>Catatan satuan:</strong> pengurangan koordinat menghasilkan meter karena data menggunakan CRS proyeksi bersatuan meter. Jika koordinat masih berupa lintang dan bujur, selisihnya bersatuan derajat; data perlu diproyeksikan ke CRS yang sesuai atau diukur secara geodesik.</p>
 
   <h2 id="ringkasan">8. Ringkasan</h2>
   <ul class="summary-list">
