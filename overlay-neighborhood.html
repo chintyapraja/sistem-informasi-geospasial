@@ -23,7 +23,7 @@
   </div>
   <p class="analysis-question"><strong>Contoh pertanyaan:</strong> bagian permukiman mana yang berada pada zona rawan banjir, bagaimana karakter lingkungan di sekitarnya, dan berapa luas wilayah yang terdampak?</p>
 
-  <h2 id="konsep">2. Apa yang dimaksud dengan overlay?</h2>
+  <h2 id="konsep">2. Konsep overlay</h2>
   <p><strong>Overlay</strong> adalah operasi yang menumpangtindihkan dua atau lebih layer untuk membentuk informasi baru berdasarkan kesamaan lokasi. Setiap layer mewakili satu tema, misalnya penggunaan lahan, zona banjir, jenis tanah, atau batas administrasi.</p>
   <figure class="visual-board">
     <svg viewBox="0 0 960 360" role="img" aria-labelledby="overlay-title overlay-desc">
@@ -74,7 +74,7 @@
 
   <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html"><img src="https://docs.qgis.org/3.44/en/_images/final_intersect_result.png" alt="Hasil resmi intersection dua zona buffer pada QGIS"></a><figcaption>Hasil intersection dua kriteria lokasi pada QGIS: area biru memenuhi kedua kriteria. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis</a>.</figcaption></figure>
 
-  <h3 id="atribut-overlay">Apa yang terjadi pada tabel atribut?</h3>
+  <h3 id="atribut-overlay">3.1 Transformasi tabel atribut</h3>
   <div class="table-wrap"><table><thead><tr><th>ID hasil</th><th>Penggunaan lahan</th><th>Kelas banjir</th><th>Luas hasil</th></tr></thead><tbody><tr><td>H01</td><td>Permukiman</td><td>Tinggi</td><td>12,4 ha</td></tr><tr><td>H02</td><td>Sawah</td><td>Tinggi</td><td>35,7 ha</td></tr><tr><td>H03</td><td>Permukiman</td><td>Sedang</td><td>8,1 ha</td></tr></tbody></table></div>
   <p>Satu poligon penggunaan lahan dapat terpecah menjadi beberapa record karena dipotong oleh batas kelas banjir. Luas harus dihitung kembali dari geometri hasil, bukan menyalin luas objek sebelum overlay.</p>
 
@@ -102,7 +102,7 @@
     <figcaption>Overlay raster dilakukan berdasarkan posisi sel yang bersesuaian.</figcaption>
   </figure>
 
-  <h3 id="weighted">Weighted overlay</h3>
+  <h3 id="weighted">4.1 Weighted overlay</h3>
   <p><strong>Weighted overlay</strong> menggabungkan beberapa kriteria yang telah dinormalisasi ke skala yang sama. Bobot menyatakan tingkat kepentingan relatif setiap kriteria.</p>
   <p class="equation">Skor kesesuaian = (0,40 × kemiringan) + (0,35 × jarak jalan) + (0,25 × penggunaan lahan)</p>
   <ul>
@@ -136,7 +136,7 @@
     <figcaption>Ilustrasi focal mean dengan jendela 3 × 3. Jendela bergerak ke seluruh raster untuk menghasilkan nilai baru pada setiap lokasi.</figcaption>
   </figure>
 
-  <h3 id="jendela">Ukuran dan bentuk lingkungan</h3>
+  <h3 id="jendela">5.1 Ukuran dan bentuk lingkungan</h3>
   <div class="operation-list">
     <article><strong>Rectangle atau square</strong><p>Lingkungan berbentuk grid persegi; mudah digunakan untuk filter dan perataan.</p></article>
     <article><strong>Circle</strong><p>Lingkungan ditentukan oleh radius; lebih seragam terhadap semua arah.</p></article>
@@ -153,8 +153,8 @@
     <tr><td>Buffer</td><td>Wilayah mana yang berada dalam jarak tertentu?</td><td>Zona jarak; dibahas lebih lanjut pada proximity.</td></tr>
   </tbody></table></div>
 
-  <h2 id="kasus">7. Studi kasus di Indonesia</h2>
-  <p class="analysis-question"><strong>Pertanyaan:</strong> permukiman dan fasilitas umum mana yang berada pada zona bahaya banjir?</p>
+  <h2 id="kasus">7. Penerapan pada konteks Indonesia</h2>
+  <p class="analysis-question"><strong>Rumusan kasus:</strong> identifikasi permukiman dan fasilitas umum yang berada pada zona bahaya banjir.</p>
   <p><a href="https://inarisk.bnpb.go.id/">InaRISK BNPB</a> menampilkan layer bahaya, kerentanan, risiko, infrastruktur, dan fasilitas. Struktur tersebut memberi contoh nyata penggunaan tumpang susun: beberapa tema yang menempati ruang yang sama dibandingkan untuk mengenali unsur yang berpotensi terpapar.</p>
   <div class="table-wrap"><table><thead><tr><th>Tahap</th><th>Operasi</th><th>Makna hasil</th></tr></thead><tbody>
     <tr><td>1. Menentukan unit analisis</td><td>Gunakan zona bahaya banjir, batas administrasi, permukiman, jalan, sekolah, dan fasilitas kesehatan dari sumber yang berwenang.</td><td>Setiap layer mewakili pertanyaan yang berbeda: bahaya, wilayah, penduduk, serta unsur yang berpotensi terdampak.</td></tr>
@@ -165,17 +165,37 @@
   </tbody></table></div>
   <p><strong>Interpretasi:</strong> hasil tumpang susun menunjukkan unsur yang secara spasial beririsan dengan zona bahaya. Hasil tersebut bukan prakiraan kejadian pada waktu tertentu dan tidak langsung menyatakan besarnya kerugian. Tingkat keterpaparan, kerentanan, kapasitas, dan verifikasi lapangan perlu dianalisis secara terpisah.</p>
 
-  <h2 id="latihan">8. Lembar kerja analisis 2</h2>
-  <p><strong>Waktu:</strong> 15 menit. <strong>Bentuk:</strong> diagram alur dan tabel singkat, dikerjakan berkelompok.</p>
-  <p class="analysis-question"><strong>Situasi:</strong> tersedia zona bahaya banjir, poligon permukiman, titik sekolah, batas desa, dan raster elevasi.</p>
+  <h2 id="contoh-terstruktur">8. Contoh terstruktur</h2>
+  <h3>8.1 Overlay paparan banjir menurut desa</h3>
+  <p>Poligon permukiman diiriskan dengan zona bahaya banjir, kemudian luas hasil intersection diringkas berdasarkan kode desa.</p>
+  <div class="table-wrap"><table><thead><tr><th>Desa</th><th>Luas permukiman (ha)</th><th>Permukiman pada zona bahaya (ha)</th><th>Persentase terpapar</th><th>Sekolah pada zona bahaya</th></tr></thead><tbody>
+    <tr><td>A</td><td>120</td><td>30</td><td>25%</td><td>2</td></tr>
+    <tr><td>B</td><td>80</td><td>44</td><td>55%</td><td>1</td></tr>
+    <tr><td>C</td><td>150</td><td>15</td><td>10%</td><td>0</td></tr>
+  </tbody></table></div>
+  <ol>
+    <li><strong>Intersection</strong> menghasilkan bagian permukiman yang benar-benar beririsan dengan zona bahaya.</li>
+    <li><strong>Spatial join</strong> atau agregasi menghitung jumlah sekolah terdampak menurut desa.</li>
+    <li><strong>Field calculation</strong> menghitung persentase: luas terpapar ÷ luas permukiman × 100%.</li>
+    <li><strong>Interpretasi</strong> menunjukkan Desa B mempunyai proporsi paparan tertinggi, sedangkan jumlah sekolah terdampak terbanyak terdapat di Desa A.</li>
+  </ol>
+  <h3>8.2 Contoh weighted overlay</h3>
+  <p>Tiga kriteria kesesuaian telah distandardisasi pada skala 1–5. Bobot kemiringan lereng sebesar 0,40; akses jalan 0,35; dan keamanan banjir 0,25.</p>
+  <div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Lereng</th><th>Akses jalan</th><th>Keamanan banjir</th><th>Skor akhir</th></tr></thead><tbody><tr><td>A</td><td>4</td><td>5</td><td>2</td><td>3,85</td></tr><tr><td>B</td><td>3</td><td>3</td><td>5</td><td>3,50</td></tr></tbody></table></div>
+  <p class="equation">Skor A = (4 × 0,40) + (5 × 0,35) + (2 × 0,25) = 3,85</p>
+
+  <h2 id="latihan">9. Latihan konseptual</h2>
+  <p><strong>Alokasi waktu:</strong> 20 menit. <strong>Bentuk kegiatan:</strong> diagram alur dan tabel analisis secara berkelompok.</p>
+  <p class="analysis-question"><strong>Data yang tersedia:</strong> zona bahaya banjir, poligon permukiman, titik sekolah, batas desa, dan raster elevasi.</p>
   <ol>
     <li>Tentukan layer masukan dan operasi yang diperlukan untuk menghitung luas permukiman serta jumlah sekolah pada zona bahaya di setiap desa.</li>
     <li>Jelaskan perbedaan hasil <em>select by location</em> dan <em>intersection</em> pada kasus tersebut.</li>
     <li>Jelaskan satu tujuan analisis ketetanggaan pada raster elevasi dan tentukan bentuk lingkungan yang masuk akal.</li>
     <li>Sebutkan tiga pemeriksaan kualitas sebelum hasil dibandingkan antarwilayah.</li>
   </ol>
+  <details><summary>Pembahasan ringkas</summary><p>Intersection diperlukan untuk menghitung bagian permukiman pada zona bahaya. Select by location hanya menandai objek yang berhubungan secara spasial tanpa memotong geometri. Jumlah sekolah per desa dapat dihitung melalui spatial join atau agregasi. Focal mean pada raster elevasi dapat menggambarkan kecenderungan elevasi lingkungan sekitar; ukuran jendela harus disesuaikan dengan resolusi raster dan skala proses. Pemeriksaan minimum meliputi CRS, keselarasan grid, waktu data, ketelitian posisi, dan konsistensi definisi kelas.</p></details>
 
-  <h2 id="ringkasan">9. Ringkasan</h2>
+  <h2 id="ringkasan">10. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Overlay</b><span>menggabungkan beberapa tema berdasarkan lokasi yang sama.</span></li>
     <li><b>Vektor</b><span>menghasilkan geometri dan atribut baru melalui intersection, union, clip, atau difference.</span></li>
@@ -184,7 +204,7 @@
     <li><b>Skala</b><span>ukuran sel, jendela, dan ketelitian data memengaruhi pola hasil.</span></li>
   </ul>
 
-  <h2 id="referensi">10. Referensi</h2>
+  <h2 id="referensi">11. Referensi</h2>
   <ul class="reference">
     <li><a href="https://ltb.itc.utwente.nl/498/concept/81478">University of Twente, ITC Living Textbook — Spatial Analysis Functions</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis</a>.</li>
@@ -196,7 +216,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#konsep">Konsep tumpang susun</a><a href="#vektor">Tumpang susun vektor</a><a href="#raster">Tumpang susun raster</a><a href="#neighborhood">Analisis ketetanggaan</a><a href="#beda">Perbandingan</a><a href="#kasus">Studi kasus Indonesia</a><a href="#latihan">Lembar kerja</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#konsep">Konsep tumpang susun</a><a href="#vektor">Tumpang susun vektor</a><a href="#raster">Tumpang susun raster</a><a href="#neighborhood">Analisis ketetanggaan</a><a href="#beda">Perbandingan</a><a href="#kasus">Penerapan Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
