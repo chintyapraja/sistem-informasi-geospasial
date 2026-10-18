@@ -163,7 +163,24 @@
   <p><strong>Interpretasi:</strong> kecamatan dengan kepadatan dan rasio penduduk per fasilitas yang tinggi serta akses yang jauh dapat ditandai sebagai wilayah yang perlu ditelaah. Penetapan prioritas tetap memerlukan kapasitas fasilitas, kondisi jalan, tenaga kesehatan, kebijakan, dan verifikasi lapangan.</p>
   <p><strong>Contoh sistem resmi:</strong> <a href="https://inarisk.bnpb.go.id/">InaRISK BNPB</a> memungkinkan pengguna memilih wilayah dan jenis bencana, menampilkan kelas risiko, serta membaca indikator penduduk dan fasilitas yang terpapar. Sistem tersebut menunjukkan bahwa penelusuran, klasifikasi, dan pengukuran digunakan bersama untuk menyampaikan informasi wilayah.</p>
 
-  <h2 id="latihan">7. Latihan konseptual</h2>
+  <h2 id="contoh-terstruktur">7. Contoh terstruktur</h2>
+  <h3>7.1 Retrieval, klasifikasi, dan pengukuran kecamatan</h3>
+  <p>Empat kecamatan mempunyai data penduduk, luas wilayah, dan jumlah puskesmas sebagai berikut.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kecamatan</th><th>Penduduk</th><th>Luas (km²)</th><th>Puskesmas</th><th>Kepadatan (jiwa/km²)</th></tr></thead><tbody>
+    <tr><td>A</td><td>12.000</td><td>6</td><td>1</td><td>2.000</td></tr>
+    <tr><td>B</td><td>9.000</td><td>3</td><td>0</td><td>3.000</td></tr>
+    <tr><td>C</td><td>15.000</td><td>10</td><td>2</td><td>1.500</td></tr>
+    <tr><td>D</td><td>7.000</td><td>2</td><td>0</td><td>3.500</td></tr>
+  </tbody></table></div>
+  <div class="operation-list">
+    <article><strong>Retrieval</strong><p>Ekspresi <code>kepadatan &gt;= 3000 AND puskesmas = 0</code> memilih Kecamatan B dan D.</p></article>
+    <article><strong>Klasifikasi</strong><p>Kelas rendah: &lt;2.000; sedang: 2.000–2.999; tinggi: ≥3.000 jiwa/km². Kecamatan B dan D termasuk kelas tinggi.</p></article>
+    <article><strong>Pengukuran</strong><p>Luas poligon digunakan sebagai penyebut kepadatan. Perhitungan memerlukan CRS proyeksi yang sesuai dan satuan luas yang konsisten.</p></article>
+    <article><strong>Interpretasi</strong><p>Hasil menunjukkan wilayah yang memenuhi kriteria awal, bukan keputusan akhir pembangunan fasilitas.</p></article>
+  </div>
+  <p class="equation">Kepadatan penduduk = jumlah penduduk ÷ luas wilayah</p>
+
+  <h2 id="latihan">8. Latihan konseptual</h2>
   <p><strong>Alokasi waktu:</strong> 15 menit. <strong>Bentuk kegiatan:</strong> penyusunan tabel analisis secara berkelompok tanpa menggunakan perangkat lunak.</p>
   <p class="analysis-question"><strong>Data yang tersedia:</strong> layer kecamatan dengan field <code>nama</code>, <code>penduduk</code>, dan <code>luas_km2</code>, serta layer titik puskesmas dengan field <code>status</code> dan <code>kapasitas</code>.</p>
   <ol>
@@ -172,8 +189,9 @@
     <li>Pilih metode klasifikasi untuk memetakan kepadatan penduduk dan jelaskan alasannya.</li>
     <li>Sebutkan besaran yang harus diukur, CRS yang sesuai, dan satu keterbatasan hasil.</li>
   </ol>
+  <details><summary>Pembahasan ringkas</summary><p>Salah satu rumusan analisis adalah mengidentifikasi kecamatan berkepadatan tinggi yang belum mempunyai puskesmas aktif. Kriteria atribut dapat memakai <code>kepadatan &gt; nilai_ambang</code> dan <code>status = 'aktif'</code>. Kriteria spasial dapat memilih puskesmas yang berada di dalam setiap kecamatan. Klasifikasi harus menyebut metode dan batas kelas. Luas dihitung menggunakan CRS proyeksi yang sesuai, sedangkan jarak luas wilayah dapat memengaruhi pilihan perhitungan planar atau geodesik.</p></details>
 
-  <h2 id="ringkasan">8. Ringkasan</h2>
+  <h2 id="ringkasan">9. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Retrieval</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial.</span></li>
     <li><b>Klasifikasi</b><span>mengelompokkan nilai; metode kelas dapat mengubah pola yang terlihat.</span></li>
@@ -182,7 +200,7 @@
     <li><b>Interpretasi</b><span>selalu menghubungkan hasil operasi dengan pertanyaan awal dan keterbatasan data.</span></li>
   </ul>
 
-  <h2 id="referensi">9. Referensi</h2>
+  <h2 id="referensi">10. Referensi</h2>
   <ul class="reference">
     <li><a href="https://ltb.itc.utwente.nl/498/concept/81478">University of Twente, ITC Living Textbook — Classification, Measurement and Retrieval Functions</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html">QGIS User Guide — Working with the Attribute Table</a>.</li>
@@ -194,7 +212,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Retrieval data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#pengukuran">Pengukuran spasial</a><a href="#kasus">Penerapan di Indonesia</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Retrieval data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#pengukuran">Pengukuran spasial</a><a href="#kasus">Penerapan di Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
 </div>
 </body>
 </html>
