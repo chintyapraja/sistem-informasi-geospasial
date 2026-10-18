@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ['6', 'Pengelolaan dan input data', 'pengelolaan-input-data.html'],
     ['7', 'Topologi dan integrasi data', 'topologi-integrasi.html'],
     ['8', 'Ujian Tengah Semester', 'latihan-uts.html'],
-    ['9', 'Retrieval, klasifikasi, pengukuran', 'retrieval-klasifikasi-pengukuran.html'],
+    ['9', 'Penelusuran data, klasifikasi, dan pengukuran', 'retrieval-klasifikasi-pengukuran.html'],
     ['10', 'Overlay dan neighborhood', 'overlay-neighborhood.html'],
     ['11', 'Proximity dan network', 'proximity-network.html'],
     ['12', 'Pemodelan dan analisis SIG', 'pemodelan-analisis-sig.html'],
