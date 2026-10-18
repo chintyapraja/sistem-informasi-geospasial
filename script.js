@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button type="button" class="annotation-undo" disabled>Urungkan</button>
         <button type="button" class="annotation-clear" disabled>Hapus semua</button>
       </div>
-      <button type="button" class="annotation-launcher" aria-expanded="false">Alat anotasi</button>
+      <button type="button" class="annotation-launcher" aria-expanded="false">Anotasi</button>
       <span class="annotation-status" aria-live="polite"></span>
     `;
     document.body.appendChild(tools);
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const open = !tools.classList.contains('is-open');
       tools.classList.toggle('is-open', open);
       launcher.setAttribute('aria-expanded', String(open));
-      launcher.textContent = open ? 'Tutup anotasi' : 'Alat anotasi';
+      launcher.textContent = open ? 'Tutup anotasi' : 'Anotasi';
       if (!open) setPen(false);
     });
     pen.addEventListener('click', () => setPen(!drawing));
