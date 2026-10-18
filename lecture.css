@@ -12,7 +12,7 @@ a:hover{text-decoration-thickness:2px}
 .sidebar-teacher{margin-top:12px;font-size:14px;line-height:1.5;color:var(--ink)}.sidebar-teacher span{color:var(--muted)}
 .nav-title{margin-top:28px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--muted)}
 .sidebar nav{margin-top:34px}
-.sidebar .nav-title+nav{margin-top:9px}.sidebar nav a{display:block;padding:8px 11px;margin:3px 0;border-radius:3px;font-size:15px;line-height:1.45;text-decoration:none}.sidebar nav a b{display:inline-block;min-width:25px;color:var(--blue)}.sidebar nav a span{display:inline}
+.sidebar .nav-title+nav{margin-top:9px}.sidebar nav a{display:grid;grid-template-columns:27px minmax(0,1fr);column-gap:8px;align-items:start;padding:8px 11px;margin:3px 0;border-radius:3px;font-size:15px;line-height:1.45;text-decoration:none}.sidebar nav a b{display:block;min-width:0;text-align:right;color:var(--blue);font-variant-numeric:tabular-nums}.sidebar nav a span{display:block}
 .sidebar nav a[aria-current]{background:#deebf1;border-left:3px solid var(--blue);font-weight:700}
 .layout{margin-left:270px;display:grid;grid-template-columns:minmax(0,850px) 190px;gap:44px;max-width:1220px;padding:52px 48px 80px}
 main{min-width:0}
