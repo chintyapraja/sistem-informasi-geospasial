@@ -125,18 +125,29 @@
   </ul>
   <p class="equation">Waktu tempuh = panjang ruas ÷ kecepatan ruas</p>
 
-  <h2 id="kasus">8. Contoh terpadu</h2>
-  <p class="analysis-question"><strong>Kasus:</strong> mengevaluasi pelayanan ambulans dari tiga rumah sakit.</p>
+  <h2 id="kasus">8. Studi kasus di Indonesia</h2>
+  <p class="analysis-question"><strong>Pertanyaan:</strong> seberapa mudah penduduk kepulauan mencapai puskesmas atau rumah sakit?</p>
+  <p>Penelitian Leosari, Uelmen, dan Carney (2023) di Provinsi Maluku menggunakan SIG untuk menggabungkan pusat permukiman, fasilitas kesehatan, jalan, pelabuhan, dan rute antarpulau. Kasus ini penting karena fasilitas yang tampak dekat dalam jarak lurus belum tentu mudah dicapai apabila perjalanan harus mengikuti jaringan jalan dan laut.</p>
+  <div class="table-wrap"><table><thead><tr><th>Tahap</th><th>Data atau analisis</th><th>Informasi yang diperoleh</th></tr></thead><tbody>
+    <tr><td>1. Menentukan asal dan tujuan</td><td>Pusat permukiman menjadi titik asal; puskesmas dan rumah sakit menjadi tujuan.</td><td>Pasangan lokasi yang akan dibandingkan.</td></tr>
+    <tr><td>2. Menyusun jaringan</td><td>Jalan dan rute laut menjadi ruas; simpang dan pelabuhan menjadi titik perpindahan.</td><td>Model perjalanan yang lebih sesuai dengan kondisi kepulauan.</td></tr>
+    <tr><td>3. Menetapkan hambatan</td><td>Setiap ruas diberi biaya berupa jarak atau waktu tempuh. Arah perjalanan dan putusnya konektivitas harus diperiksa.</td><td>Biaya perjalanan untuk setiap alternatif rute.</td></tr>
+    <tr><td>4. Mencari rute</td><td>Analisis rute terpendek atau fasilitas terdekat dilakukan melalui jaringan.</td><td>Fasilitas yang dapat dicapai dengan biaya perjalanan paling kecil, bukan sekadar paling dekat pada peta.</td></tr>
+    <tr><td>5. Menafsirkan kesenjangan</td><td>Hasil dibandingkan antarpulau atau antarwilayah dan dapat digabungkan dengan data penduduk serta kapasitas fasilitas.</td><td>Wilayah dengan hambatan akses yang memerlukan telaah kebijakan lebih lanjut.</td></tr>
+  </tbody></table></div>
+  <p><strong>Pelajaran utama:</strong> definisi “terdekat” harus sesuai dengan cara penduduk benar-benar bergerak. Penelitian lain di Jakarta juga menggunakan jaringan jalan dan wilayah jangkauan berbasis waktu untuk mengevaluasi akses rumah sakit rujukan. Kedua contoh menunjukkan bahwa jarak lurus, jarak jaringan, dan waktu tempuh tidak boleh diperlakukan sebagai ukuran yang sama.</p>
+
+  <h2 id="latihan">9. Lembar kerja analisis 3</h2>
+  <p><strong>Waktu:</strong> 15 menit. <strong>Bentuk:</strong> satu rancangan analisis, dikerjakan berkelompok.</p>
+  <p class="analysis-question"><strong>Situasi:</strong> sebuah kabupaten mempunyai data permukiman, puskesmas, rumah sakit, jaringan jalan, sungai, jembatan, kelas jalan, dan kecepatan rencana.</p>
   <ol>
-    <li><strong>Bangun jaringan:</strong> ruas jalan menjadi edge dan persimpangan menjadi node.</li>
-    <li><strong>Tentukan biaya:</strong> hitung waktu tempuh dari panjang, kecepatan, arah, dan restriction.</li>
-    <li><strong>Service area:</strong> bentuk area layanan 5, 10, dan 15 menit dari setiap rumah sakit.</li>
-    <li><strong>Overlay:</strong> gabungkan area layanan dengan persebaran penduduk untuk menghitung jumlah penduduk yang tercakup.</li>
-    <li><strong>Closest facility:</strong> tentukan rumah sakit tercepat untuk setiap lokasi kejadian.</li>
-    <li><strong>Interpretasi:</strong> temukan wilayah berpenduduk yang belum tercakup dalam 15 menit dan periksa penyebabnya.</li>
+    <li>Bedakan pertanyaan yang dijawab oleh buffer 5 km dan wilayah layanan 15 menit.</li>
+    <li>Tentukan node, edge, hambatan, dan pembatas jaringan yang diperlukan.</li>
+    <li>Pilih analisis yang sesuai untuk menentukan fasilitas tercepat dan wilayah yang belum terlayani.</li>
+    <li>Sebutkan dua kesalahan data yang dapat menghasilkan rute keliru serta cara memeriksanya.</li>
   </ol>
 
-  <h2 id="ringkasan">9. Ringkasan</h2>
+  <h2 id="ringkasan">10. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Proximity</b><span>menilai kedekatan; arti jarak harus didefinisikan dengan jelas.</span></li>
     <li><b>Buffer</b><span>membentuk zona pada jarak tertentu dari suatu objek.</span></li>
@@ -145,8 +156,11 @@
     <li><b>Kualitas</b><span>topologi, arah, restriction, dan atribut ruas menentukan keandalan hasil.</span></li>
   </ul>
 
-  <h2 id="referensi">10. Referensi</h2>
+  <h2 id="referensi">11. Referensi</h2>
   <ul class="reference">
+    <li><a href="https://doi.org/10.1371/journal.pgph.0001600">Leosari, Uelmen, dan Carney (2023) — Spatial Evaluation of Healthcare Accessibility across Archipelagic Communities of Maluku Province, Indonesia</a>.</li>
+    <li><a href="https://doi.org/10.1186/s12913-020-05896-x">Silalahi dkk. (2020) — GIS-based Approaches on the Accessibility of Referral Hospitals in Jakarta</a>.</li>
+    <li><a href="https://onlinelibrary.wiley.com/doi/book/10.1002/9781119967101">Okabe dan Sugihara (2012) — Spatial Analysis along Networks</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis and Buffer</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/what-is-network-analysis-.htm">ArcGIS Pro Documentation — What Is Network Analysis?</a>.</li>
@@ -154,7 +168,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#proximity">Proximity</a><a href="#buffer">Buffer</a><a href="#network">Network</a><a href="#operasi">Jenis analisis</a><a href="#beda">Perbandingan jarak</a><a href="#kualitas">Kualitas data</a><a href="#kasus">Contoh terpadu</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#proximity">Kedekatan</a><a href="#buffer">Buffer</a><a href="#network">Jaringan</a><a href="#operasi">Jenis analisis</a><a href="#beda">Perbandingan jarak</a><a href="#kualitas">Kualitas data</a><a href="#kasus">Studi kasus Indonesia</a><a href="#latihan">Lembar kerja</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
