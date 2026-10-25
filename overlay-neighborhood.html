@@ -4,7 +4,10 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Overlay dan Neighborhood Analysis | Sistem Informasi Geospasial</title>
   <meta name="description" content="Materi pertemuan 10 tentang overlay vektor, overlay raster, dan neighborhood analysis.">
-  <link rel="stylesheet" href="lecture.css?v=20261018c"><script defer src="script.js?v=20261018l"></script>
+  <link rel="stylesheet" href="lecture.css?v=20261018c"><script defer src="script.js?v=20261018l"></script><script defer src="overlay-quiz.js?v=20261025a"></script>
+  <style>
+    .quiz-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.25rem 0 1.75rem}.quiz-intro article{padding:1rem 1.1rem;border:1px solid #cbd9df;border-radius:12px;background:#f5f9fa}.quiz-intro b{display:block;color:#075175;font-size:1.45rem}.quiz-intro span{color:#5d6b76}.quiz-section{margin:2.2rem 0 1rem;padding:.7rem 1rem;border-left:5px solid #0b6c91;background:#eef6f8;color:#17313f}.quiz-card{margin:0 0 1.35rem;padding:1.2rem;border:1px solid #cbd9df;border-radius:14px;background:#fff;box-shadow:0 3px 14px rgba(23,49,63,.06)}.quiz-card legend{display:flex;gap:.65rem;width:100%;padding:0 0 .9rem;font-weight:700;color:#26323e;line-height:1.5}.quiz-number{display:inline-grid;place-items:center;flex:0 0 2rem;height:2rem;border-radius:50%;background:#075175;color:#fff;font-size:.92rem}.quiz-figure{margin:.2rem 0 1rem;padding:.75rem;border-radius:10px;background:#f5f8fa;border:1px solid #d9e3e7}.quiz-figure svg{display:block;width:100%;max-height:270px}.quiz-figure figcaption{margin:.55rem 0 0;font-size:.9rem;color:#5d6b76}.quiz-options{display:grid;gap:.65rem}.quiz-option{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem .85rem;border:1px solid #d7e1e5;border-radius:9px;cursor:pointer;line-height:1.45}.quiz-option:hover{border-color:#0b6c91;background:#f4fafc}.quiz-option input{margin-top:.22rem;accent-color:#075175;transform:scale(1.15)}.quiz-card.is-correct{border-color:#2f855a;background:#f5fbf7}.quiz-card.is-incorrect{border-color:#c0564a;background:#fff8f6}.quiz-card.is-unanswered{border-color:#b7791f;background:#fffbeb}.quiz-feedback{margin-top:1rem;padding:.9rem 1rem;border-radius:9px;background:#eef3f5;line-height:1.55}.quiz-feedback b{display:block;margin-bottom:.25rem;color:#17313f}.quiz-actions{position:sticky;bottom:1rem;z-index:6;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin:2rem 0;padding:1rem;border:1px solid #cbd9df;border-radius:14px;background:rgba(255,255,255,.96);box-shadow:0 8px 24px rgba(23,49,63,.15);backdrop-filter:blur(8px)}.quiz-button{appearance:none;border:0;border-radius:8px;padding:.82rem 1.1rem;background:#075175;color:#fff;font:inherit;font-weight:700;cursor:pointer}.quiz-button:hover{background:#06415d}.quiz-button.secondary{background:#e6eef1;color:#17313f}.quiz-progress{margin-left:auto;color:#5d6b76;font-weight:700}.quiz-result{margin:1.5rem 0;padding:1.25rem;border:2px solid #075175;border-radius:14px;background:#eef7fa}.quiz-result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-top:1rem}.quiz-metric{padding:.8rem;border-radius:9px;background:#fff;text-align:center}.quiz-metric b{display:block;font-size:1.5rem;color:#075175}.quiz-result:focus{outline:4px solid rgba(11,108,145,.24)}@media(max-width:760px){.quiz-intro,.quiz-result-grid{grid-template-columns:1fr 1fr}.quiz-progress{width:100%;margin-left:0}.quiz-card{padding:1rem}.quiz-figure svg{max-height:220px}}@media(max-width:460px){.quiz-intro,.quiz-result-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 <a class="skip" href="#materi">Langsung ke materi</a>
@@ -184,16 +187,23 @@
   <div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Lereng</th><th>Akses jalan</th><th>Keamanan banjir</th><th>Skor akhir</th></tr></thead><tbody><tr><td>A</td><td>4</td><td>5</td><td>2</td><td>3,85</td></tr><tr><td>B</td><td>3</td><td>3</td><td>5</td><td>3,50</td></tr></tbody></table></div>
   <p class="equation">Skor A = (4 × 0,40) + (5 × 0,35) + (2 × 0,25) = 3,85</p>
 
-  <h2 id="latihan">9. Latihan konseptual</h2>
-  <p><strong>Alokasi waktu:</strong> 20 menit. <strong>Bentuk kegiatan:</strong> diagram alur dan tabel analisis secara berkelompok.</p>
-  <p class="analysis-question"><strong>Data yang tersedia:</strong> zona bahaya banjir, poligon permukiman, titik sekolah, batas desa, dan raster elevasi.</p>
-  <ol>
-    <li>Tentukan layer masukan dan operasi yang diperlukan untuk menghitung luas permukiman serta jumlah sekolah pada zona bahaya di setiap desa.</li>
-    <li>Jelaskan perbedaan hasil <em>select by location</em> dan <em>intersection</em> pada kasus tersebut.</li>
-    <li>Jelaskan satu tujuan analisis ketetanggaan pada raster elevasi dan tentukan bentuk lingkungan yang masuk akal.</li>
-    <li>Sebutkan tiga pemeriksaan kualitas sebelum hasil dibandingkan antarwilayah.</li>
-  </ol>
-  <details><summary>Pembahasan ringkas</summary><p>Intersection diperlukan untuk menghitung bagian permukiman pada zona bahaya. Select by location hanya menandai objek yang berhubungan secara spasial tanpa memotong geometri. Jumlah sekolah per desa dapat dihitung melalui spatial join atau agregasi. Focal mean pada raster elevasi dapat menggambarkan kecenderungan elevasi lingkungan sekitar; ukuran jendela harus disesuaikan dengan resolusi raster dan skala proses. Pemeriksaan minimum meliputi CRS, keselarasan grid, waktu data, ketelitian posisi, dan konsistensi definisi kelas.</p></details>
+  <h2 id="latihan">9. Latihan pilihan ganda</h2>
+  <p>Latihan ini terdiri atas 30 soal tentang tumpang susun vektor, tumpang susun raster, analisis ketetanggaan, dan interpretasi hasil. Pilih satu jawaban paling tepat pada setiap soal.</p>
+  <div class="quiz-intro" aria-label="Informasi latihan">
+    <article><b>30 soal</b><span>Empat kelompok konsep</span></article>
+    <article><b>30 poin</b><span>Satu poin untuk setiap jawaban benar</span></article>
+    <article><b>Nilai otomatis</b><span>Pembahasan tampil setelah jawaban diperiksa</span></article>
+  </div>
+  <noscript><p class="analysis-question">JavaScript perlu diaktifkan untuk membuka latihan interaktif dan menghitung nilai.</p></noscript>
+  <form id="overlayQuiz" class="quiz" novalidate>
+    <div id="quizQuestions"></div>
+    <div class="quiz-actions">
+      <button class="quiz-button" type="submit">Periksa jawaban</button>
+      <button class="quiz-button secondary" type="reset">Ulangi latihan</button>
+      <span class="quiz-progress" id="quizProgress" aria-live="polite">0 dari 30 soal terjawab</span>
+    </div>
+  </form>
+  <section id="quizResult" class="quiz-result" tabindex="-1" hidden aria-live="polite"></section>
 
   <h2 id="ringkasan">10. Ringkasan</h2>
   <ul class="summary-list">
@@ -210,13 +220,14 @@
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/processing_algs/qgis/vectoroverlay.html">QGIS User Guide — Vector Overlay</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/analysis/an-overview-of-the-overlay-toolset.htm">ArcGIS Pro Documentation — Overlay Toolset</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-weighted-overlay-works.htm">ArcGIS Pro Documentation — How Weighted Overlay Works</a>.</li>
     <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-focal-statistics-works.htm">ArcGIS Pro Documentation — How Focal Statistics Works</a>.</li>
     <li><a href="https://inarisk.bnpb.go.id/">BNPB — InaRISK, Peta Risiko Bencana Indonesia</a>.</li>
     <li><a href="https://www.big.go.id/content/produk/ina-geoportal">Badan Informasi Geospasial — Ina-Geoportal</a>.</li>
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#konsep">Konsep tumpang susun</a><a href="#vektor">Tumpang susun vektor</a><a href="#raster">Tumpang susun raster</a><a href="#neighborhood">Analisis ketetanggaan</a><a href="#beda">Perbandingan</a><a href="#kasus">Penerapan Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan konseptual</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#konsep">Konsep tumpang susun</a><a href="#vektor">Tumpang susun vektor</a><a href="#raster">Tumpang susun raster</a><a href="#neighborhood">Analisis ketetanggaan</a><a href="#beda">Perbandingan</a><a href="#kasus">Penerapan Indonesia</a><a href="#contoh-terstruktur">Contoh terstruktur</a><a href="#latihan">Latihan 30 soal</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
