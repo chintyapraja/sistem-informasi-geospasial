@@ -23,23 +23,7 @@
     <article><b>04</b><strong>Menafsirkan hasil</strong><p>Memeriksa kesesuaian data dan menjelaskan keterbatasan hasil analisis.</p></article>
   </div>
 
-  <h2 id="alur">2. Alur materi</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Waktu</th><th>Materi</th><th>Hasil yang diharapkan</th></tr></thead>
-      <tbody>
-        <tr><td>0–10 menit</td><td>Pertanyaan dasar tentang jarak</td><td>Mahasiswa memahami bahwa “dekat” harus dinyatakan dengan ukuran yang jelas.</td></tr>
-        <tr><td>10–30 menit</td><td>Model jarak</td><td>Mahasiswa dapat memilih jarak planar, geodesik, jaringan, atau biaya.</td></tr>
-        <tr><td>30–45 menit</td><td>Buffer dan fitur terdekat</td><td>Mahasiswa dapat membedakan zona jarak dan pencarian objek terdekat.</td></tr>
-        <tr><td>45–65 menit</td><td>Model dan kualitas jaringan</td><td>Mahasiswa memahami unsur jaringan serta syarat keterhubungannya.</td></tr>
-        <tr><td>65–80 menit</td><td>Jenis analisis jaringan</td><td>Mahasiswa dapat memilih operasi sesuai pertanyaan.</td></tr>
-        <tr><td>80–90 menit</td><td>Contoh lengkap</td><td>Mahasiswa membandingkan rute terpendek dan tercepat.</td></tr>
-        <tr><td>90–100 menit</td><td>Latihan mandiri</td><td>Mahasiswa merumuskan analisis untuk kasus baru.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h2 id="makna-dekat">3. “Dekat” menurut ukuran apa?</h2>
+  <h2 id="makna-dekat">2. “Dekat” menurut ukuran apa?</h2>
   <p>Dua lokasi dapat dianggap dekat berdasarkan jarak lurus, jarak sepanjang jalan, waktu tempuh, atau biaya perjalanan. Oleh karena itu, pertanyaan analisis harus menyebutkan <strong>ukuran kedekatan</strong> yang digunakan.</p>
 
   <figure class="visual-board">
@@ -101,7 +85,7 @@
     <li><b>Satuan hasil</b><span>harus dinyatakan dengan jelas: meter, kilometer, menit, rupiah, atau satuan biaya lain.</span></li>
   </ul>
 
-  <h2 id="kedekatan">4. Operasi analisis kedekatan</h2>
+  <h2 id="kedekatan">3. Operasi analisis kedekatan</h2>
 
   <h3 id="buffer">4.1 Buffer: membentuk zona pada jarak tertentu</h3>
   <p><strong>Buffer</strong> menghasilkan zona di sekitar titik, garis, atau poligon. Pertanyaan yang dijawab berbentuk: <em>objek apa yang berada dalam jarak tertentu dari sumber?</em></p>
@@ -176,7 +160,7 @@
   <h3 id="cost-distance">4.3 Jarak berbasis biaya</h3>
   <p>Pergerakan tidak selalu mengikuti jalan. Pada permukaan raster, setiap sel dapat menyimpan biaya melintasi lokasi tersebut. Lereng curam, rawa, atau tutupan lahan tertentu dapat diberi biaya lebih besar. Akumulasi biaya terkecil dari asal ke tujuan menghasilkan lintasan biaya terendah.</p>
 
-  <h2 id="jaringan">5. Model jaringan</h2>
+  <h2 id="jaringan">4. Model jaringan</h2>
   <p>Jaringan direpresentasikan sebagai <strong>graf</strong>: kumpulan simpul dan ruas yang saling terhubung. Garis yang tampak bersentuhan pada peta belum tentu terhubung secara topologis.</p>
 
   <figure class="visual-board">
@@ -223,7 +207,7 @@
   <div class="equation"><b>Waktu tempuh = panjang ruas ÷ kecepatan</b></div>
   <p>Rute tercepat tidak selalu menjadi rute terpendek. Ruas yang lebih panjang dapat ditempuh lebih cepat apabila kecepatannya lebih tinggi atau hambatannya lebih kecil.</p>
 
-  <h2 id="jenis-analisis">6. Jenis analisis jaringan</h2>
+  <h2 id="jenis-analisis">5. Jenis analisis jaringan</h2>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Analisis</th><th>Pertanyaan yang dijawab</th><th>Contoh keluaran</th></tr></thead>
@@ -242,7 +226,7 @@
     <figure><img src="assets/analysis/service_area.png" alt="Contoh wilayah layanan pada jaringan jalan di QGIS"><figcaption>Contoh wilayah layanan pada jaringan. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</figcaption></figure>
   </div>
 
-  <h2 id="alur-analisis">7. Urutan analisis</h2>
+  <h2 id="alur-analisis">6. Urutan analisis</h2>
   <ol class="agenda">
     <li><b>1. Rumuskan pertanyaan</b><span>Contoh: rumah sakit mana yang dapat dicapai paling cepat?</span></li>
     <li><b>2. Tentukan model pergerakan</b><span>Jarak lurus, jalan, sungai, permukaan biaya, atau jaringan lain.</span></li>
@@ -252,7 +236,7 @@
     <li><b>6. Periksa hasil</b><span>Bandingkan dengan peta, kondisi lapangan, dan pengetahuan tentang wilayah.</span></li>
   </ol>
 
-  <h2 id="kualitas">8. Kualitas data dan sumber kesalahan</h2>
+  <h2 id="kualitas">7. Kualitas data dan sumber kesalahan</h2>
   <ul class="slide-points">
     <li><b>Ruas terputus</b><span>jalan yang seharusnya tersambung tidak memiliki simpul bersama sehingga rute berhenti.</span></li>
     <li><b>Simpul semu</b><span>garis jalan layang dianggap terhubung dengan jalan di bawahnya.</span></li>
@@ -262,7 +246,7 @@
     <li><b>Data tidak mutakhir</b><span>penutupan jalan, jembatan baru, atau perubahan akses belum tercatat.</span></li>
   </ul>
 
-  <h2 id="contoh">9. Contoh lengkap: memilih rute ambulans</h2>
+  <h2 id="contoh">8. Contoh lengkap: memilih rute ambulans</h2>
   <p>Ambulans bergerak dari lokasi kecelakaan <strong>A</strong> menuju rumah sakit <strong>H</strong>. Tersedia dua rute. Hambatan yang dibandingkan adalah panjang dan waktu tempuh.</p>
 
   <figure class="visual-board">
@@ -306,7 +290,7 @@
   </div>
   <p><strong>Perubahan kondisi:</strong> apabila ruas C–H ditutup karena banjir, rute A–C–H tidak dapat digunakan. Penghalang tersebut harus dimasukkan agar hasil analisis sesuai dengan kondisi saat perjalanan dilakukan.</p>
 
-  <h2 id="latihan">10. Latihan mandiri</h2>
+  <h2 id="latihan">9. Latihan mandiri</h2>
   <p>Tiga kasus berikut digunakan untuk menerapkan konsep. <strong>Pembahasan dan jawaban tidak disertakan.</strong> Setiap jawaban harus menyebutkan pertanyaan analisis, data, ukuran hambatan, operasi yang dipilih, dan cara memeriksa hasil.</p>
 
   <article class="case-question"><small>KASUS 1 · EVAKUASI BANJIR</small><strong>Sebuah kecamatan memiliki tiga desa, dua tempat pengungsian, jaringan jalan, data kecepatan, jalan satu arah, dan dua ruas yang ditutup akibat banjir.</strong></article>
@@ -336,7 +320,7 @@
     <li>Jelaskan sistem koordinat dan satuan yang harus digunakan untuk analisis jarak.</li>
   </ol>
 
-  <h2 id="ringkasan">11. Ringkasan</h2>
+  <h2 id="ringkasan">10. Ringkasan</h2>
   <ul class="summary-list">
     <li><b>Ukuran jarak</b><span>harus dipilih sebelum operasi analisis: planar, geodesik, jaringan, atau biaya.</span></li>
     <li><b>Buffer</b><span>membentuk zona jarak; fitur terdekat menghasilkan pasangan objek dan nilai jarak.</span></li>
@@ -345,7 +329,7 @@
     <li><b>Interpretasi</b><span>harus mempertimbangkan satuan, sistem koordinat, kualitas jaringan, dan kondisi lapangan.</span></li>
   </ul>
 
-  <h2 id="referensi">12. Referensi</h2>
+  <h2 id="referensi">11. Referensi</h2>
   <ul class="reference">
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis and Buffer</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</li>
@@ -358,7 +342,7 @@
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#alur">Alur materi</a><a href="#makna-dekat">Ukuran jarak</a><a href="#kedekatan">Analisis kedekatan</a><a href="#jaringan">Model jaringan</a><a href="#jenis-analisis">Jenis analisis</a><a href="#alur-analisis">Urutan analisis</a><a href="#kualitas">Kualitas data</a><a href="#contoh">Contoh lengkap</a><a href="#latihan">Latihan mandiri</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#makna-dekat">Ukuran jarak</a><a href="#kedekatan">Analisis kedekatan</a><a href="#jaringan">Model jaringan</a><a href="#jenis-analisis">Jenis analisis</a><a href="#alur-analisis">Urutan analisis</a><a href="#kualitas">Kualitas data</a><a href="#contoh">Contoh lengkap</a><a href="#latihan">Latihan mandiri</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
