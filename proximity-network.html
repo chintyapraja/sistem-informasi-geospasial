@@ -240,7 +240,8 @@
   </div>
 
   <h2 id="jaringan">4. Model jaringan</h2>
-  <p>Jaringan direpresentasikan sebagai <strong>graf</strong>: kumpulan simpul dan ruas yang saling terhubung. Garis yang tampak bersentuhan pada peta belum tentu terhubung secara topologis.</p>
+  <div class="case-question"><small>ISTILAH DASAR</small><strong>Graf bukan grafik batang atau grafik garis. Graf adalah model sederhana yang menunjukkan lokasi mana yang terhubung dan jalur apa yang menghubungkannya.</strong></div>
+  <p>Pada jaringan jalan, <strong>persimpangan atau ujung jalan</strong> disederhanakan menjadi simpul, sedangkan <strong>ruas jalan di antara dua simpul</strong> menjadi sisi atau ruas graf. Setiap ruas kemudian dapat diberi nilai panjang, waktu tempuh, arah, dan aturan perjalanan.</p>
 
   <figure class="visual-board">
     <svg viewBox="0 0 1000 470" role="img" aria-labelledby="network-title network-desc">
@@ -277,14 +278,64 @@
   </dl>
 
 
-  <h3 id="graf">4.1 Dari garis menjadi graf</h3>
-  <p>Layer jalan baru menjadi jaringan analitis setelah geometri garis diterjemahkan menjadi graf dan diberi aturan perjalanan. Graf dapat dituliskan sebagai <strong>G = (V, E)</strong>: <em>V</em> adalah kumpulan simpul dan <em>E</em> adalah kumpulan ruas yang menghubungkan simpul.</p>
+  <h3 id="graf">4.1 Dari peta jalan menjadi graf jaringan</h3>
+  <p>Peta jalan menampilkan bentuk dan posisi jalan di dunia nyata. Graf mempertahankan informasi yang diperlukan untuk menganalisis hubungan dan perjalanan, kemudian mengabaikan detail bentuk yang tidak diperlukan.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dunia nyata</th><th>Pada peta</th><th>Dalam graf</th><th>Informasi yang disimpan</th></tr></thead>
+      <tbody>
+        <tr><td>Persimpangan</td><td>Titik pertemuan jalan</td><td><strong>Simpul</strong> (<em>node/vertex</em>)</td><td>ID simpul dan jenis persimpangan.</td></tr>
+        <tr><td>Ruas jalan</td><td>Garis di antara persimpangan</td><td><strong>Sisi/ruas</strong> (<em>edge/link</em>)</td><td>Panjang, kecepatan, waktu, arah, dan kelas jalan.</td></tr>
+        <tr><td>Perjalanan</td><td>Urutan beberapa ruas</td><td><strong>Lintasan</strong> (<em>path</em>)</td><td>Jumlah hambatan seluruh ruas yang dilalui.</td></tr>
+        <tr><td>Jalan tertutup</td><td>Ruas tidak dapat dilalui</td><td><strong>Penghalang</strong> (<em>barrier</em>)</td><td>Larangan melintasi ruas atau tambahan biaya.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure class="visual-board">
+    <svg viewBox="0 0 1000 390" role="img" aria-labelledby="graph-simple-title graph-simple-desc">
+      <title id="graph-simple-title">Contoh sederhana graf jaringan jalan</title>
+      <desc id="graph-simple-desc">Tiga simpul A, B, dan C dihubungkan oleh ruas dengan bobot jarak yang berbeda.</desc>
+      <rect width="1000" height="390" fill="#f7fbfc"/>
+      <defs><marker id="graph-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#587480"/></marker></defs>
+      <g font-family="Arial, sans-serif">
+        <text x="70" y="50" font-size="21" font-weight="700" fill="#07587a">Jaringan pada peta</text>
+        <g stroke="#b7c4ca" stroke-width="28" stroke-linecap="round">
+          <line x1="120" y1="220" x2="285" y2="100"/><line x1="285" y1="100" x2="430" y2="235"/><line x1="120" y1="220" x2="430" y2="235"/>
+        </g>
+        <g stroke="#07587a" stroke-width="5" stroke-linecap="round">
+          <line x1="120" y1="220" x2="285" y2="100"/><line x1="285" y1="100" x2="430" y2="235"/><line x1="120" y1="220" x2="430" y2="235"/>
+        </g>
+        <g fill="#fff" stroke="#07587a" stroke-width="4"><circle cx="120" cy="220" r="21"/><circle cx="285" cy="100" r="21"/><circle cx="430" cy="235" r="21"/></g>
+        <g font-size="17" font-weight="700" text-anchor="middle" fill="#20303c"><text x="120" y="226">A</text><text x="285" y="106">B</text><text x="430" y="241">C</text></g>
+
+        <line x1="480" y1="190" x2="555" y2="190" stroke="#587480" stroke-width="4" marker-end="url(#graph-arrow)"/>
+        <text x="485" y="165" font-size="15" fill="#536572">disederhanakan</text>
+
+        <text x="610" y="50" font-size="21" font-weight="700" fill="#07587a">Graf berbobot</text>
+        <g stroke="#07587a" stroke-width="6">
+          <line x1="650" y1="220" x2="790" y2="100"/><line x1="790" y1="100" x2="920" y2="235"/><line x1="650" y1="220" x2="920" y2="235"/>
+        </g>
+        <g fill="#fff" stroke="#07587a" stroke-width="4"><circle cx="650" cy="220" r="25"/><circle cx="790" cy="100" r="25"/><circle cx="920" cy="235" r="25"/></g>
+        <g font-size="18" font-weight="700" text-anchor="middle" fill="#20303c"><text x="650" y="226">A</text><text x="790" y="106">B</text><text x="920" y="241">C</text></g>
+        <g font-size="16" fill="#20303c"><text x="690" y="135">2 km</text><text x="850" y="145">3 km</text><text x="780" y="270">7 km</text></g>
+        <text x="610" y="335" font-size="16" fill="#536572">A–B–C = 5 km; A–C = 7 km</text>
+      </g>
+    </svg>
+    <figcaption><strong>Peta dan graf jaringan.</strong> Lintasan A–B–C terdiri atas dua ruas dengan biaya total 5 km, sehingga lebih pendek daripada ruas langsung A–C sepanjang 7 km.</figcaption>
+  </figure>
+
+  <p>Secara matematis, graf ditulis sebagai <strong>G = (V, E)</strong>. <em>V</em> adalah kumpulan simpul dan <em>E</em> adalah kumpulan ruas. Notasi tersebut hanya cara ringkas untuk menyatakan “lokasi dan hubungan antarlokasi”.</p>
+
   <ul class="slide-points">
     <li><b>Graf tidak berarah</b><span>ruas dapat dilalui dua arah dengan biaya yang sama.</span></li>
-    <li><b>Graf berarah</b><span>biaya atau izin perjalanan dari A ke B dapat berbeda dari B ke A.</span></li>
-    <li><b>Graf berbobot</b><span>setiap ruas menyimpan nilai hambatan, misalnya panjang atau waktu tempuh.</span></li>
-    <li><b>Graf multimoda</b><span>perjalanan dapat berpindah antara berjalan kaki, jalan raya, kapal, atau angkutan umum pada simpul perpindahan.</span></li>
+    <li><b>Graf berarah</b><span>izin atau biaya perjalanan dari A ke B dapat berbeda dari B ke A.</span></li>
+    <li><b>Graf berbobot</b><span>setiap ruas menyimpan hambatan, misalnya panjang, waktu, tarif, atau energi.</span></li>
+    <li><b>Graf multimoda</b><span>perjalanan dapat berpindah antara berjalan kaki, jalan raya, kapal, atau angkutan umum.</span></li>
   </ul>
+
+  <p class="source-note"><strong>Rujukan konsep:</strong> <a href="https://ltb.itc.utwente.nl/491/concept/79722">ITC, University of Twente — Network Analysis</a>; <a href="https://faculty.washington.edu/jwh/367network.htm">University of Washington — Notes on Network Analysis</a>; dan <a href="https://ocw.mit.edu/courses/1-022-introduction-to-network-models-fall-2018/resources/lecture-notes/">MIT OpenCourseWare — Introduction to Network Models</a>.</p>
 
   <h3 id="keterhubungan">4.2 Persilangan belum tentu persimpangan</h3>
   <div class="two-definitions">
@@ -536,6 +587,9 @@
 
   <h2 id="referensi">12. Referensi</h2>
   <ul class="reference">
+    <li><a href="https://ltb.itc.utwente.nl/491/concept/79722">ITC, University of Twente — Living Textbook: Network Analysis</a>.</li>
+    <li><a href="https://faculty.washington.edu/jwh/367network.htm">University of Washington — Geography 367: Notes on Network Analysis</a>.</li>
+    <li><a href="https://ocw.mit.edu/courses/1-022-introduction-to-network-models-fall-2018/resources/lecture-notes/">MIT OpenCourseWare — Introduction to Network Models: Lecture Notes</a>.</li>
     <li><a href="https://openfl.pressbooks.pub/introductiontogis2/chapter/chapter-seven/">Introductory Readings in GIS — Spatial Data Analysis, Proximity, and Network Analysis</a>.</li>
     <li><a href="https://pressbooks.pub/gist/chapter/6-1/">Introduction to GIS — Vector Topology and Network Analysis</a>.</li>
     <li><a href="https://inarisk.bnpb.go.id/v4/">BNPB — InaRISK, Peta Risiko Bencana Indonesia</a>.</li>
