@@ -245,102 +245,71 @@
   <div class="case-question"><small>BAYANGKAN KASUS INI</small><strong>Seorang warga bergerak dari Desa A menuju Puskesmas C. Ia dapat melewati Simpang B atau menggunakan jalan langsung. Jalur mana yang jaraknya paling pendek?</strong></div>
 
   <h3 id="graf">4.1 Memahami graf secara bertahap</h3>
-  <figure class="visual-board">
-    <svg viewBox="0 0 1200 660" role="img" aria-labelledby="graf-jelas-title graf-jelas-desc">
-      <title id="graf-jelas-title">Perubahan peta jalan menjadi graf jaringan</title>
-      <desc id="graf-jelas-desc">Peta Desa A, Simpang B, dan Puskesmas C diubah menjadi tiga simpul yang dihubungkan ruas berbobot, lalu dua alternatif lintasan dibandingkan.</desc>
-      <rect width="1200" height="660" fill="#f7fbfc"/>
-      <defs>
-        <marker id="graf-step-arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#52717d"/></marker>
-      </defs>
-      <g font-family="Arial, sans-serif">
-        <g transform="translate(30,35)">
-          <rect width="350" height="550" rx="14" fill="#fff" stroke="#cbd9df" stroke-width="2"/>
-          <circle cx="36" cy="38" r="20" fill="#07587a"/><text x="36" y="45" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">1</text>
-          <text x="70" y="45" font-size="24" font-weight="700" fill="#07587a">Peta jalan</text>
-          <text x="25" y="82" font-size="16" fill="#536572">Lokasi dan jalan masih mengikuti bentuk nyata.</text>
-
-          <path d="M70 375 Q130 175 210 205 T305 370" fill="none" stroke="#c3cdd2" stroke-width="34" stroke-linecap="round"/>
-          <path d="M70 375 Q185 455 305 370" fill="none" stroke="#c3cdd2" stroke-width="34" stroke-linecap="round"/>
-          <path d="M70 375 Q130 175 210 205 T305 370" fill="none" stroke="#7a8c95" stroke-width="4" stroke-dasharray="15 10"/>
-          <path d="M70 375 Q185 455 305 370" fill="none" stroke="#7a8c95" stroke-width="4" stroke-dasharray="15 10"/>
-
-          <g transform="translate(35,300)">
-            <rect x="0" y="20" width="70" height="58" fill="#f0a36b" stroke="#9c5f34" stroke-width="2"/>
-            <polygon points="-6,20 35,-12 76,20" fill="#c85d4c"/>
-            <text x="35" y="105" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Desa A</text>
-          </g>
-          <g transform="translate(210,205)">
-            <circle r="15" fill="#fff" stroke="#07587a" stroke-width="5"/>
-            <text x="0" y="-28" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Simpang B</text>
-          </g>
-          <g transform="translate(270,300)">
-            <rect x="0" y="10" width="70" height="68" fill="#fff" stroke="#4b8b65" stroke-width="3"/>
-            <rect x="27" y="-8" width="16" height="48" fill="#d85050"/><rect x="11" y="8" width="48" height="16" fill="#d85050"/>
-            <text x="35" y="105" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Puskesmas C</text>
-          </g>
-          <text x="72" y="190" font-size="15" fill="#536572">Jalan melalui B</text>
-          <text x="115" y="485" font-size="15" fill="#536572">Jalan langsung</text>
+  <div class="source-image-trio">
+    <figure>
+      <svg viewBox="0 0 420 390" role="img" aria-labelledby="peta-graf-title" style="width:100%;height:auto;display:block">
+        <title id="peta-graf-title">Tahap pertama: peta jalan</title>
+        <rect width="420" height="390" fill="#f7fbfc"/>
+        <g font-family="Arial, sans-serif">
+          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">1</text>
+          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Peta jalan</text>
+          <text x="28" y="80" font-size="16" fill="#536572">Lokasi dan jalan mengikuti bentuk nyata.</text>
+          <path d="M75 285 Q145 105 225 145 T350 285" fill="none" stroke="#c3cdd2" stroke-width="38" stroke-linecap="round"/>
+          <path d="M75 285 Q215 355 350 285" fill="none" stroke="#c3cdd2" stroke-width="38" stroke-linecap="round"/>
+          <path d="M75 285 Q145 105 225 145 T350 285" fill="none" stroke="#71858f" stroke-width="4" stroke-dasharray="15 10"/>
+          <path d="M75 285 Q215 355 350 285" fill="none" stroke="#71858f" stroke-width="4" stroke-dasharray="15 10"/>
+          <rect x="42" y="250" width="65" height="52" fill="#f0a36b" stroke="#9c5f34" stroke-width="2"/><polygon points="35,250 75,218 114,250" fill="#c85d4c"/>
+          <circle cx="225" cy="145" r="14" fill="#fff" stroke="#07587a" stroke-width="5"/>
+          <rect x="320" y="245" width="62" height="62" fill="#fff" stroke="#4b8b65" stroke-width="3"/><rect x="344" y="230" width="14" height="46" fill="#d85050"/><rect x="329" y="245" width="44" height="14" fill="#d85050"/>
+          <text x="75" y="332" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Desa A</text>
+          <text x="225" y="118" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Simpang B</text>
+          <text x="350" y="332" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Puskesmas C</text>
         </g>
+      </svg>
+      <figcaption><strong>1. Peta jalan.</strong> Tiga lokasi dihubungkan oleh dua pilihan jalan.</figcaption>
+    </figure>
 
-        <line x1="395" y1="310" x2="430" y2="310" stroke="#52717d" stroke-width="4" marker-end="url(#graf-step-arrow)"/>
-
-        <g transform="translate(440,35)">
-          <rect width="350" height="550" rx="14" fill="#fff" stroke="#cbd9df" stroke-width="2"/>
-          <circle cx="36" cy="38" r="20" fill="#07587a"/><text x="36" y="45" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">2</text>
-          <text x="70" y="45" font-size="24" font-weight="700" fill="#07587a">Graf jaringan</text>
-          <text x="25" y="82" font-size="16" fill="#536572">Bentuk jalan disederhanakan menjadi hubungan.</text>
-
-          <g stroke="#07587a" stroke-width="8" stroke-linecap="round">
-            <line x1="60" y1="375" x2="175" y2="190"/>
-            <line x1="175" y1="190" x2="295" y2="375"/>
-            <line x1="60" y1="375" x2="295" y2="375"/>
-          </g>
-          <g fill="#fff" stroke="#07587a" stroke-width="5">
-            <circle cx="60" cy="375" r="28"/><circle cx="175" cy="190" r="28"/><circle cx="295" cy="375" r="28"/>
-          </g>
-          <g font-size="21" font-weight="700" text-anchor="middle" fill="#20303c">
-            <text x="60" y="382">A</text><text x="175" y="197">B</text><text x="295" y="382">C</text>
-          </g>
-          <g font-size="18" font-weight="700" fill="#ea6a47">
-            <text x="83" y="260">2 km</text><text x="232" y="260">3 km</text><text x="148" y="410">7 km</text>
-          </g>
-
-          <g transform="translate(30,455)">
-            <circle cx="12" cy="10" r="10" fill="#fff" stroke="#07587a" stroke-width="4"/>
-            <text x="34" y="16" font-size="16" fill="#20303c">lingkaran = simpul/lokasi</text>
-            <line x1="0" y1="48" x2="24" y2="48" stroke="#07587a" stroke-width="6"/>
-            <text x="34" y="54" font-size="16" fill="#20303c">garis = ruas penghubung</text>
-            <text x="0" y="92" font-size="16" font-weight="700" fill="#ea6a47">2 km</text>
-            <text x="55" y="92" font-size="16" fill="#20303c">= bobot/biaya ruas</text>
-          </g>
+    <figure>
+      <svg viewBox="0 0 420 390" role="img" aria-labelledby="model-graf-title" style="width:100%;height:auto;display:block">
+        <title id="model-graf-title">Tahap kedua: graf jaringan</title>
+        <rect width="420" height="390" fill="#f7fbfc"/>
+        <g font-family="Arial, sans-serif">
+          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">2</text>
+          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Graf jaringan</text>
+          <text x="28" y="80" font-size="16" fill="#536572">Simpan hubungan dan biaya perjalanan.</text>
+          <g stroke="#07587a" stroke-width="8" stroke-linecap="round"><line x1="70" y1="290" x2="210" y2="130"/><line x1="210" y1="130" x2="350" y2="290"/><line x1="70" y1="290" x2="350" y2="290"/></g>
+          <g fill="#fff" stroke="#07587a" stroke-width="5"><circle cx="70" cy="290" r="29"/><circle cx="210" cy="130" r="29"/><circle cx="350" cy="290" r="29"/></g>
+          <g font-size="21" font-weight="700" text-anchor="middle" fill="#20303c"><text x="70" y="297">A</text><text x="210" y="137">B</text><text x="350" y="297">C</text></g>
+          <g font-size="18" font-weight="700" fill="#ea6a47"><text x="102" y="194">2 km</text><text x="286" y="194">3 km</text><text x="180" y="330">7 km</text></g>
+          <circle cx="55" cy="360" r="9" fill="#fff" stroke="#07587a" stroke-width="4"/><text x="74" y="366" font-size="15" fill="#20303c">simpul</text>
+          <line x1="145" y1="360" x2="175" y2="360" stroke="#07587a" stroke-width="6"/><text x="185" y="366" font-size="15" fill="#20303c">ruas</text>
+          <text x="265" y="366" font-size="15" font-weight="700" fill="#ea6a47">2 km</text><text x="310" y="366" font-size="15" fill="#20303c">bobot</text>
         </g>
+      </svg>
+      <figcaption><strong>2. Graf jaringan.</strong> Lingkaran adalah simpul, garis adalah ruas, dan angka adalah bobot.</figcaption>
+    </figure>
 
-        <line x1="805" y1="310" x2="840" y2="310" stroke="#52717d" stroke-width="4" marker-end="url(#graf-step-arrow)"/>
-
-        <g transform="translate(850,35)">
-          <rect width="320" height="550" rx="14" fill="#fff" stroke="#cbd9df" stroke-width="2"/>
-          <circle cx="36" cy="38" r="20" fill="#07587a"/><text x="36" y="45" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">3</text>
-          <text x="70" y="45" font-size="24" font-weight="700" fill="#07587a">Bandingkan rute</text>
-          <text x="25" y="82" font-size="16" fill="#536572">Jumlahkan bobot ruas yang dilalui.</text>
-
-          <rect x="25" y="125" width="270" height="135" rx="10" fill="#eaf5f6" stroke="#84b8c3"/>
-          <text x="45" y="160" font-size="20" font-weight="700" fill="#07587a">Rute A–B–C</text>
-          <text x="45" y="198" font-size="20" fill="#20303c">2 km + 3 km</text>
-          <text x="45" y="235" font-size="27" font-weight="700" fill="#07587a">= 5 km</text>
-
-          <rect x="25" y="285" width="270" height="120" rx="10" fill="#fff5ed" stroke="#e7a06f"/>
-          <text x="45" y="320" font-size="20" font-weight="700" fill="#a95032">Rute A–C</text>
-          <text x="45" y="358" font-size="27" font-weight="700" fill="#a95032">= 7 km</text>
-
-          <path d="M45 455 L68 478 L112 430" fill="none" stroke="#3d8f5c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="130" y="458" font-size="19" font-weight="700" fill="#3d6d4c">Pilih A–B–C</text>
-          <text x="130" y="485" font-size="16" fill="#536572">karena paling pendek.</text>
+    <figure>
+      <svg viewBox="0 0 420 390" role="img" aria-labelledby="hasil-graf-title" style="width:100%;height:auto;display:block">
+        <title id="hasil-graf-title">Tahap ketiga: membandingkan rute</title>
+        <rect width="420" height="390" fill="#f7fbfc"/>
+        <g font-family="Arial, sans-serif">
+          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">3</text>
+          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Bandingkan rute</text>
+          <text x="28" y="80" font-size="16" fill="#536572">Jumlahkan bobot ruas pada setiap lintasan.</text>
+          <rect x="28" y="110" width="364" height="115" rx="12" fill="#eaf5f6" stroke="#84b8c3" stroke-width="2"/>
+          <text x="50" y="145" font-size="20" font-weight="700" fill="#07587a">Rute A–B–C</text>
+          <text x="50" y="180" font-size="19" fill="#20303c">2 km + 3 km = <tspan font-size="26" font-weight="700">5 km</tspan></text>
+          <rect x="28" y="245" width="364" height="90" rx="12" fill="#fff5ed" stroke="#e7a06f" stroke-width="2"/>
+          <text x="50" y="280" font-size="20" font-weight="700" fill="#a95032">Rute A–C</text>
+          <text x="50" y="315" font-size="26" font-weight="700" fill="#a95032">7 km</text>
+          <path d="M45 360 L60 375 L90 342" fill="none" stroke="#3d8f5c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="110" y="370" font-size="18" font-weight="700" fill="#3d6d4c">A–B–C paling pendek</text>
         </g>
-      </g>
-    </svg>
-    <figcaption><strong>Dari peta menjadi graf.</strong> Graf tidak mempertahankan bentuk lengkung jalan secara rinci. Graf mempertahankan lokasi, hubungan, dan biaya yang diperlukan untuk menghitung perjalanan.</figcaption>
-  </figure>
+      </svg>
+      <figcaption><strong>3. Hasil.</strong> Rute A–B–C dipilih karena biaya totalnya paling kecil.</figcaption>
+    </figure>
+  </div>
 
   <div class="concept-strip">
     <article><b>SIMPUL</b><strong>Lokasi penting</strong><p>Desa, persimpangan, halte, pelabuhan, atau fasilitas tujuan.</p></article>
