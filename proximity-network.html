@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Kedekatan dan Analisis Jaringan | Sistem Informasi Geospasial</title>
-  <meta name="description" content="Materi pertemuan 11 tentang ukuran jarak, buffer, fitur terdekat, model jaringan, rute, wilayah layanan, dan fasilitas terdekat.">
-  <link rel="stylesheet" href="lecture.css?v=20261018c"><script defer src="script.js?v=20261018l"></script>
+  <title>Proximity dan Network Analysis | Sistem Informasi Geospasial</title>
+  <meta name="description" content="Materi pertemuan 11 tentang jarak, buffer, kedekatan, rute, dan analisis jaringan.">
+  <link rel="stylesheet" href="lecture.css?v=20261018"><script defer src="script.js?v=20261018"></script>
 </head>
 <body>
 <a class="skip" href="#materi">Langsung ke materi</a>
@@ -12,605 +12,212 @@
 <div class="layout">
 <main id="materi">
   <div class="eyebrow">Pertemuan 11 · Materi 10 · 100 menit · CPMK3</div>
-  <h1>Kedekatan dan Analisis Jaringan</h1>
-  <p class="lead">Analisis kedekatan menjawab pertanyaan tentang jarak antarlokasi. Analisis jaringan menjawab pertanyaan tentang perjalanan melalui jalan, sungai, pipa, atau jaringan lain yang saling terhubung.</p>
+  <h1>Proximity dan network analysis</h1>
+  <p class="lead">Proximity analysis menilai kedekatan antarlokasi. Network analysis menilai perjalanan melalui jaringan dengan mempertimbangkan konektivitas, arah, dan biaya perjalanan.</p>
 
   <h2 id="tujuan">1. Tujuan pembelajaran</h2>
   <div class="concept-strip">
-    <article><b>01</b><strong>Menentukan ukuran jarak</strong><p>Membedakan jarak planar, geodesik, jaringan, dan biaya perjalanan.</p></article>
-    <article><b>02</b><strong>Memilih operasi</strong><p>Membedakan fungsi buffer, fitur terdekat, rute, fasilitas terdekat, dan wilayah layanan.</p></article>
-    <article><b>03</b><strong>Membaca jaringan</strong><p>Menjelaskan simpul, ruas, keterhubungan, arah, hambatan, pembatas, dan penghalang.</p></article>
-    <article><b>04</b><strong>Menafsirkan hasil</strong><p>Memeriksa kesesuaian data dan menjelaskan keterbatasan hasil analisis.</p></article>
+    <article><b>Proximity</b><strong>Menilai kedekatan</strong><p>Membedakan jarak lurus, jarak geodesik, buffer, nearest feature, dan cost distance.</p></article>
+    <article><b>Network</b><strong>Memahami jaringan</strong><p>Menjelaskan node, edge, konektivitas, arah, restriction, dan impedance.</p></article>
+    <article><b>Aplikasi</b><strong>Menyusun prosedur</strong><p>Memilih shortest path, fastest path, service area, atau origin–destination matrix.</p></article>
   </div>
+  <p class="analysis-question"><strong>Contoh pertanyaan:</strong> rumah sakit mana yang paling cepat dicapai dari lokasi kecelakaan, melalui ruas jalan mana, dan wilayah mana yang dapat dilayani dalam 15 menit?</p>
 
-  <h2 id="makna-dekat">2. “Dekat” menurut ukuran apa?</h2>
-  <p>Dua lokasi dapat dianggap dekat berdasarkan jarak lurus, jarak sepanjang jalan, waktu tempuh, atau biaya perjalanan. Oleh karena itu, pertanyaan analisis harus menyebutkan <strong>ukuran kedekatan</strong> yang digunakan.</p>
-
+  <h2 id="proximity">2. Apa yang dimaksud dengan proximity?</h2>
+  <p><strong>Proximity</strong> menyatakan tingkat kedekatan antarobjek berdasarkan jarak. “Dekat” harus selalu disertai definisi: dekat menurut jarak lurus, jarak permukaan bumi, waktu tempuh, atau biaya perjalanan.</p>
   <figure class="visual-board">
-    <svg viewBox="0 0 1000 430" role="img" aria-labelledby="jarak-title jarak-desc">
-      <title id="jarak-title">Empat cara mengukur kedekatan</title>
-      <desc id="jarak-desc">Perbandingan jarak lurus, geodesik, jaringan, dan biaya perjalanan antara lokasi asal dan tujuan.</desc>
-      <rect width="1000" height="430" fill="#f7fbfc"/>
-      <g font-family="Arial, sans-serif">
-        <g transform="translate(35,45)">
-          <rect width="215" height="320" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="20" font-weight="700" fill="#07587a">Jarak planar</text>
-          <circle cx="50" cy="120" r="11" fill="#ea6a47"/><circle cx="165" cy="230" r="11" fill="#087b92"/>
-          <line x1="58" y1="128" x2="157" y2="222" stroke="#20303c" stroke-width="4"/>
-          <text x="20" y="280" font-size="15" fill="#536572">Garis lurus pada</text><text x="20" y="302" font-size="15" fill="#536572">bidang proyeksi.</text>
-        </g>
-        <g transform="translate(275,45)">
-          <rect width="215" height="320" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="20" font-weight="700" fill="#07587a">Jarak geodesik</text>
-          <circle cx="108" cy="165" r="72" fill="#e6f3f5" stroke="#7ca7b4" stroke-width="3"/>
-          <path d="M57 150 Q108 85 162 151" fill="none" stroke="#20303c" stroke-width="4"/>
-          <circle cx="57" cy="150" r="9" fill="#ea6a47"/><circle cx="162" cy="151" r="9" fill="#087b92"/>
-          <text x="20" y="280" font-size="15" fill="#536572">Lintasan terpendek pada</text><text x="20" y="302" font-size="15" fill="#536572">permukaan elipsoid bumi.</text>
-        </g>
-        <g transform="translate(515,45)">
-          <rect width="215" height="320" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="20" font-weight="700" fill="#07587a">Jarak jaringan</text>
-          <path d="M40 230 L40 105 L105 105 L105 175 L175 175 L175 235" fill="none" stroke="#8a9aa3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M40 230 L40 105 L105 105 L105 175 L175 175 L175 235" fill="none" stroke="#07587a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="40" cy="230" r="10" fill="#ea6a47"/><circle cx="175" cy="235" r="10" fill="#087b92"/>
-          <text x="20" y="280" font-size="15" fill="#536572">Panjang lintasan melalui</text><text x="20" y="302" font-size="15" fill="#536572">ruas yang terhubung.</text>
-        </g>
-        <g transform="translate(755,45)">
-          <rect width="215" height="320" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="20" font-weight="700" fill="#07587a">Biaya perjalanan</text>
-          <path d="M35 215 L75 125 L125 190 L180 90" fill="none" stroke="#07587a" stroke-width="7"/>
-          <text x="40" y="245" font-size="14" fill="#536572">5 menit</text><text x="84" y="115" font-size="14" fill="#536572">macet</text><text x="142" y="175" font-size="14" fill="#536572">tol</text>
-          <text x="20" y="280" font-size="15" fill="#536572">Waktu, tarif, energi, atau</text><text x="20" y="302" font-size="15" fill="#536572">gabungan beberapa biaya.</text>
-        </g>
+    <svg viewBox="0 0 960 390" role="img" aria-labelledby="distance-title distance-desc">
+      <title id="distance-title">Tiga cara menilai kedekatan</title><desc id="distance-desc">Lokasi A dan B dibandingkan menggunakan jarak lurus, jarak jaringan, dan cost distance.</desc>
+      <rect width="960" height="390" fill="#f5f8fa"/>
+      <g font-family="system-ui,sans-serif" text-anchor="middle">
+        <g transform="translate(20 40)"><rect width="290" height="300" rx="8" fill="#fff" stroke="#c5d1d7"/><text x="145" y="35" fill="#075175" font-weight="700">JARAK LURUS</text><circle cx="55" cy="210" r="11" fill="#b64c42"/><circle cx="235" cy="85" r="11" fill="#075175"/><line x1="65" y1="203" x2="225" y2="92" stroke="#26323e" stroke-width="4" stroke-dasharray="9"/><text x="55" y="245">A</text><text x="235" y="65">B</text><text x="145" y="275" fill="#5d6b76">Euclidean / geodesic</text></g>
+        <g transform="translate(335 40)"><rect width="290" height="300" rx="8" fill="#fff" stroke="#c5d1d7"/><text x="145" y="35" fill="#075175" font-weight="700">JARAK JARINGAN</text><path d="M45 225 L105 165 L92 110 L170 95 L236 70" fill="none" stroke="#aab4b9" stroke-width="18"/><path d="M45 225 L105 165 L92 110 L170 95 L236 70" fill="none" stroke="#075175" stroke-width="5"/><circle cx="45" cy="225" r="11" fill="#b64c42"/><circle cx="236" cy="70" r="11" fill="#075175"/><text x="145" y="275" fill="#5d6b76">mengikuti ruas yang terhubung</text></g>
+        <g transform="translate(650 40)"><rect width="290" height="300" rx="8" fill="#fff" stroke="#c5d1d7"/><text x="145" y="35" fill="#075175" font-weight="700">COST DISTANCE</text><rect x="35" y="70" width="220" height="170" fill="#dcebbd"/><path d="M35 190 C90 145,132 230,255 110" fill="none" stroke="#75aeca" stroke-width="42" opacity=".75"/><path d="M55 220 C105 175,167 160,235 87" fill="none" stroke="#b64c42" stroke-width="6" stroke-dasharray="8"/><circle cx="55" cy="220" r="10" fill="#b64c42"/><circle cx="235" cy="87" r="10" fill="#075175"/><text x="145" y="275" fill="#5d6b76">melewati permukaan berbiaya</text></g>
       </g>
     </svg>
-    <figcaption><strong>Empat ukuran kedekatan.</strong> Ukuran yang dipilih menentukan hasil analisis.</figcaption>
+    <figcaption>Satu pasangan lokasi dapat mempunyai nilai kedekatan berbeda menurut cara jarak didefinisikan.</figcaption>
   </figure>
 
-  <h3 id="model-jarak">2.1 Model jarak</h3>
+  <h3 id="jenis-jarak">Jenis jarak</h3>
+  <div class="operation-list">
+    <article><strong>Euclidean distance</strong><p>Jarak lurus pada bidang datar. Sesuai untuk wilayah terbatas dengan CRS proyeksi yang tepat.</p></article>
+    <article><strong>Geodesic distance</strong><p>Jarak terpendek pada permukaan elipsoid bumi. Sesuai untuk jarak panjang atau cakupan luas.</p></article>
+    <article><strong>Manhattan distance</strong><p>Jarak sebagai jumlah perpindahan horizontal dan vertikal; menggambarkan gerak pada grid tertentu.</p></article>
+    <article><strong>Cost distance</strong><p>Jarak efektif berdasarkan akumulasi hambatan raster, misalnya lereng, tutupan lahan, atau biaya.</p></article>
+  </div>
+
+  <h2 id="buffer">3. Buffer dan nearest feature</h2>
+  <p><strong>Buffer</strong> membentuk zona pada jarak tertentu dari titik, garis, atau poligon. Buffer menjawab “wilayah mana yang berada dalam jarak X?”, sedangkan nearest feature menjawab “objek mana yang paling dekat dan berapa jaraknya?”.</p>
+  <figure class="visual-board">
+    <svg viewBox="0 0 960 350" role="img" aria-labelledby="buffer-title buffer-desc">
+      <title id="buffer-title">Buffer titik, garis, dan poligon</title><desc id="buffer-desc">Titik, garis, dan poligon dikelilingi zona buffer dengan jarak tertentu.</desc>
+      <rect width="960" height="350" fill="#fff"/>
+      <g font-family="system-ui,sans-serif" text-anchor="middle">
+        <g transform="translate(25 35)"><text x="145" y="25" fill="#075175" font-weight="700">TITIK</text><circle cx="145" cy="160" r="90" fill="#d6e8ed" stroke="#75aeca" stroke-width="3"/><circle cx="145" cy="160" r="12" fill="#b64c42"/><line x1="145" y1="160" x2="235" y2="160" stroke="#075175" stroke-width="3"/><text x="190" y="147" font-size="14">500 m</text></g>
+        <g transform="translate(335 35)"><text x="145" y="25" fill="#075175" font-weight="700">GARIS</text><path d="M35 220 C85 90,185 235,255 85" fill="none" stroke="#d6e8ed" stroke-width="70"/><path d="M35 220 C85 90,185 235,255 85" fill="none" stroke="#075175" stroke-width="6"/><text x="145" y="290" fill="#5d6b76">zona pada kedua sisi</text></g>
+        <g transform="translate(645 35)"><text x="145" y="25" fill="#075175" font-weight="700">POLIGON</text><polygon points="70,105 205,80 245,170 180,245 70,220 42,155" fill="#d6e8ed" stroke="#75aeca" stroke-width="25" stroke-linejoin="round"/><polygon points="70,105 205,80 245,170 180,245 70,220 42,155" fill="#fff" stroke="#075175" stroke-width="4"/><text x="145" y="290" fill="#5d6b76">buffer keluar dari batas</text></g>
+      </g>
+    </svg>
+    <figcaption>Ilustrasi buffer pada tiga tipe geometri vektor.</figcaption>
+  </figure>
+
+  <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html"><img src="assets/analysis/dissolve_buffer_results.png" alt="Hasil buffer jalan yang telah didissolve pada QGIS"></a><figcaption>Buffer jalan setelah batas internal didissolve menjadi satu zona. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis</a>.</figcaption></figure>
   <dl class="reading-result">
-    <dt>Planar</dt><dd>Jarak lurus dihitung pada bidang datar. Sesuai untuk wilayah terbatas apabila data menggunakan sistem koordinat proyeksi yang tepat.</dd>
-    <dt>Geodesik</dt><dd>Jarak dihitung pada permukaan elipsoid bumi. Sesuai untuk wilayah luas, lintas zona proyeksi, atau lintasan panjang.</dd>
-    <dt>Jaringan</dt><dd>Jarak dihitung melalui ruas yang dapat dilalui. Hasil dipengaruhi keterhubungan, arah, dan pembatas perjalanan.</dd>
-    <dt>Biaya</dt><dd>Kedekatan dinilai dengan waktu, tarif, konsumsi energi, kemiringan, atau hambatan lain; tidak harus berupa meter atau kilometer.</dd>
+    <dt>Single buffer</dt><dd>Satu jarak digunakan untuk seluruh objek, misalnya 500 m dari sungai.</dd>
+    <dt>Multiple ring</dt><dd>Beberapa zona jarak dibentuk, misalnya 0–500 m, 500–1.000 m, dan 1.000–1.500 m.</dd>
+    <dt>Variable buffer</dt><dd>Jarak setiap objek ditentukan oleh nilai atribut, misalnya lebar sempadan menurut kelas sungai.</dd>
+    <dt>Dissolve</dt><dd>Batas antarbuffer yang bertumpang tindih dihapus jika zona ingin diperlakukan sebagai satu wilayah.</dd>
   </dl>
 
-  <h3 id="jarak-geometri">2.2 Jarak antargeometri</h3>
-  <p>Jarak dalam SIG tidak selalu dihitung dari titik pusat suatu objek. Jarak minimum ditentukan oleh bagian geometri yang paling dekat. Cara membacanya bergantung pada bentuk objek asal dan tujuan.</p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Pasangan geometri</th><th>Jarak yang dihitung</th><th>Contoh pertanyaan</th></tr></thead>
-      <tbody>
-        <tr><td>Titik–titik</td><td>Garis lurus antara dua koordinat.</td><td>Berapa jarak sekolah ke puskesmas?</td></tr>
-        <tr><td>Titik–garis</td><td>Jarak terpendek dari titik menuju bagian garis terdekat.</td><td>Berapa jarak permukiman ke sungai?</td></tr>
-        <tr><td>Titik–poligon</td><td>Jarak ke batas poligon; bernilai nol jika titik berada di dalam poligon.</td><td>Apakah sekolah berada di dalam zona bahaya?</td></tr>
-        <tr><td>Poligon–poligon</td><td>Jarak minimum antara kedua batas; bernilai nol jika bersentuhan atau bertumpang tindih.</td><td>Seberapa jauh kawasan industri dari kawasan lindung?</td></tr>
-      </tbody>
-    </table>
-  </div>
-
+  <h2 id="network">4. Network analysis</h2>
+  <p><strong>Jaringan</strong> adalah model objek yang saling terhubung dan dapat dilalui. Jalan, rel, jaringan pipa, sungai, serta jaringan utilitas dapat dimodelkan sebagai edge dan node.</p>
   <figure class="visual-board">
-    <svg viewBox="0 0 1000 330" role="img" aria-labelledby="geom-title geom-desc">
-      <title id="geom-title">Jarak minimum antargeometri</title>
-      <desc id="geom-desc">Jarak titik ke titik, titik ke garis, dan titik ke poligon dihitung dari bagian geometri yang paling dekat.</desc>
-      <rect width="1000" height="330" fill="#f7fbfc"/>
-      <g font-family="Arial, sans-serif">
-        <g transform="translate(35,35)">
-          <rect width="285" height="250" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="32" font-size="19" font-weight="700" fill="#07587a">Titik–titik</text>
-          <circle cx="65" cy="125" r="11" fill="#ea6a47"/><circle cx="220" cy="175" r="11" fill="#087b92"/>
-          <line x1="76" y1="129" x2="209" y2="171" stroke="#20303c" stroke-width="4" stroke-dasharray="8 6"/>
-          <text x="120" y="135" font-size="15" fill="#536572">d</text>
-        </g>
-        <g transform="translate(357,35)">
-          <rect width="285" height="250" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="32" font-size="19" font-weight="700" fill="#07587a">Titik–garis</text>
-          <path d="M40 205 Q140 55 245 170" fill="none" stroke="#087b92" stroke-width="8"/>
-          <circle cx="85" cy="75" r="11" fill="#ea6a47"/>
-          <line x1="92" y1="84" x2="125" y2="125" stroke="#20303c" stroke-width="4" stroke-dasharray="8 6"/>
-          <text x="105" y="95" font-size="15" fill="#536572">minimum</text>
-        </g>
-        <g transform="translate(679,35)">
-          <rect width="285" height="250" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="32" font-size="19" font-weight="700" fill="#07587a">Titik–poligon</text>
-          <path d="M65 205 L50 105 L135 58 L230 115 L215 215 Z" fill="#dff2f4" stroke="#087b92" stroke-width="4"/>
-          <circle cx="140" cy="145" r="11" fill="#ea6a47"/>
-          <text x="102" y="245" font-size="15" fill="#536572">di dalam → jarak 0</text>
-        </g>
-      </g>
+    <svg viewBox="0 0 960 420" role="img" aria-labelledby="network-title network-desc">
+      <title id="network-title">Komponen model jaringan</title><desc id="network-desc">Jaringan terdiri atas node, edge, arah, biaya, dan restriction.</desc>
+      <rect width="960" height="420" fill="#f5f8fa"/>
+      <g stroke="#9aaab2" stroke-width="13" stroke-linecap="round"><line x1="125" y1="100" x2="335" y2="90"/><line x1="335" y1="90" x2="500" y2="205"/><line x1="500" y1="205" x2="765" y2="115"/><line x1="335" y1="90" x2="310" y2="315"/><line x1="310" y1="315" x2="500" y2="205"/><line x1="500" y1="205" x2="710" y2="335"/></g>
+      <g fill="#075175"><circle cx="125" cy="100" r="15"/><circle cx="335" cy="90" r="15"/><circle cx="500" cy="205" r="15"/><circle cx="765" cy="115" r="15"/><circle cx="310" cy="315" r="15"/><circle cx="710" cy="335" r="15"/></g>
+      <g font-family="system-ui,sans-serif"><g transform="translate(35 220)"><rect width="185" height="82" rx="7" fill="#fff" stroke="#9bb1bc"/><text x="18" y="30" font-weight="700" fill="#075175">NODE</text><text x="18" y="56" fill="#5d6b76">simpang atau ujung</text></g><g transform="translate(650 205)"><rect width="230" height="82" rx="7" fill="#fff" stroke="#9bb1bc"/><text x="18" y="30" font-weight="700" fill="#075175">EDGE</text><text x="18" y="56" fill="#5d6b76">ruas yang dapat dilalui</text></g><g transform="translate(370 295)"><rect width="230" height="93" rx="7" fill="#fff" stroke="#9bb1bc"/><text x="18" y="28" font-weight="700" fill="#075175">IMPEDANCE</text><text x="18" y="53" fill="#5d6b76">jarak, waktu, atau biaya</text><text x="18" y="76" fill="#5d6b76">pada setiap edge</text></g></g>
+      <path d="M400 118 L468 165" stroke="#b64c42" stroke-width="6"/><polygon points="467,165 446,159 458,143" fill="#b64c42"/>
     </svg>
-    <figcaption><strong>Jarak minimum antargeometri.</strong> Titik di dalam poligon mempunyai jarak nol terhadap poligon tersebut.</figcaption>
+    <figcaption>Komponen jaringan: node, edge, arah, konektivitas, dan impedance.</figcaption>
   </figure>
 
-  <h3 id="kedekatan-akses">2.3 Kedekatan, jangkauan, dan aksesibilitas</h3>
+  <h3 id="komponen">Komponen yang menentukan rute</h3>
   <div class="operation-list">
-    <article><strong>Kedekatan</strong><p>Menyatakan seberapa dekat dua objek menurut ukuran jarak tertentu.</p></article>
-    <article><strong>Jangkauan</strong><p>Menyatakan lokasi yang masih dapat dicapai dalam batas jarak, waktu, atau biaya tertentu.</p></article>
-    <article><strong>Aksesibilitas</strong><p>Menilai kemudahan mencapai kesempatan atau layanan; mempertimbangkan jaringan, hambatan, jumlah penduduk, dan kapasitas tujuan.</p></article>
-    <article><strong>Cakupan layanan</strong><p>Menghubungkan jangkauan fasilitas dengan penduduk atau wilayah yang dapat dilayani.</p></article>
-  </div>
-  <p><strong>Contoh:</strong> puskesmas terdekat belum tentu paling mudah diakses. Sebuah sungai tanpa jembatan, jalan satu arah, kemacetan, atau kapasitas fasilitas dapat mengubah penilaian akses.</p>
-
-  <div class="case-question"><small>CONTOH SEDERHANA</small><strong>Rumah sakit berjarak lurus 2 km dari sebuah desa, tetapi jembatan terdekat berada jauh di sebelah utara. Jarak melalui jalan menjadi 7 km. Untuk menilai akses ambulans, jarak jaringan lebih tepat daripada jarak lurus.</strong></div>
-
-  <h3 id="crs">2.4 Sistem referensi koordinat dan satuan</h3>
-  <ul class="slide-points">
-    <li><b>Koordinat geografis</b><span>menggunakan derajat. Derajat tidak boleh langsung dianggap sebagai meter atau kilometer.</span></li>
-    <li><b>Koordinat proyeksi</b><span>menggunakan satuan linear, misalnya meter. Proyeksi harus sesuai dengan lokasi dan cakupan analisis.</span></li>
-    <li><b>Jarak geodesik</b><span>dapat digunakan ketika cakupan wilayah luas atau objek berada pada zona proyeksi yang berbeda.</span></li>
-    <li><b>Satuan hasil</b><span>harus dinyatakan dengan jelas: meter, kilometer, menit, rupiah, atau satuan biaya lain.</span></li>
-  </ul>
-
-  <h2 id="kedekatan">3. Operasi analisis kedekatan</h2>
-
-  <h3 id="buffer">3.1 Buffer: membentuk zona pada jarak tertentu</h3>
-  <p><strong>Buffer</strong> menghasilkan zona di sekitar titik, garis, atau poligon. Pertanyaan yang dijawab berbentuk: <em>objek apa yang berada dalam jarak tertentu dari sumber?</em></p>
-
-  <figure class="visual-board">
-    <svg viewBox="0 0 1000 390" role="img" aria-labelledby="buffer-title buffer-desc">
-      <title id="buffer-title">Buffer titik, garis, dan poligon</title>
-      <desc id="buffer-desc">Zona jarak yang terbentuk di sekitar sekolah, sungai, dan kawasan industri.</desc>
-      <rect width="1000" height="390" fill="#f7fbfc"/>
-      <g font-family="Arial, sans-serif">
-        <g transform="translate(35,40)">
-          <rect width="285" height="290" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="18" y="32" font-size="19" font-weight="700" fill="#07587a">Buffer titik</text>
-          <circle cx="142" cy="150" r="85" fill="#dff2f4" stroke="#5d9cac" stroke-width="3"/>
-          <circle cx="142" cy="150" r="10" fill="#ea6a47"/>
-          <text x="92" y="265" font-size="15" fill="#536572">Sekolah + 500 m</text>
-        </g>
-        <g transform="translate(355,40)">
-          <rect width="285" height="290" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="18" y="32" font-size="19" font-weight="700" fill="#07587a">Buffer garis</text>
-          <path d="M45 220 Q110 65 235 205" fill="none" stroke="#dff2f4" stroke-width="55" stroke-linecap="round"/>
-          <path d="M45 220 Q110 65 235 205" fill="none" stroke="#087b92" stroke-width="7" stroke-linecap="round"/>
-          <text x="85" y="265" font-size="15" fill="#536572">Sungai + 100 m</text>
-        </g>
-        <g transform="translate(675,40)">
-          <rect width="285" height="290" rx="10" fill="#fff" stroke="#cbd9df"/>
-          <text x="18" y="32" font-size="19" font-weight="700" fill="#07587a">Buffer poligon</text>
-          <path d="M62 213 L55 115 L130 70 L215 115 L220 220 L135 250 Z" fill="#dff2f4" stroke="#5d9cac" stroke-width="3"/>
-          <path d="M92 196 L88 130 L135 103 L187 132 L190 195 L137 220 Z" fill="#ea6a47" opacity=".85"/>
-          <text x="60" y="265" font-size="15" fill="#536572">Industri + 1 km</text>
-        </g>
-      </g>
-    </svg>
-    <figcaption><strong>Buffer titik, garis, dan poligon.</strong> Jarak buffer harus mengikuti tujuan analisis dan satuan data.</figcaption>
-  </figure>
-
-  <div class="operation-list">
-    <article><strong>Buffer tunggal</strong><p>Satu jarak diterapkan pada seluruh objek, misalnya 500 m dari semua sekolah.</p></article>
-    <article><strong>Buffer bertingkat</strong><p>Beberapa jarak membentuk zona, misalnya 0–5 km, 5–10 km, dan 10–15 km.</p></article>
-    <article><strong>Buffer bervariasi</strong><p>Jarak diambil dari nilai atribut, misalnya sempadan berbeda menurut kelas sungai.</p></article>
-    <article><strong>Dissolve</strong><p>Zona buffer yang saling tumpang tindih dilebur apabila batas setiap sumber tidak diperlukan.</p></article>
+    <article><strong>Node</strong><p>Titik yang menghubungkan edge, misalnya persimpangan, terminal, atau katup.</p></article>
+    <article><strong>Edge</strong><p>Ruas yang dapat dilalui atau mengalirkan sesuatu, misalnya ruas jalan atau pipa.</p></article>
+    <article><strong>Connectivity</strong><p>Aturan yang menentukan apakah perpindahan dapat terjadi dari satu edge ke edge lain.</p></article>
+    <article><strong>Direction</strong><p>Arah pergerakan yang diizinkan; jalan satu arah membatasi perjalanan.</p></article>
+    <article><strong>Impedance</strong><p>Biaya yang diminimalkan, misalnya jarak, waktu, energi, atau tarif.</p></article>
+    <article><strong>Restriction</strong><p>Larangan atau kondisi, misalnya dilarang belok, batas tinggi kendaraan, atau jalan tertutup.</p></article>
   </div>
 
-  <figure class="source-image-pair">
-    <figure><img src="https://docs.qgis.org/3.44/en/_images/dissolve_buffer_results.png" alt="Perbandingan hasil buffer dengan dan tanpa dissolve pada QGIS"><figcaption>Hasil buffer dengan dan tanpa <em>dissolve</em>. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis</a>.</figcaption></figure>
-    <figure>
-      <svg viewBox="0 0 560 360" role="img" aria-label="Seleksi objek yang berada di dalam zona buffer">
-        <rect width="560" height="360" fill="#f7fbfc"/>
-        <circle cx="230" cy="175" r="115" fill="#dff2f4" stroke="#5d9cac" stroke-width="3"/>
-        <path d="M75 65 L485 300" stroke="#8a9aa3" stroke-width="16"/>
-        <circle cx="230" cy="175" r="12" fill="#ea6a47"/>
-        <rect x="145" y="115" width="28" height="28" fill="#087b92"/><rect x="300" y="215" width="28" height="28" fill="#087b92"/><rect x="430" y="100" width="28" height="28" fill="#c3cdd2"/>
-        <text x="35" y="335" font-family="Arial" font-size="17" fill="#536572">Dua bangunan berada di dalam zona; satu berada di luar.</text>
-      </svg>
-      <figcaption><strong>Buffer dilanjutkan dengan seleksi spasial.</strong> Zona dibentuk terlebih dahulu, kemudian objek di dalamnya dipilih.</figcaption>
-    </figure>
-  </figure>
-
-  <h3 id="nearest">3.2 Fitur terdekat</h3>
-  <p>Operasi <strong>fitur terdekat</strong> mencari objek tujuan dengan jarak paling kecil dari setiap objek asal. Hasil biasanya memuat identitas tujuan terdekat dan nilai jaraknya.</p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Desa asal</th><th>Puskesmas terdekat</th><th>Jarak lurus</th><th>Makna</th></tr></thead>
-      <tbody>
-        <tr><td>Desa A</td><td>Puskesmas 2</td><td>1,8 km</td><td>Puskesmas 2 mempunyai jarak geometris paling kecil dari Desa A.</td></tr>
-        <tr><td>Desa B</td><td>Puskesmas 1</td><td>3,1 km</td><td>Hasil belum memperhitungkan jalan, jembatan, atau waktu tempuh.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><strong>Perbedaan utama:</strong> buffer menghasilkan <em>zona</em>, sedangkan fitur terdekat menghasilkan <em>pasangan objek dan nilai jarak</em>.</p>
-
-
-  <h3 id="voronoi">3.3 Wilayah terdekat: poligon Thiessen/Voronoi</h3>
-  <p>Poligon Thiessen atau Voronoi membagi ruang berdasarkan titik sumber. Setiap lokasi di dalam satu poligon secara geometris lebih dekat ke titik sumbernya daripada ke titik sumber lain.</p>
-  <div class="two-definitions">
-    <article><small>KEGUNAAN</small><strong>Pembagian wilayah awal</strong><p>Dapat digunakan untuk memperkirakan wilayah terdekat bagi stasiun hujan, fasilitas, atau titik pelayanan.</p></article>
-    <article><small>KETERBATASAN</small><strong>Bukan wilayah layanan jaringan</strong><p>Tidak memperhitungkan jalan, sungai, topografi, arah perjalanan, kapasitas fasilitas, atau batas administrasi.</p></article>
-  </div>
-
-  <h3 id="cost-distance">3.4 Jarak berbasis biaya</h3>
-  <p>Pergerakan tidak selalu mengikuti jalan. Pada permukaan raster, setiap sel dapat menyimpan biaya melintasi lokasi tersebut. Lereng curam, rawa, atau tutupan lahan tertentu dapat diberi biaya lebih besar. Akumulasi biaya terkecil dari asal ke tujuan menghasilkan lintasan biaya terendah.</p>
-
-
-  <h3 id="pilih-operasi">3.5 Memilih operasi kedekatan</h3>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Jika pertanyaannya …</th><th>Operasi awal</th><th>Keluaran</th></tr></thead>
-      <tbody>
-        <tr><td>Objek apa yang berada dalam radius 500 m?</td><td>Buffer + seleksi spasial</td><td>Zona jarak dan objek terpilih.</td></tr>
-        <tr><td>Fasilitas mana yang paling dekat secara geometris?</td><td>Fitur terdekat</td><td>ID fasilitas dan jarak minimum.</td></tr>
-        <tr><td>Wilayah mana yang secara geometris paling dekat dengan setiap fasilitas?</td><td>Thiessen/Voronoi</td><td>Poligon pembagian ruang.</td></tr>
-        <tr><td>Lintasan mana yang paling ringan melintasi lereng dan tutupan lahan?</td><td>Jarak biaya raster</td><td>Akumulasi biaya dan lintasan biaya terendah.</td></tr>
-        <tr><td>Fasilitas mana yang tercepat dicapai melalui jalan?</td><td>Fasilitas terdekat pada jaringan</td><td>Rute dan waktu perjalanan.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h2 id="jaringan">4. Model jaringan</h2>
-  <p>Analisis perjalanan tidak cukup hanya menggunakan gambar jalan. SIG perlu mengetahui <strong>jalan mana yang terhubung, arah yang diperbolehkan, dan biaya untuk melewati setiap ruas</strong>. Hubungan tersebut disederhanakan menjadi model yang disebut <strong>graf jaringan</strong>.</p>
-
-  <div class="case-question"><small>BAYANGKAN KASUS INI</small><strong>Seorang warga bergerak dari Desa A menuju Puskesmas C. Ia dapat melewati Simpang B atau menggunakan jalan langsung. Jalur mana yang jaraknya paling pendek?</strong></div>
-
-  <h3 id="graf">4.1 Memahami graf secara bertahap</h3>
-  <div class="source-image-trio">
-    <figure>
-      <svg viewBox="0 0 420 390" role="img" aria-labelledby="peta-graf-title" style="width:100%;height:auto;display:block">
-        <title id="peta-graf-title">Tahap pertama: peta jalan</title>
-        <rect width="420" height="390" fill="#f7fbfc"/>
-        <g font-family="Arial, sans-serif">
-          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">1</text>
-          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Peta jalan</text>
-          <text x="28" y="80" font-size="16" fill="#536572">Lokasi dan jalan mengikuti bentuk nyata.</text>
-          <path d="M75 285 Q145 105 225 145 T350 285" fill="none" stroke="#c3cdd2" stroke-width="38" stroke-linecap="round"/>
-          <path d="M75 285 Q215 355 350 285" fill="none" stroke="#c3cdd2" stroke-width="38" stroke-linecap="round"/>
-          <path d="M75 285 Q145 105 225 145 T350 285" fill="none" stroke="#71858f" stroke-width="4" stroke-dasharray="15 10"/>
-          <path d="M75 285 Q215 355 350 285" fill="none" stroke="#71858f" stroke-width="4" stroke-dasharray="15 10"/>
-          <rect x="42" y="250" width="65" height="52" fill="#f0a36b" stroke="#9c5f34" stroke-width="2"/><polygon points="35,250 75,218 114,250" fill="#c85d4c"/>
-          <circle cx="225" cy="145" r="14" fill="#fff" stroke="#07587a" stroke-width="5"/>
-          <rect x="320" y="245" width="62" height="62" fill="#fff" stroke="#4b8b65" stroke-width="3"/><rect x="344" y="230" width="14" height="46" fill="#d85050"/><rect x="329" y="245" width="44" height="14" fill="#d85050"/>
-          <text x="75" y="332" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Desa A</text>
-          <text x="225" y="118" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Simpang B</text>
-          <text x="350" y="332" text-anchor="middle" font-size="17" font-weight="700" fill="#20303c">Puskesmas C</text>
-        </g>
-      </svg>
-      <figcaption><strong>1. Peta jalan.</strong> Tiga lokasi dihubungkan oleh dua pilihan jalan.</figcaption>
-    </figure>
-
-    <figure>
-      <svg viewBox="0 0 420 390" role="img" aria-labelledby="model-graf-title" style="width:100%;height:auto;display:block">
-        <title id="model-graf-title">Tahap kedua: graf jaringan</title>
-        <rect width="420" height="390" fill="#f7fbfc"/>
-        <g font-family="Arial, sans-serif">
-          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">2</text>
-          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Graf jaringan</text>
-          <text x="28" y="80" font-size="16" fill="#536572">Simpan hubungan dan biaya perjalanan.</text>
-          <g stroke="#07587a" stroke-width="8" stroke-linecap="round"><line x1="70" y1="290" x2="210" y2="130"/><line x1="210" y1="130" x2="350" y2="290"/><line x1="70" y1="290" x2="350" y2="290"/></g>
-          <g fill="#fff" stroke="#07587a" stroke-width="5"><circle cx="70" cy="290" r="29"/><circle cx="210" cy="130" r="29"/><circle cx="350" cy="290" r="29"/></g>
-          <g font-size="21" font-weight="700" text-anchor="middle" fill="#20303c"><text x="70" y="297">A</text><text x="210" y="137">B</text><text x="350" y="297">C</text></g>
-          <g font-size="18" font-weight="700" fill="#ea6a47"><text x="102" y="194">2 km</text><text x="286" y="194">3 km</text><text x="180" y="330">7 km</text></g>
-          <circle cx="55" cy="360" r="9" fill="#fff" stroke="#07587a" stroke-width="4"/><text x="74" y="366" font-size="15" fill="#20303c">simpul</text>
-          <line x1="145" y1="360" x2="175" y2="360" stroke="#07587a" stroke-width="6"/><text x="185" y="366" font-size="15" fill="#20303c">ruas</text>
-          <text x="265" y="366" font-size="15" font-weight="700" fill="#ea6a47">2 km</text><text x="310" y="366" font-size="15" fill="#20303c">bobot</text>
-        </g>
-      </svg>
-      <figcaption><strong>2. Graf jaringan.</strong> Lingkaran adalah simpul, garis adalah ruas, dan angka adalah bobot.</figcaption>
-    </figure>
-
-    <figure>
-      <svg viewBox="0 0 420 390" role="img" aria-labelledby="hasil-graf-title" style="width:100%;height:auto;display:block">
-        <title id="hasil-graf-title">Tahap ketiga: membandingkan rute</title>
-        <rect width="420" height="390" fill="#f7fbfc"/>
-        <g font-family="Arial, sans-serif">
-          <circle cx="38" cy="38" r="22" fill="#07587a"/><text x="38" y="45" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">3</text>
-          <text x="75" y="45" font-size="25" font-weight="700" fill="#07587a">Bandingkan rute</text>
-          <text x="28" y="80" font-size="16" fill="#536572">Jumlahkan bobot ruas pada setiap lintasan.</text>
-          <rect x="28" y="110" width="364" height="115" rx="12" fill="#eaf5f6" stroke="#84b8c3" stroke-width="2"/>
-          <text x="50" y="145" font-size="20" font-weight="700" fill="#07587a">Rute A–B–C</text>
-          <text x="50" y="180" font-size="19" fill="#20303c">2 km + 3 km = <tspan font-size="26" font-weight="700">5 km</tspan></text>
-          <rect x="28" y="245" width="364" height="90" rx="12" fill="#fff5ed" stroke="#e7a06f" stroke-width="2"/>
-          <text x="50" y="280" font-size="20" font-weight="700" fill="#a95032">Rute A–C</text>
-          <text x="50" y="315" font-size="26" font-weight="700" fill="#a95032">7 km</text>
-          <path d="M45 360 L60 375 L90 342" fill="none" stroke="#3d8f5c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="110" y="370" font-size="18" font-weight="700" fill="#3d6d4c">A–B–C paling pendek</text>
-        </g>
-      </svg>
-      <figcaption><strong>3. Hasil.</strong> Rute A–B–C dipilih karena biaya totalnya paling kecil.</figcaption>
-    </figure>
-  </div>
-
-  <div class="concept-strip">
-    <article><b>SIMPUL</b><strong>Lokasi penting</strong><p>Desa, persimpangan, halte, pelabuhan, atau fasilitas tujuan.</p></article>
-    <article><b>RUAS</b><strong>Hubungan langsung</strong><p>Jalan, rel, rute kapal, pipa, atau jalur lain yang menghubungkan dua simpul.</p></article>
-    <article><b>BOBOT</b><strong>Biaya perjalanan</strong><p>Jarak, waktu, tarif, energi, risiko, atau ukuran hambatan lainnya.</p></article>
-  </div>
-
-  <h3>4.1.1 Mengapa peta jalan perlu diubah menjadi graf?</h3>
-  <ul class="slide-points">
-    <li><b>Peta menunjukkan bentuk</b><span>tetapi bentuk garis belum menjelaskan apakah dua jalan benar-benar terhubung.</span></li>
-    <li><b>Graf menunjukkan hubungan</b><span>sehingga SIG dapat menelusuri pilihan lintasan dari asal menuju tujuan.</span></li>
-    <li><b>Bobot memungkinkan perbandingan</b><span>sehingga rute dapat dipilih berdasarkan jarak, waktu, tarif, atau kriteria lain.</span></li>
-    <li><b>Aturan membatasi perjalanan</b><span>misalnya jalan satu arah, larangan belok, ruas banjir, atau pergantian moda.</span></li>
-  </ul>
-
-  <h3>4.1.2 Jenis graf yang digunakan dalam SIG</h3>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Jenis</th><th>Artinya</th><th>Contoh</th></tr></thead>
-      <tbody>
-        <tr><td>Graf tidak berarah</td><td>Ruas dapat dilalui dua arah dengan biaya yang sama.</td><td>Jalur pejalan kaki dua arah.</td></tr>
-        <tr><td>Graf berarah</td><td>Arah A–B dapat diizinkan, sedangkan B–A dilarang atau mempunyai biaya berbeda.</td><td>Jalan satu arah.</td></tr>
-        <tr><td>Graf berbobot</td><td>Setiap ruas mempunyai nilai biaya.</td><td>Jalan dengan atribut panjang dan waktu tempuh.</td></tr>
-        <tr><td>Graf multimoda</td><td>Jaringan menggabungkan beberapa jenis perjalanan.</td><td>Berjalan kaki → kapal → jalan raya.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p>Dalam notasi matematika, graf ditulis <strong>G = (V, E)</strong>. <em>V</em> adalah kumpulan simpul dan <em>E</em> adalah kumpulan ruas. Untuk memahami analisis SIG, makna sederhananya adalah: <strong>lokasi mana yang tersedia dan lokasi mana yang terhubung secara langsung</strong>.</p>
-  <p class="source-note"><strong>Rujukan konsep:</strong> <a href="https://ltb.itc.utwente.nl/491/concept/79722">ITC, University of Twente — Network Analysis</a>; <a href="https://faculty.washington.edu/jwh/367network.htm">University of Washington — Notes on Network Analysis</a>; dan <a href="https://ocw.mit.edu/courses/1-022-introduction-to-network-models-fall-2018/resources/lecture-notes/">MIT OpenCourseWare — Introduction to Network Models</a>.</p>
-
-  <h3 id="keterhubungan">4.2 Persilangan belum tentu persimpangan</h3>
-  <div class="two-definitions">
-    <article><small>TERHUBUNG</small><strong>Persimpangan sebidang</strong><p>Dua ruas bertemu pada simpul yang sama sehingga perjalanan dapat berpindah ruas.</p></article>
-    <article><small>TIDAK TERHUBUNG</small><strong>Jalan layang</strong><p>Dua garis berpotongan pada tampilan peta, tetapi berada pada ketinggian berbeda dan tidak memiliki akses langsung.</p></article>
-  </div>
-
-
-  <h3 id="aturan-jaringan">4.3 Aturan perjalanan pada jaringan</h3>
-  <dl class="reading-result">
-    <dt>Arah</dt><dd>Menentukan ruas yang dapat dilalui dari simpul asal menuju simpul tujuan.</dd>
-    <dt>Belokan</dt><dd>Menyimpan larangan atau tambahan waktu ketika kendaraan berpindah dari satu ruas ke ruas lain.</dd>
-    <dt>Hierarki</dt><dd>Mengutamakan kelas jalan tertentu agar rute jarak jauh tidak terlalu sering melewati jalan lokal.</dd>
-    <dt>Moda</dt><dd>Membatasi ruas menurut jenis perjalanan, misalnya pejalan kaki tidak dapat menggunakan jalan tol.</dd>
-    <dt>Waktu</dt><dd>Biaya dapat berubah menurut jam, hari, pasang surut, jadwal kapal, atau kondisi lalu lintas.</dd>
-    <dt>Penghalang</dt><dd>Menutup ruas atau menambah biaya karena banjir, longsor, kecelakaan, atau pekerjaan jalan.</dd>
-  </dl>
-
-  <h3 id="waktu-tempuh">4.4 Jarak dan waktu tempuh</h3>
-  <div class="equation"><b>Waktu tempuh = panjang ruas ÷ kecepatan</b></div>
-  <p>Rute tercepat tidak selalu menjadi rute terpendek. Ruas yang lebih panjang dapat ditempuh lebih cepat apabila kecepatannya lebih tinggi atau hambatannya lebih kecil.</p>
-
-
-  <h3 id="lintasan-optimal">4.5 Lintasan optimal</h3>
-  <p>Analisis rute mencari lintasan dengan <strong>jumlah hambatan paling kecil</strong>. Algoritma tidak memilih ruas yang tampak paling lurus, tetapi menjumlahkan bobot setiap alternatif lintasan dari asal menuju tujuan.</p>
-  <div class="equation"><b>Biaya lintasan = biaya ruas 1 + biaya ruas 2 + … + biaya ruas n</b></div>
-  <ol>
-    <li>Analisis dimulai dari simpul asal.</li>
-    <li>Biaya sementara menuju simpul yang dapat dicapai dibandingkan.</li>
-    <li>Simpul dengan biaya akumulatif terkecil dikembangkan terlebih dahulu.</li>
-    <li>Proses berlanjut sampai tujuan memperoleh biaya minimum yang dapat dipastikan.</li>
-  </ol>
-  <p>Konsep tersebut menjadi dasar algoritma lintasan terpendek seperti Dijkstra. Hasil tetap bergantung pada bobot, arah, pembatas, dan kualitas jaringan yang dimasukkan.</p>
-
-  <h2 id="jenis-analisis">5. Jenis analisis jaringan</h2>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Analisis</th><th>Pertanyaan yang dijawab</th><th>Contoh keluaran</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Rute</strong></td><td>Lintasan mana yang meminimalkan jarak, waktu, atau biaya?</td><td>Rute pengiriman terpendek atau rute ambulans tercepat.</td></tr>
-        <tr><td><strong>Fasilitas terdekat</strong></td><td>Fasilitas mana yang paling mudah dicapai dari suatu kejadian?</td><td>Rumah sakit dengan waktu tempuh terkecil dari lokasi kecelakaan.</td></tr>
-        <tr><td><strong>Wilayah layanan</strong></td><td>Wilayah mana yang dapat dicapai dalam batas biaya tertentu?</td><td>Cakupan 5, 10, dan 15 menit dari pos pemadam.</td></tr>
-        <tr><td><strong>Matriks asal–tujuan</strong></td><td>Berapa biaya perjalanan dari banyak asal ke banyak tujuan?</td><td>Matriks waktu tempuh desa–puskesmas.</td></tr>
-        <tr><td><strong>Lokasi–alokasi</strong></td><td>Lokasi fasilitas mana yang paling baik untuk melayani permintaan?</td><td>Pemilihan lokasi gudang atau pos layanan baru.</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <h2 id="operasi">5. Jenis network analysis</h2>
+  <div class="table-wrap"><table><thead><tr><th>Analisis</th><th>Pertanyaan</th><th>Contoh hasil</th></tr></thead><tbody>
+    <tr><td>Shortest path</td><td>Rute mana mempunyai jarak total paling pendek?</td><td>Rute 8,4 km melalui ruas A–D–F.</td></tr>
+    <tr><td>Fastest path</td><td>Rute mana mempunyai waktu tempuh paling kecil?</td><td>Rute 14 menit walaupun jaraknya lebih panjang.</td></tr>
+    <tr><td>Service area</td><td>Wilayah mana yang dapat dicapai dalam batas biaya tertentu?</td><td>Area layanan ambulans 5, 10, dan 15 menit.</td></tr>
+    <tr><td>Closest facility</td><td>Fasilitas mana yang paling murah atau cepat dicapai?</td><td>Rumah sakit tercepat dari lokasi kejadian.</td></tr>
+    <tr><td>OD matrix</td><td>Berapa biaya perjalanan dari banyak origin ke banyak destination?</td><td>Matriks waktu dari desa ke seluruh puskesmas.</td></tr>
+    <tr><td>Location–allocation</td><td>Di mana fasilitas ditempatkan agar permintaan terlayani secara efisien?</td><td>Lokasi pos pemadam untuk cakupan maksimum.</td></tr>
+  </tbody></table></div>
 
   <div class="source-image-pair">
-    <figure><img src="https://docs.qgis.org/3.44/en/_images/fastest_path_result.png" alt="Hasil analisis rute tercepat pada jaringan jalan di QGIS"><figcaption>Contoh hasil analisis rute tercepat. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</figcaption></figure>
-    <figure><img src="https://docs.qgis.org/3.44/en/_images/service_area.png" alt="Contoh wilayah layanan pada jaringan jalan di QGIS"><figcaption>Contoh wilayah layanan pada jaringan. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</figcaption></figure>
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html"><img src="assets/analysis/fastest_path_result.png" alt="Hasil fastest path resmi pada QGIS"></a><figcaption>Fastest path memilih rute berdasarkan waktu, bukan hanya panjang. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</figcaption></figure>
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html"><img src="assets/analysis/service_area.png" alt="Hasil service area resmi pada QGIS"></a><figcaption>Service area menunjukkan bagian jaringan yang dapat dicapai dalam batas biaya tertentu. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</figcaption></figure>
   </div>
 
-  <h2 id="alur-analisis">6. Urutan analisis</h2>
-  <ol class="agenda">
-    <li><b>1. Rumuskan pertanyaan</b><span>Contoh: rumah sakit mana yang dapat dicapai paling cepat?</span></li>
-    <li><b>2. Tentukan model pergerakan</b><span>Jarak lurus, jalan, sungai, permukaan biaya, atau jaringan lain.</span></li>
-    <li><b>3. Pilih hambatan</b><span>Jarak, waktu, tarif, energi, atau gabungan biaya.</span></li>
-    <li><b>4. Siapkan data</b><span>Geometri, keterhubungan, kecepatan, arah, pembatas, dan penghalang.</span></li>
-    <li><b>5. Jalankan operasi</b><span>Buffer, fitur terdekat, rute, fasilitas terdekat, wilayah layanan, atau matriks asal–tujuan.</span></li>
-    <li><b>6. Periksa hasil</b><span>Bandingkan dengan peta, kondisi lapangan, dan pengetahuan tentang wilayah.</span></li>
-  </ol>
-
-  <h2 id="kualitas">7. Kualitas data dan sumber kesalahan</h2>
-  <ul class="slide-points">
-    <li><b>Ruas terputus</b><span>jalan yang seharusnya tersambung tidak memiliki simpul bersama sehingga rute berhenti.</span></li>
-    <li><b>Simpul semu</b><span>garis jalan layang dianggap terhubung dengan jalan di bawahnya.</span></li>
-    <li><b>Arah salah</b><span>jalan satu arah disimpan sebagai dua arah sehingga rute melanggar aturan lalu lintas.</span></li>
-    <li><b>Kecepatan tidak sesuai</b><span>waktu tempuh menjadi terlalu kecil atau terlalu besar.</span></li>
-    <li><b>Lokasi tidak menempel</b><span>asal atau tujuan berada jauh dari jaringan dan harus dihubungkan ke ruas yang tepat.</span></li>
-    <li><b>Data tidak mutakhir</b><span>penutupan jalan, jembatan baru, atau perubahan akses belum tercatat.</span></li>
-  </ul>
-
-
-  <h2 id="kasus-indonesia">8. Contoh analisis pada peta Indonesia</h2>
-  <p>Peta nyata biasanya menjawab beberapa pertanyaan sekaligus. Peta bahaya menunjukkan lokasi ancaman, tetapi keputusan evakuasi memerlukan tambahan data penduduk, jaringan jalan, jembatan, tempat aman, kapasitas, dan waktu perjalanan.</p>
-
-  <h3 id="inarisk-banjir">8.1 Banjir: dari peta bahaya menuju rute evakuasi</h3>
-  <p><a href="https://inarisk.bnpb.go.id/v4/"><strong>InaRISK BNPB</strong></a> menyediakan peta bahaya, kerentanan, risiko, infrastruktur, serta fasilitas yang terpapar. Peta tersebut dapat menjadi sumber konteks awal untuk menyusun analisis evakuasi.</p>
-
-  <figure class="visual-board">
-    <svg viewBox="0 0 1000 430" role="img" aria-labelledby="banjir-title banjir-desc">
-      <title id="banjir-title">Alur analisis evakuasi banjir</title>
-      <desc id="banjir-desc">Peta bahaya ditumpangsusunkan dengan permukiman, jalan terdampak menjadi penghalang, lalu jaringan digunakan untuk mencari tempat evakuasi yang dapat dicapai.</desc>
-      <rect width="1000" height="430" fill="#f7fbfc"/>
-      <defs><marker id="arrow-case" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#587480"/></marker></defs>
-      <g font-family="Arial, sans-serif">
-        <g transform="translate(35,75)">
-          <rect width="190" height="250" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="19" font-weight="700" fill="#07587a">1. Bahaya</text>
-          <path d="M20 180 Q65 90 100 165 T170 110 L170 220 L20 220 Z" fill="#7ec8df" opacity=".75"/>
-          <circle cx="60" cy="140" r="9" fill="#ea6a47"/><circle cx="120" cy="185" r="9" fill="#ea6a47"/>
-          <text x="20" y="238" font-size="14" fill="#536572">Banjir + permukiman</text>
-        </g>
-        <g transform="translate(280,75)">
-          <rect width="190" height="250" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="19" font-weight="700" fill="#07587a">2. Paparan</text>
-          <circle cx="58" cy="105" r="12" fill="#ea6a47"/><circle cx="130" cy="165" r="12" fill="#ea6a47"/>
-          <rect x="35" y="190" width="110" height="30" fill="#dff2f4"/>
-          <text x="20" y="238" font-size="14" fill="#536572">Penduduk dan fasilitas</text>
-        </g>
-        <g transform="translate(525,75)">
-          <rect width="190" height="250" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="19" font-weight="700" fill="#07587a">3. Jaringan</text>
-          <path d="M30 190 L80 85 L155 175" fill="none" stroke="#087b92" stroke-width="9"/>
-          <circle cx="80" cy="85" r="10" fill="#fff" stroke="#07587a" stroke-width="3"/>
-          <line x1="105" y1="122" x2="130" y2="150" stroke="#d34f3d" stroke-width="7"/>
-          <text x="20" y="238" font-size="14" fill="#536572">Ruas banjir = penghalang</text>
-        </g>
-        <g transform="translate(770,75)">
-          <rect width="190" height="250" rx="12" fill="#fff" stroke="#cbd9df"/>
-          <text x="20" y="35" font-size="19" font-weight="700" fill="#07587a">4. Keputusan</text>
-          <path d="M30 185 Q95 65 155 150" fill="none" stroke="#087b92" stroke-width="8"/>
-          <circle cx="30" cy="185" r="10" fill="#ea6a47"/><polygon points="155,125 175,165 135,165" fill="#56a56a"/>
-          <text x="20" y="218" font-size="14" fill="#536572">Rute aman + waktu</text><text x="20" y="238" font-size="14" fill="#536572">+ kapasitas shelter</text>
-        </g>
-        <g stroke="#587480" stroke-width="3" marker-end="url(#arrow-case)">
-          <line x1="230" y1="200" x2="270" y2="200"/><line x1="475" y1="200" x2="515" y2="200"/><line x1="720" y1="200" x2="760" y2="200"/>
-        </g>
-      </g>
-    </svg>
-    <figcaption><strong>Skema analisis evakuasi banjir.</strong> Tumpang susun mengidentifikasi paparan; analisis jaringan menilai apakah tempat aman benar-benar dapat dicapai.</figcaption>
-  </figure>
-
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Pertanyaan</th><th>Data</th><th>Analisis</th><th>Hasil</th></tr></thead>
-      <tbody>
-        <tr><td>Permukiman mana yang berada di zona banjir?</td><td>Bahaya banjir + permukiman</td><td>Intersection atau seleksi spasial</td><td>Permukiman dan penduduk terpapar.</td></tr>
-        <tr><td>Ruas mana yang tidak dapat dilalui?</td><td>Bahaya banjir + jalan + kedalaman/genangan</td><td>Overlay dan penetapan penghalang</td><td>Jaringan yang telah memperhitungkan ruas terdampak.</td></tr>
-        <tr><td>Tempat evakuasi mana yang tercepat dicapai?</td><td>Jaringan + lokasi asal + shelter</td><td>Fasilitas terdekat</td><td>Tujuan, rute, jarak, dan waktu perjalanan.</td></tr>
-        <tr><td>Wilayah mana yang belum terlayani dalam 15 menit?</td><td>Jaringan + shelter + penduduk</td><td>Wilayah layanan + overlay penduduk</td><td>Permukiman di luar cakupan waktu.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><a href="https://inarisk.bnpb.go.id/v4/"><strong>Buka peta resmi InaRISK BNPB →</strong></a></p>
-
-  <h3 id="tsunami-palabuhanratu">8.2 Tsunami: akses menuju tempat evakuasi di Palabuhanratu</h3>
-  <p>Sebuah penelitian di Palabuhanratu menggabungkan pemodelan genangan tsunami, penduduk terdampak, pemilihan lokasi shelter, batas waktu perjalanan 30 menit, dan analisis rute jaringan. Urutannya menunjukkan bahwa peta bahaya tidak langsung menghasilkan rute evakuasi.</p>
-  <div class="operation-list">
-    <article><strong>1. Zona terdampak</strong><p>Skenario genangan digunakan untuk menentukan permukiman dan penduduk yang memerlukan evakuasi.</p></article>
-    <article><strong>2. Cakupan shelter</strong><p>Wilayah layanan 30 menit digunakan untuk menguji apakah shelter yang ada dapat dijangkau.</p></article>
-    <article><strong>3. Alternatif lokasi</strong><p>Lokasi shelter tambahan dibandingkan berdasarkan peningkatan cakupan penduduk.</p></article>
-    <article><strong>4. Rute evakuasi</strong><p>Jaringan jalan menghubungkan daerah terdampak dengan shelter terpilih.</p></article>
-  </div>
-  <div class="case-question"><small>HASIL PENELITIAN</small><strong>Pada skenario genangan 20 m, shelter yang ada dimodelkan dapat dijangkau oleh 38% penduduk terdampak dalam 30 menit. Penambahan tiga lokasi shelter meningkatkan cakupan model menjadi 100%, kemudian dibentuk 55 rute evakuasi.</strong></div>
-  <p>Angka tersebut merupakan hasil model dengan asumsi tertentu. Kecepatan berjalan, kepadatan jalan, kerusakan jaringan, kapasitas shelter, dan kondisi saat kejadian tetap harus diperiksa.</p>
-  <p><a href="https://journal.uir.ac.id/index.php/JGEET/article/view/28893"><strong>Baca studi Palabuhanratu →</strong></a></p>
-
-  <h3 id="akses-kesehatan">8.3 Akses layanan kesehatan di wilayah kepulauan</h3>
-  <p>Pada wilayah kepulauan seperti Maluku, jarak lurus menuju fasilitas kesehatan dapat melewati laut tanpa jalur transportasi. Model yang lebih tepat dapat menggabungkan jalan, pelabuhan, dan rute laut sebagai jaringan multimoda.</p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Komponen</th><th>Representasi SIG</th><th>Fungsi analisis</th></tr></thead>
-      <tbody>
-        <tr><td>Permukiman</td><td>Titik asal dengan atribut jumlah penduduk</td><td>Menunjukkan lokasi dan besarnya kebutuhan layanan.</td></tr>
-        <tr><td>Jalan dan rute laut</td><td>Ruas jaringan dengan waktu perjalanan</td><td>Menghubungkan asal, pelabuhan, dan fasilitas.</td></tr>
-        <tr><td>Pelabuhan</td><td>Simpul perpindahan moda</td><td>Menghubungkan perjalanan darat dan laut.</td></tr>
-        <tr><td>Puskesmas dan rumah sakit</td><td>Titik tujuan dengan jenis dan kapasitas</td><td>Menjadi kesempatan layanan yang akan dicapai.</td></tr>
-        <tr><td>Analisis</td><td>Matriks asal–tujuan dan fasilitas terdekat</td><td>Membandingkan waktu akses antarpulau atau antarpermukiman.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><strong>Makna hasil:</strong> wilayah dengan waktu perjalanan tinggi atau tanpa rute yang tersambung dapat dikenali sebagai kesenjangan akses. Namun, keputusan pelayanan juga memerlukan kapasitas fasilitas, jadwal transportasi, biaya perjalanan, dan kebutuhan penduduk.</p>
-  <p><a href="https://doi.org/10.1371/journal.pgph.0001600"><strong>Baca penelitian akses kesehatan di Maluku →</strong></a></p>
-
-  <h2 id="contoh">9. Contoh perhitungan: memilih rute ambulans</h2>
-  <p>Ambulans bergerak dari lokasi kecelakaan <strong>A</strong> menuju rumah sakit <strong>H</strong>. Tersedia dua rute. Hambatan yang dibandingkan adalah panjang dan waktu tempuh.</p>
-
-  <figure class="visual-board">
-    <svg viewBox="0 0 1000 440" role="img" aria-labelledby="ambulans-title ambulans-desc">
-      <title id="ambulans-title">Dua alternatif rute ambulans</title>
-      <desc id="ambulans-desc">Rute A-B-H lebih pendek, sedangkan rute A-C-H lebih cepat karena kecepatannya lebih tinggi.</desc>
-      <rect width="1000" height="440" fill="#f7fbfc"/>
-      <g stroke="#c5d0d5" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M120 220 L390 85 L850 220"/><path d="M120 220 L390 355 L850 220"/>
-      </g>
-      <path d="M120 220 L390 85 L850 220" fill="none" stroke="#ea6a47" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M120 220 L390 355 L850 220" fill="none" stroke="#087b92" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-      <g fill="#fff" stroke="#20303c" stroke-width="4">
-        <circle cx="120" cy="220" r="28"/><circle cx="390" cy="85" r="28"/><circle cx="390" cy="355" r="28"/><circle cx="850" cy="220" r="28"/>
-      </g>
-      <g font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#20303c">
-        <text x="120" y="228">A</text><text x="390" y="93">B</text><text x="390" y="363">C</text><text x="850" y="228">H</text>
-      </g>
-      <g font-family="Arial, sans-serif" font-size="17" fill="#20303c">
-        <text x="210" y="115">2 km · 40 km/jam</text><text x="585" y="105">4 km · 40 km/jam</text>
-        <text x="200" y="345">3 km · 60 km/jam</text><text x="585" y="350">5 km · 60 km/jam</text>
-        <text x="65" y="275">Kecelakaan</text><text x="815" y="275">Rumah sakit</text>
-      </g>
-    </svg>
-    <figcaption><strong>Dua alternatif rute.</strong> Warna jingga menunjukkan rute A–B–H; warna biru menunjukkan rute A–C–H.</figcaption>
-  </figure>
-
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Rute</th><th>Panjang</th><th>Perhitungan waktu</th><th>Total waktu</th></tr></thead>
-      <tbody>
-        <tr><td>A–B–H</td><td>2 + 4 = <strong>6 km</strong></td><td>(2 ÷ 40 × 60) + (4 ÷ 40 × 60)</td><td><strong>9 menit</strong></td></tr>
-        <tr><td>A–C–H</td><td>3 + 5 = <strong>8 km</strong></td><td>(3 ÷ 60 × 60) + (5 ÷ 60 × 60)</td><td><strong>8 menit</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
+  <h2 id="beda">6. Jarak lurus dan jarak jaringan tidak selalu sama</h2>
   <div class="two-definitions">
-    <article><small>JIKA HAMBATAN = JARAK</small><strong>A–B–H dipilih</strong><p>Panjang total 6 km, lebih pendek daripada A–C–H yang panjangnya 8 km.</p></article>
-    <article><small>JIKA HAMBATAN = WAKTU</small><strong>A–C–H dipilih</strong><p>Waktu total 8 menit, lebih cepat daripada A–B–H yang memerlukan 9 menit.</p></article>
+    <article><small>PROXIMITY GEOMETRIS</small><strong>Fasilitas terdekat</strong><p>Dipilih dari jarak lurus antara lokasi asal dan fasilitas. Penghalang dan struktur jalan belum diperhitungkan.</p></article>
+    <article><small>PROXIMITY MELALUI NETWORK</small><strong>Fasilitas tercepat dicapai</strong><p>Dipilih dari biaya perjalanan pada jaringan, termasuk konektivitas, arah, kecepatan, dan larangan.</p></article>
   </div>
-  <p><strong>Perubahan kondisi:</strong> apabila ruas C–H ditutup karena banjir, rute A–C–H tidak dapat digunakan. Penghalang tersebut harus dimasukkan agar hasil analisis sesuai dengan kondisi saat perjalanan dilakukan.</p>
+  <p>Rumah sakit yang tampak paling dekat pada peta dapat memerlukan waktu lebih lama karena sungai tanpa jembatan, jalan satu arah, kemacetan, atau kualitas ruas yang berbeda.</p>
 
-  <h2 id="latihan">10. Latihan mandiri</h2>
-  <p>Tiga kasus berikut digunakan untuk menerapkan konsep. <strong>Pembahasan dan jawaban tidak disertakan.</strong> Setiap jawaban harus menyebutkan pertanyaan analisis, data, ukuran hambatan, operasi yang dipilih, dan cara memeriksa hasil.</p>
+  <h2 id="kualitas">7. Syarat kualitas data jaringan</h2>
+  <ul class="mastery-list">
+    <li>Ruas yang seharusnya terhubung mempunyai node yang sama dan tidak mengalami undershoot atau overshoot.</li>
+    <li>Persilangan bertingkat, misalnya jembatan dan jalan di bawahnya, tidak otomatis dianggap saling terhubung.</li>
+    <li>Atribut arah, kecepatan, panjang, kelas jalan, dan restriction terisi secara konsisten.</li>
+    <li>Impedance menggunakan satuan yang benar dan rumus yang dapat diperiksa.</li>
+    <li>Origin dan destination ditempatkan atau di-snap ke edge yang dapat dilalui.</li>
+  </ul>
+  <p class="equation">Waktu tempuh = panjang ruas ÷ kecepatan ruas</p>
 
-  <article class="case-question"><small>KASUS 1 · EVAKUASI BANJIR</small><strong>Sebuah kecamatan memiliki tiga desa, dua tempat pengungsian, jaringan jalan, data kecepatan, jalan satu arah, dan dua ruas yang ditutup akibat banjir.</strong></article>
+  <h2 id="kasus">8. Contoh terbimbing: memilih rumah sakit tercepat</h2>
+  <div class="case-question">
+    <small>PERTANYAAN ANALISIS</small>
+    <strong>Ambulans berada di Desa Suka Maju. Rumah sakit mana yang dapat dicapai paling cepat: RS A, RS B, atau RS C?</strong>
+  </div>
+  <p>Ketiga rumah sakit tidak boleh dibandingkan hanya dari jarak lurus. Ambulans harus mengikuti jalan, mematuhi arah jalan, dan menghindari ruas yang sedang ditutup.</p>
+
+  <h3>Data yang tersedia</h3>
+  <div class="evidence-grid">
+    <article><small>ORIGIN</small><b>Desa Suka Maju</b><p>Lokasi ambulans ditempatkan pada ruas jalan terdekat.</p></article>
+    <article><small>DESTINATION</small><b>RS A, RS B, dan RS C</b><p>Pintu masuk setiap rumah sakit ditempatkan pada jaringan jalan.</p></article>
+    <article><small>JARINGAN</small><b>Ruas dan simpang jalan</b><p>Setiap ruas memiliki panjang, kecepatan, dan arah perjalanan.</p></article>
+    <article><small>RESTRICTION</small><b>Jembatan menuju RS A ditutup</b><p>Ruas tersebut tidak boleh digunakan dalam pencarian rute.</p></article>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>Rumah sakit</th><th>Jarak lurus</th><th>Jarak melalui jalan</th><th>Waktu hasil analisis</th><th>Keterangan</th></tr></thead><tbody>
+    <tr><td>RS A</td><td>3,2 km</td><td>9,6 km</td><td>24 menit</td><td>Jembatan terdekat ditutup sehingga harus memutar.</td></tr>
+    <tr class="selected-row"><td><strong>RS B</strong></td><td>4,8 km</td><td>6,5 km</td><td><strong>11 menit</strong></td><td>Terhubung melalui jalan arteri dengan kecepatan lebih tinggi.</td></tr>
+    <tr><td>RS C</td><td>5,1 km</td><td>7,0 km</td><td>16 menit</td><td>Rutenya lebih pendek dari RS A, tetapi melewati jalan lokal.</td></tr>
+  </tbody></table></div>
+
+  <h3>Langkah analisis</h3>
   <ol>
-    <li>Tentukan jenis analisis untuk mencari tempat pengungsian yang paling cepat dicapai dari setiap desa.</li>
-    <li>Tentukan atribut jaringan yang harus tersedia.</li>
-    <li>Jelaskan perbedaan hasil apabila hambatan yang digunakan adalah jarak dan waktu.</li>
-    <li>Tentukan analisis untuk memetakan wilayah yang dapat mencapai setiap tempat pengungsian dalam 15 menit.</li>
-    <li>Jelaskan dua pemeriksaan kualitas data sebelum hasil digunakan.</li>
+    <li><strong>Rumuskan ukuran “terdekat”.</strong> Karena pasien membutuhkan pertolongan segera, impedance yang dipilih adalah <em>waktu tempuh</em>, bukan jarak lurus.</li>
+    <li><strong>Periksa jaringan.</strong> Pastikan ruas saling terhubung, lokasi ambulans dan pintu rumah sakit telah di-snap, serta jalan satu arah tercatat.</li>
+    <li><strong>Hitung biaya setiap ruas.</strong> Jika suatu ruas panjangnya 2 km dan kecepatan rata-ratanya 40 km/jam, waktu tempuhnya adalah <code>2 ÷ 40 × 60 = 3 menit</code>.</li>
+    <li><strong>Terapkan restriction.</strong> Ruas jembatan yang ditutup dikeluarkan dari jaringan yang dapat dilalui.</li>
+    <li><strong>Jalankan closest facility.</strong> Jumlahkan waktu seluruh ruas pada setiap alternatif rute menuju RS A, RS B, dan RS C.</li>
+    <li><strong>Periksa hasil.</strong> Bandingkan rute dengan kondisi lapangan dan pastikan tidak ada rute yang melawan arah atau melewati jalan tertutup.</li>
   </ol>
+  <p class="key-message"><strong>Keputusan: pilih RS B.</strong><span>RS A paling dekat secara geometris, tetapi RS B paling cepat dicapai melalui jaringan. Jadi, “paling dekat” tidak selalu berarti “paling cepat”.</span></p>
 
-  <article class="case-question"><small>KASUS 2 · AKSES PUSKESMAS</small><strong>Data yang tersedia terdiri atas titik desa, titik puskesmas, jumlah penduduk desa, jaringan jalan, kecepatan rata-rata, dan lokasi jembatan.</strong></article>
+  <h2 id="latihan">9. Latihan mandiri</h2>
+  <p>Untuk setiap kasus, tuliskan <strong>pertanyaan analisis, data yang diperlukan, metode, parameter, hasil yang diharapkan, dan cara memeriksa hasil</strong>. Jangan langsung menyebut nama alat sebelum menentukan arti “dekat” atau “mudah dicapai”.</p>
+
+  <h3>Latihan 1 — Menentukan sekolah yang berada dekat jalan raya</h3>
+  <div class="case-question"><small>KONTEKS</small><strong>Pemerintah kabupaten ingin memprioritaskan pemasangan pagar dan rambu keselamatan pada sekolah yang berjarak paling jauh 300 meter dari jalan raya utama.</strong></div>
+  <p><strong>Data tersedia:</strong> titik lokasi sekolah, garis jalan, atribut kelas jalan, dan batas kecamatan. CRS data awal adalah WGS 84 (derajat).</p>
   <ol>
-    <li>Tentukan operasi untuk menghitung waktu tempuh dari seluruh desa ke seluruh puskesmas.</li>
-    <li>Jelaskan mengapa fitur terdekat berdasarkan jarak lurus dapat menghasilkan kesimpulan yang berbeda dari fasilitas terdekat melalui jaringan.</li>
-    <li>Susun kriteria untuk mengenali desa dengan akses pelayanan yang rendah.</li>
-    <li>Tentukan bentuk keluaran yang dapat digunakan untuk membandingkan desa.</li>
-    <li>Jelaskan data tambahan yang diperlukan agar waktu tempuh lebih mendekati kondisi nyata.</li>
+    <li>Operasi proximity apa yang paling tepat untuk menemukan sekolah dalam jarak 300 meter dari jalan raya utama?</li>
+    <li>Mengapa analisis tidak boleh langsung dilakukan menggunakan satuan derajat? Apa yang harus dilakukan terlebih dahulu?</li>
+    <li>Bagaimana memilih hanya jalan dengan kelas “jalan raya utama” sebelum analisis?</li>
+    <li>Jika zona dari beberapa ruas saling bertumpang tindih, kapan opsi <em>dissolve</em> perlu digunakan?</li>
+    <li>Kolom apa yang perlu ada pada tabel hasil agar sekolah dapat diurutkan menurut kecamatan dan jaraknya dari jalan?</li>
+    <li>Bagaimana cara memeriksa apakah sebuah sekolah yang terpilih benar-benar berada dalam jarak 300 meter?</li>
   </ol>
+  <p class="plain-note"><strong>Produk akhir:</strong> peta sekolah prioritas, jumlah sekolah prioritas per kecamatan, dan tabel nama sekolah beserta jaraknya dari jalan raya utama.</p>
 
-  <article class="case-question"><small>KASUS 3 · SEMPADAN SUNGAI</small><strong>Data yang tersedia terdiri atas jaringan sungai dengan atribut kelas sungai, ketentuan lebar sempadan untuk setiap kelas, serta lokasi sekolah dan permukiman.</strong></article>
+  <h3>Latihan 2 — Menentukan puskesmas tercepat dari lokasi kecelakaan</h3>
+  <div class="case-question"><small>KONTEKS</small><strong>Terjadi kecelakaan di Simpang Melati. Petugas harus memilih satu dari tiga puskesmas berdasarkan waktu tempuh ambulans pada pukul 17.00.</strong></div>
+  <p><strong>Data tersedia:</strong> jaringan jalan dengan panjang, kecepatan jam sibuk, arah jalan, larangan belok, lokasi kecelakaan, dan tiga puskesmas. Satu ruas sedang ditutup karena perbaikan.</p>
   <ol>
-    <li>Tentukan jenis buffer yang sesuai untuk membentuk sempadan berdasarkan kelas sungai.</li>
-    <li>Jelaskan fungsi <em>dissolve</em> dan tentukan apakah diperlukan pada kasus ini.</li>
-    <li>Tentukan operasi untuk mengidentifikasi sekolah yang berada di dalam sempadan.</li>
-    <li>Tentukan operasi untuk menghitung sekolah yang paling dekat dengan sungai apabila tidak berada di dalam sempadan.</li>
-    <li>Jelaskan sistem koordinat dan satuan yang harus digunakan untuk analisis jarak.</li>
+    <li>Mengapa <em>nearest feature</em> berdasarkan jarak lurus tidak cukup untuk kasus ini?</li>
+    <li>Analisis jaringan apa yang harus dipilih dan apa impedance-nya?</li>
+    <li>Bagaimana menghitung waktu tempuh suatu ruas dari panjang dalam kilometer dan kecepatan dalam km/jam?</li>
+    <li>Bagaimana jalan satu arah, larangan belok, dan ruas yang ditutup dimasukkan ke dalam model?</li>
+    <li>Jika Puskesmas A berjarak 3 km dengan waktu 18 menit, sedangkan Puskesmas B berjarak 5 km dengan waktu 12 menit, fasilitas mana yang dipilih? Jelaskan.</li>
+    <li>Pemeriksaan apa yang harus dilakukan agar rute hasil analisis benar-benar dapat dilalui ambulans?</li>
   </ol>
+  <p class="plain-note"><strong>Produk akhir:</strong> satu rute tercepat, nama puskesmas terpilih, total jarak, total waktu, serta penjelasan mengapa dua puskesmas lainnya tidak dipilih.</p>
 
-  <h2 id="ringkasan">11. Ringkasan</h2>
+  <h3>Latihan 3 — Mengevaluasi cakupan layanan pemadam kebakaran</h3>
+  <div class="case-question"><small>KONTEKS</small><strong>Kota memiliki dua pos pemadam. Pemerintah ingin mengetahui permukiman mana yang belum dapat dicapai dalam 10 menit dan menentukan wilayah prioritas untuk pos baru.</strong></div>
+  <p><strong>Data tersedia:</strong> dua titik pos pemadam, jaringan jalan, kecepatan rata-rata, jalan satu arah, sungai dan jembatan, poligon permukiman, serta jumlah penduduk setiap permukiman.</p>
+  <ol>
+    <li>Analisis jaringan apa yang dapat membentuk wilayah yang dicapai dalam 5 dan 10 menit?</li>
+    <li>Mengapa buffer 10 km dari pos pemadam tidak dapat menggantikan analisis tersebut?</li>
+    <li>Data atau atribut apa yang paling menentukan ketepatan batas wilayah layanan?</li>
+    <li>Operasi apa yang digunakan untuk menggabungkan hasil wilayah layanan dengan poligon permukiman?</li>
+    <li>Bagaimana menghitung jumlah penduduk yang berada di luar cakupan 10 menit?</li>
+    <li>Jika suatu permukiman dekat secara lurus tetapi berada di seberang sungai tanpa jembatan, bagaimana hasilnya seharusnya diinterpretasikan?</li>
+    <li>Berdasarkan hasil tersebut, kriteria apa yang dapat digunakan untuk mengusulkan wilayah pos pemadam baru?</li>
+  </ol>
+  <p class="plain-note"><strong>Produk akhir:</strong> peta service area 5 dan 10 menit, daftar permukiman di luar cakupan, jumlah penduduk yang belum terlayani, dan satu rekomendasi wilayah prioritas pos baru.</p>
+
+  <h2 id="ringkasan">10. Ringkasan</h2>
   <ul class="summary-list">
-    <li><b>Ukuran jarak</b><span>harus dipilih sebelum operasi analisis: planar, geodesik, jaringan, atau biaya.</span></li>
-    <li><b>Buffer</b><span>membentuk zona jarak; fitur terdekat menghasilkan pasangan objek dan nilai jarak.</span></li>
-    <li><b>Jaringan</b><span>terdiri atas simpul, ruas, keterhubungan, arah, hambatan, pembatas, dan penghalang.</span></li>
-    <li><b>Jenis analisis</b><span>dipilih sesuai pertanyaan: rute, fasilitas terdekat, wilayah layanan, matriks asal–tujuan, atau lokasi–alokasi.</span></li>
-    <li><b>Interpretasi</b><span>harus mempertimbangkan satuan, sistem koordinat, kualitas jaringan, dan kondisi lapangan.</span></li>
+    <li><b>Proximity</b><span>menilai kedekatan; arti jarak harus didefinisikan dengan jelas.</span></li>
+    <li><b>Buffer</b><span>membentuk zona pada jarak tertentu dari suatu objek.</span></li>
+    <li><b>Network</b><span>memodelkan pergerakan melalui node dan edge yang saling terhubung.</span></li>
+    <li><b>Impedance</b><span>menentukan rute optimal berdasarkan jarak, waktu, atau biaya lain.</span></li>
+    <li><b>Kualitas</b><span>topologi, arah, restriction, dan atribut ruas menentukan keandalan hasil.</span></li>
   </ul>
 
-  <h2 id="referensi">12. Referensi</h2>
+  <h2 id="referensi">11. Referensi</h2>
   <ul class="reference">
-    <li><a href="https://ltb.itc.utwente.nl/491/concept/79722">ITC, University of Twente — Living Textbook: Network Analysis</a>.</li>
-    <li><a href="https://faculty.washington.edu/jwh/367network.htm">University of Washington — Geography 367: Notes on Network Analysis</a>.</li>
-    <li><a href="https://ocw.mit.edu/courses/1-022-introduction-to-network-models-fall-2018/resources/lecture-notes/">MIT OpenCourseWare — Introduction to Network Models: Lecture Notes</a>.</li>
-    <li><a href="https://openfl.pressbooks.pub/introductiontogis2/chapter/chapter-seven/">Introductory Readings in GIS — Spatial Data Analysis, Proximity, and Network Analysis</a>.</li>
-    <li><a href="https://pressbooks.pub/gist/chapter/6-1/">Introduction to GIS — Vector Topology and Network Analysis</a>.</li>
-    <li><a href="https://inarisk.bnpb.go.id/v4/">BNPB — InaRISK, Peta Risiko Bencana Indonesia</a>.</li>
-    <li><a href="https://inarisk.bnpb.go.id/panduan_singkat_ina.pdf">BNPB — Panduan Singkat InaRISK</a>.</li>
-    <li><a href="https://journal.uir.ac.id/index.php/JGEET/article/view/28893">GIS-Based Tsunami Evacuation Planning in Palabuhanratu</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/basic_analysis.html">QGIS Training Manual — Vector Analysis and Buffer</a>.</li>
     <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_analysis/network_analysis.html">QGIS Training Manual — Network Analysis</a>.</li>
-    <li><a href="https://pro.arcgis.com/en/pro-app/3.3/tool-reference/analysis/how-near-analysis-works.htm">ArcGIS Pro Documentation — How Proximity Tools Calculate Distance</a>.</li>
-    <li><a href="https://pro.arcgis.com/en/pro-app/3.5/tool-reference/analysis/how-buffer-analysis-works.htm">ArcGIS Pro Documentation — How Buffer Analysis Works</a>.</li>
-    <li><a href="https://pro.arcgis.com/en/pro-app/3.6/help/analysis/networks/network-analyst-solver-types.htm">ArcGIS Pro Documentation — Types of Network Analysis</a>.</li>
-    <li><a href="https://pro.arcgis.com/en/pro-app/3.6/help/analysis/networks/barriers.htm">ArcGIS Pro Documentation — Barriers</a>.</li>
-    <li><a href="https://doi.org/10.1371/journal.pgph.0001600">Leosari, Uelmen, dan Carney (2023) — Spatial Evaluation of Healthcare Accessibility across Archipelagic Communities of Maluku Province, Indonesia</a>.</li>
-    <li><a href="https://doi.org/10.1186/s12913-020-05896-x">Silalahi dkk. (2020) — GIS-based Approaches on the Accessibility of Referral Hospitals in Jakarta</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/what-is-network-analysis-.htm">ArcGIS Pro Documentation — What Is Network Analysis?</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/analysis/how-near-analysis-works.htm">ArcGIS Pro Documentation — How Near Analysis Works</a>.</li>
   </ul>
   <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
 </main>
-<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#makna-dekat">Ukuran jarak</a><a href="#kedekatan">Analisis kedekatan</a><a href="#jaringan">Model jaringan</a><a href="#jenis-analisis">Jenis analisis</a><a href="#alur-analisis">Urutan analisis</a><a href="#kualitas">Kualitas data</a><a href="#kasus-indonesia">Kasus Indonesia</a><a href="#contoh">Contoh perhitungan</a><a href="#latihan">Latihan mandiri</a><a href="#ringkasan">Ringkasan</a></aside>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan</a><a href="#proximity">Proximity</a><a href="#buffer">Buffer</a><a href="#network">Network</a><a href="#operasi">Jenis analisis</a><a href="#beda">Perbandingan jarak</a><a href="#kualitas">Kualitas data</a><a href="#kasus">Contoh terbimbing</a><a href="#latihan">Latihan mandiri</a><a href="#ringkasan">Ringkasan</a></aside>
 </div>
 </body>
 </html>
