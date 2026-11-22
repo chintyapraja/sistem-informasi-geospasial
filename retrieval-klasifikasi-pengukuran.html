@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Penelusuran Data, Klasifikasi, dan Pengukuran | Sistem Informasi Geospasial</title>
+  <meta name="description" content="Materi pertemuan 9 tentang penelusuran data (retrieval), klasifikasi, dan pengukuran dalam SIG.">
+  <link rel="stylesheet" href="lecture.css?v=20261018c">
+  <script defer src="script.js?v=20261018l"></script>
+</head>
+<body>
+<a class="skip" href="#materi">Langsung ke materi</a>
+<aside class="sidebar"><a class="brand" href="index.html">Sistem Informasi<br>Geospasial</a></aside>
+<div class="layout">
+<main id="materi">
+  <div class="eyebrow">Pertemuan 9 · Materi 9 · 100 menit · CPMK3</div>
+  <h1>Penelusuran data, klasifikasi, dan pengukuran</h1>
+  <p class="lead">Materi ini membahas prinsip penelusuran dan pemilihan data, pembentukan kelas, serta pengukuran geometris dalam analisis sistem informasi geospasial.</p>
+
+  <h2 id="tujuan">1. Tujuan pembelajaran</h2>
+  <div class="concept-strip">
+    <article><b>Penelusuran data</b><strong>Retrieval dan pemilihan data</strong><p>Menyusun kriteria atribut dan spasial untuk memperoleh objek yang relevan.</p></article>
+    <article><b>Klasifikasi</b><strong>Pembentukan kelas data</strong><p>Menentukan metode pengelompokan berdasarkan jenis data dan tujuan analisis.</p></article>
+    <article><b>Pengukuran</b><strong>Perhitungan besaran spasial</strong><p>Menghitung jarak, panjang, luas, keliling, jumlah, kepadatan, dan volume menggunakan satuan yang sesuai.</p></article>
+  </div>
+  <p class="analysis-question"><strong>Contoh rumusan analisis:</strong> identifikasi desa dengan jumlah penduduk lebih dari 5.000 jiwa, termasuk kelas kepadatan tinggi, dan memiliki luas kurang dari 10 km².</p>
+
+  <h2 id="alur">2. Kerangka proses analisis</h2>
+  <p>Penelusuran, reklasifikasi, dan pengukuran merupakan operasi awal untuk memeriksa satu kumpulan data spasial beserta atributnya. Ketiganya menggunakan objek yang sudah ada: lokasi geometri tidak dipindahkan dan objek spasial baru tidak dibentuk.</p>
+  <div class="table-wrap"><table><thead><tr><th>Operasi</th><th>Pertanyaan utama</th><th>Perubahan yang dihasilkan</th></tr></thead><tbody>
+    <tr><td><strong>Penelusuran</strong></td><td>Objek mana yang dicari atau informasi apa yang terdapat pada suatu lokasi?</td><td>Objek atau nilai yang memenuhi kriteria ditemukan dan dapat dipilih.</td></tr>
+    <tr><td><strong>Reklasifikasi</strong></td><td>Nilai atau kategori baru apa yang diberikan kepada objek yang sama?</td><td>Nilai tematik berubah, tetapi letak dan bentuk objek tetap.</td></tr>
+    <tr><td><strong>Pengukuran</strong></td><td>Berapa jarak, panjang, luas, keliling, jumlah, atau volume?</td><td>Geometri atau sel raster menghasilkan ukuran numerik.</td></tr>
+  </tbody></table></div>
+  <figure class="visual-board">
+    <svg viewBox="0 0 960 290" role="img" aria-labelledby="alur-title alur-desc">
+      <title id="alur-title">Alur penelusuran, klasifikasi, dan pengukuran</title><desc id="alur-desc">Pertanyaan diterjemahkan menjadi kriteria, objek dipilih, dikelompokkan, diukur, lalu ditafsirkan.</desc>
+      <rect width="960" height="290" fill="#f5f8fa"/>
+      <g font-family="system-ui,sans-serif" text-anchor="middle">
+        <g transform="translate(25 70)"><rect width="160" height="125" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="80" y="34" fill="#075175" font-weight="700">RUMUSAN</text><text x="80" y="66" fill="#26323e" font-size="16">Objek yang dianalisis</text><text x="80" y="90" fill="#26323e" font-size="16">Dasar klasifikasi</text><text x="80" y="114" fill="#26323e" font-size="16">Besaran geometris</text></g>
+        <text x="210" y="139" fill="#075175" font-size="28">→</text>
+        <g transform="translate(235 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700" font-size="14">PENELUSURAN</text><circle cx="45" cy="83" r="13" fill="#b64c42"/><circle cx="75" cy="76" r="13" fill="#b64c42"/><circle cx="105" cy="92" r="13" fill="#b8c5ca"/></g>
+        <text x="410" y="139" fill="#075175" font-size="28">→</text>
+        <g transform="translate(435 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700">KLASIFIKASI</text><rect x="27" y="67" width="30" height="35" fill="#d6e8ed"/><rect x="60" y="67" width="30" height="35" fill="#75aeca"/><rect x="93" y="67" width="30" height="35" fill="#075175"/></g>
+        <text x="610" y="139" fill="#075175" font-size="28">→</text>
+        <g transform="translate(635 70)"><rect width="150" height="125" rx="8" fill="#e5f1f4" stroke="#4d8297"/><text x="75" y="42" fill="#075175" font-weight="700">PENGUKURAN</text><line x1="30" y1="92" x2="120" y2="65" stroke="#b64c42" stroke-width="6"/><line x1="33" y1="103" x2="123" y2="76" stroke="#26323e" stroke-width="1" stroke-dasharray="4"/><text x="75" y="118" font-size="14" fill="#26323e">2,4 km</text></g>
+        <text x="810" y="139" fill="#075175" font-size="28">→</text>
+        <g transform="translate(835 70)"><rect width="100" height="125" rx="8" fill="#083f59"/><text x="50" y="50" fill="#fff" font-weight="700">HASIL</text><text x="50" y="78" fill="#d9edf3" font-size="14">peta</text><text x="50" y="99" fill="#d9edf3" font-size="14">tabel</text></g>
+      </g>
+    </svg>
+    <figcaption>Ketiga operasi dapat digunakan secara terpisah atau digabungkan sesuai pertanyaan analisis.</figcaption>
+  </figure>
+  <p class="source-note">Pembagian operasi mengacu pada <a href="https://ftp.itc.nl/pub/ilwis/pdf/usrch07.pdf">ITC–ILWIS User’s Guide, Chapter 7: Spatial Data Analysis</a>. Overlay menggabungkan beberapa peta, sedangkan operasi ketetanggaan menilai lingkungan di sekitar suatu lokasi; keduanya dibahas pada pertemuan berikutnya.</p>
+
+  <h2 id="retrieval">3. Penelusuran data (retrieval)</h2>
+  <p><strong>Penelusuran data</strong> atau <em>data retrieval</em> merupakan proses mencari dan mengambil baris data atau objek berdasarkan kriteria tertentu. Hasilnya dapat berupa objek terpilih pada peta, baris terpilih pada tabel, tampilan data yang telah disaring, atau kumpulan data baru.</p>
+
+  <h3>3.1 Dua pertanyaan dasar dalam penelusuran</h3>
+  <div class="two-definitions">
+    <article><small>MULAI DARI LOKASI</small><strong>Apa yang terdapat di lokasi ini?</strong><p>Koordinat atau posisi pada peta ditentukan terlebih dahulu. SIG kemudian membaca objek dan atribut pada posisi tersebut, misalnya nama desa, jenis penggunaan lahan, serta nilai elevasi pada satu titik.</p></article>
+    <article><small>MULAI DARI KRITERIA</small><strong>Di mana objek yang dicari?</strong><p>Kondisi ditentukan terlebih dahulu. SIG kemudian menunjukkan lokasi yang memenuhi kondisi tersebut, misalnya kawasan hutan atau sekolah aktif dengan lebih dari 500 siswa.</p></article>
+  </div>
+
+  <h3 id="logika">3.2 Dasar dan operator dalam kueri</h3>
+  <div class="two-definitions">
+    <article><small>BERDASARKAN ATRIBUT</small><strong>Kueri atribut</strong><p>Kriteria menggunakan nilai dalam kolom tabel, misalnya <code>jenis = 'sekolah'</code> atau <code>kapasitas &gt; 300</code>.</p></article>
+    <article><small>BERDASARKAN HUBUNGAN LOKASI</small><strong>Kueri spasial</strong><p>Kriteria menggunakan hubungan spasial, misalnya sekolah yang berada di dalam Kecamatan A atau bangunan yang memotong zona banjir.</p></article>
+  </div>
+  <div class="operation-list">
+    <article><strong>AND</strong><p>Semua syarat harus benar. <code>jenis = 'sekolah' AND siswa &gt; 500</code>.</p></article>
+    <article><strong>OR</strong><p>Salah satu syarat boleh benar. <code>status = 'rusak' OR status = 'perbaikan'</code>.</p></article>
+    <article><strong>NOT</strong><p>Mengecualikan suatu kondisi. <code>NOT jenis = 'permukiman'</code>.</p></article>
+    <article><strong>Urutan evaluasi</strong><p>Tanda kurung memperjelas gabungan syarat: <code>aktif = 1 AND (kelas = 'A' OR kelas = 'B')</code>.</p></article>
+  </div>
+  <p class="equation">Objek terpilih = objek yang membuat ekspresi bernilai TRUE</p>
+
+  <h3 id="contoh-retrieval">3.3 Penerapan kueri atribut</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Fasilitas</th><th>Jenis</th><th>Kapasitas</th><th>Status</th></tr></thead>
+    <tbody><tr><td>F01</td><td>SD Melati</td><td>Sekolah</td><td>420</td><td>Aktif</td></tr><tr class="selected-row"><td>F02</td><td>SMP Merdeka</td><td>Sekolah</td><td>760</td><td>Aktif</td></tr><tr><td>F03</td><td>Puskesmas Utama</td><td>Kesehatan</td><td>120</td><td>Aktif</td></tr><tr><td>F04</td><td>SD Harapan</td><td>Sekolah</td><td>540</td><td>Perbaikan</td></tr></tbody>
+  </table></div>
+  <p>Kueri <code>jenis = 'Sekolah' AND kapasitas &gt; 500 AND status = 'Aktif'</code> hanya memilih baris F02. Objek yang tidak memenuhi salah satu dari ketiga syarat tersebut tidak terpilih.</p>
+
+  <div class="source-image-pair">
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html"><img src="https://docs.qgis.org/3.44/en/_images/vectorAttributeTable.png" alt="Tampilan tabel atribut resmi QGIS"></a><figcaption>Tabel atribut menghubungkan setiap baris data dengan objek pada peta. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html">QGIS User Guide — Attribute Table</a>.</figcaption></figure>
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html"><img src="https://docs.qgis.org/3.44/en/_images/query_builder_example.png" alt="Contoh Query Builder resmi QGIS"></a><figcaption><em>Query Builder</em> pada QGIS menyusun ekspresi dari kolom, operator, dan nilai. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</figcaption></figure>
+  </div>
+
+  <h3 id="selection-filter">3.4 Perbedaan pemilihan, penyaringan, dan ekspor data</h3>
+  <dl class="reading-result">
+    <dt>Pemilihan</dt><dd>Objek ditandai sebagai pilihan, tetapi kumpulan data asal tetap berisi seluruh objek. Istilah pada perangkat lunak biasanya <em>selection</em>.</dd>
+    <dt>Penyaringan</dt><dd>Hanya objek yang memenuhi kriteria yang ditampilkan oleh lapisan data. Istilah pada perangkat lunak biasanya <em>filter</em>.</dd>
+    <dt>Ekspor</dt><dd>Objek terpilih disimpan sebagai kumpulan data baru sehingga menjadi hasil yang terpisah dari data asal.</dd>
+  </dl>
+  <p>Penelusuran menentukan <strong>objek mana</strong> yang memenuhi syarat. Apabila objek terpilih masih mempunyai nilai yang beragam, klasifikasi digunakan untuk menyusun nilai tersebut menjadi kelompok yang dapat dibandingkan.</p>
+
+  <h2 id="klasifikasi">4. Klasifikasi data</h2>
+  <p><strong>Klasifikasi</strong> menyusun objek ke dalam kelas berdasarkan kesamaan atribut. Kelas yang dipilih memengaruhi pola yang terlihat pada peta, sehingga metode harus disesuaikan dengan jenis data dan tujuan komunikasi.</p>
+  <h3>4.1 Dasar klasifikasi menurut jenis data</h3>
+  <div class="concept-strip">
+    <article><b>Data kategori</b><strong>Nilai unik</strong><p>Setiap kategori memperoleh simbol berbeda. Contoh: sekolah, rumah sakit, terminal.</p></article>
+    <article><b>Data berurutan</b><strong>Kelas ordinal</strong><p>Kategori mempunyai urutan. Contoh: rendah, sedang, tinggi.</p></article>
+    <article><b>Data numerik</b><strong>Rentang nilai</strong><p>Nilai dibagi ke beberapa interval. Contoh: kepadatan penduduk atau curah hujan.</p></article>
+  </div>
+  <div class="two-definitions">
+    <article><small>UNTUK PENYAJIAN</small><strong>Klasifikasi simbol</strong><p>Nilai asli tetap disimpan. Kelas digunakan untuk menentukan warna atau ukuran simbol pada peta, misalnya kepadatan rendah, sedang, dan tinggi.</p></article>
+    <article><small>UNTUK ANALISIS</small><strong>Reklasifikasi nilai</strong><p>Nilai asli diterjemahkan menjadi nilai kelas baru, misalnya kemiringan 0–8% menjadi kelas kesesuaian 3. Hasil dapat disimpan sebagai kolom atau kumpulan data baru.</p></article>
+  </div>
+  <p><strong>Perbedaannya:</strong> klasifikasi simbol mengubah cara data ditampilkan, sedangkan reklasifikasi menghasilkan kategori atau nilai baru yang dapat digunakan pada analisis berikutnya. Keduanya tetap memerlukan aturan kelas yang dinyatakan secara eksplisit.</p>
+  <h3>4.1.1 Contoh reklasifikasi</h3>
+  <p>Reklasifikasi mempertahankan lokasi setiap sel atau objek, kemudian mengganti nilai asal dengan kelas baru berdasarkan suatu aturan.</p>
+  <div class="table-wrap"><table><thead><tr><th>Nilai kemiringan asal</th><th>Aturan kelas</th><th>Nilai kelas baru</th></tr></thead><tbody>
+    <tr><td>0–8%</td><td>Masuk rentang 0–8%</td><td>Datar</td></tr>
+    <tr><td>&gt;8–15%</td><td>Masuk rentang &gt;8–15%</td><td>Landai</td></tr>
+    <tr><td>&gt;15–25%</td><td>Masuk rentang &gt;15–25%</td><td>Agak curam</td></tr>
+    <tr><td>&gt;25%</td><td>Lebih dari 25%</td><td>Curam</td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> raster kemiringan yang semula menyimpan nilai persentase menghasilkan raster kelas kemiringan. Ukuran dan posisi sel tetap sama; nilai sel yang berubah.</p>
+
+  <h3 id="metode-kelas">4.2 Metode pembentukan kelas numerik</h3>
+  <p>Metode pembentukan kelas menentukan letak <strong>batas kelas</strong> (<em>class breaks</em>). Perubahan batas kelas tidak mengubah nilai asli, tetapi dapat mengubah warna suatu wilayah dan pola yang terlihat pada peta. Karena itu, metode tidak dipilih hanya berdasarkan tampilan yang menarik.</p>
+
+  <h3>4.2.1 Langkah sebelum membentuk kelas</h3>
+  <ol>
+    <li><strong>Tentukan variabel.</strong> Nilai absolut, persentase, rasio, dan kepadatan menyampaikan makna yang berbeda. Jumlah penduduk tidak dapat langsung menggantikan kepadatan penduduk.</li>
+    <li><strong>Periksa distribusi.</strong> Urutkan nilai dan amati histogram, nilai minimum–maksimum, pencilan, nilai yang sama, serta kesenjangan antarnilai.</li>
+    <li><strong>Tentukan tujuan peta.</strong> Peta dapat digunakan untuk membandingkan besar nilai, menunjukkan peringkat, menemukan kelompok alami, atau mengenali penyimpangan dari rata-rata.</li>
+    <li><strong>Tentukan jumlah kelas.</strong> Terlalu sedikit kelas menyembunyikan variasi; terlalu banyak kelas menyulitkan pembacaan. Jumlah kelas harus sesuai dengan variasi data dan tujuan peta.</li>
+    <li><strong>Catat metode dan batas kelas.</strong> Legenda harus memperlihatkan rentang dengan jelas, termasuk aturan nilai yang tepat berada pada batas kelas.</li>
+  </ol>
+
+  <div class="concept-example">
+    <small>DATA CONTOH</small>
+    <p>Sepuluh wilayah mempunyai nilai: <strong>2, 3, 4, 5, 6, 7, 15, 16, 17, dan 25</strong>. Data yang sama akan dibagi menggunakan beberapa metode agar perbedaannya dapat diamati.</p>
+  </div>
+
+  <h3>4.2.2 Equal interval — interval sama</h3>
+  <p>Metode <em>equal interval</em> membagi selisih nilai maksimum dan minimum menjadi kelas yang sama lebar. Posisi setiap objek dalam urutan data tidak memengaruhi letak batas kelas.</p>
+  <p class="equation">Lebar kelas = (nilai maksimum − nilai minimum) ÷ jumlah kelas</p>
+  <p>Pada data contoh, rentang nilai adalah 25 − 2 = 23. Untuk tiga kelas, lebarnya 23 ÷ 3 = 7,67. Batas kelas dapat dibulatkan menjadi 2–9, 10–17, dan 18–25 karena seluruh nilai berupa bilangan bulat.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang</th><th>Nilai yang masuk</th><th>Jumlah objek</th></tr></thead><tbody>
+    <tr><td>Rendah</td><td>2–9</td><td>2, 3, 4, 5, 6, 7</td><td>6</td></tr>
+    <tr><td>Sedang</td><td>10–17</td><td>15, 16, 17</td><td>3</td></tr>
+    <tr><td>Tinggi</td><td>18–25</td><td>25</td><td>1</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Rentang yang telah dikenal</strong><p>Contohnya persentase 0–100, suhu, atau indeks dengan skala tetap. Batas yang sama juga memudahkan perbandingan beberapa peta.</p></article>
+    <article><small>KETERBATASAN</small><strong>Kelas dapat tidak seimbang</strong><p>Data yang mengelompok pada rentang sempit dapat menumpuk dalam satu kelas, sedangkan kelas lain hanya berisi sedikit objek atau bahkan kosong.</p></article>
+  </div>
+
+  <h3>4.2.3 Quantile — jumlah objek sama</h3>
+  <p>Metode <em>quantile</em> mengurutkan nilai, kemudian membagi jumlah objek agar setiap kelas berisi anggota yang hampir sama banyak. Untuk 10 objek dan tiga kelas, setiap kelas berisi sekitar tiga atau empat objek.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang hasil</th><th>Nilai yang masuk</th><th>Jumlah objek</th></tr></thead><tbody>
+    <tr><td>Kelompok bawah</td><td>2–5</td><td>2, 3, 4, 5</td><td>4</td></tr>
+    <tr><td>Kelompok tengah</td><td>6–15</td><td>6, 7, 15</td><td>3</td></tr>
+    <tr><td>Kelompok atas</td><td>16–25</td><td>16, 17, 25</td><td>3</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Menunjukkan posisi relatif</strong><p>Cocok untuk menyatakan kelompok sepertiga bawah, tengah, dan atas atau untuk menyusun peringkat wilayah.</p></article>
+    <article><small>KETERBATASAN</small><strong>Jarak nilai tidak diperhitungkan</strong><p>Nilai 15 dan 16 yang hampir sama terpisah ke kelas berbeda, sedangkan 16 dan 25 yang berjauhan justru berada dalam kelas yang sama. Nilai yang sama juga tidak seharusnya dipisah hanya untuk menyeimbangkan jumlah.</p></article>
+  </div>
+
+  <h3>4.2.4 Natural breaks (Jenks) — kelompok alami</h3>
+  <p>Metode <em>natural breaks</em> mencari batas pada kesenjangan nilai yang relatif besar. Algoritma Jenks berupaya membuat variasi nilai di dalam setiap kelas sekecil mungkin dan perbedaan antarkelas sebesar mungkin.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kelas</th><th>Rentang hasil</th><th>Nilai yang masuk</th><th>Dasar pemisahan</th></tr></thead><tbody>
+    <tr><td>Kelompok 1</td><td>2–7</td><td>2, 3, 4, 5, 6, 7</td><td>Kumpulan nilai rendah yang berdekatan</td></tr>
+    <tr><td>Kelompok 2</td><td>15–17</td><td>15, 16, 17</td><td>Kumpulan nilai menengah yang berdekatan</td></tr>
+    <tr><td>Kelompok 3</td><td>25</td><td>25</td><td>Terpisah oleh kesenjangan besar</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Mengungkap struktur satu kumpulan data</strong><p>Cocok ketika data mempunyai kelompok dan kesenjangan yang jelas serta tujuan peta adalah memperlihatkan pola internal kumpulan data tersebut.</p></article>
+    <article><small>KETERBATASAN</small><strong>Batas bergantung pada data</strong><p>Ketika data tahun berikutnya berubah, batas kelas dapat ikut berubah. Dua peta tidak dapat dibandingkan langsung apabila menggunakan batas <em>natural breaks</em> yang dihitung secara terpisah.</p></article>
+  </div>
+
+  <h3>4.2.5 Standard deviation — jarak dari rata-rata</h3>
+  <p>Metode <em>standard deviation</em> tidak terutama membagi rentang atau jumlah objek. Kelas dibentuk berdasarkan jarak nilai terhadap rata-rata menggunakan satuan simpangan baku. Metode ini menjawab apakah suatu nilai berada di bawah, mendekati, atau di atas kondisi umum.</p>
+  <p class="equation">Simpangan baku menunjukkan besar penyebaran nilai terhadap rata-rata (μ)</p>
+  <p>Pada data contoh, rata-rata μ = 10 dan simpangan baku populasi σ ≈ 7,3. Batas satu simpangan baku terletak sekitar 2,7 dan 17,3. Dengan demikian, nilai 2 berada lebih dari satu simpangan baku di bawah rata-rata, sedangkan nilai 25 berada lebih dari satu simpangan baku di atas rata-rata.</p>
+  <div class="table-wrap"><table><thead><tr><th>Posisi terhadap rata-rata</th><th>Batas pendekatan</th><th>Nilai contoh</th><th>Makna</th></tr></thead><tbody>
+    <tr><td>Di bawah −1σ</td><td>&lt;2,7</td><td>2</td><td>Jauh di bawah rata-rata</td></tr>
+    <tr><td>−1σ sampai rata-rata</td><td>2,7–10</td><td>3, 4, 5, 6, 7</td><td>Di bawah rata-rata, tetapi masih dalam satu simpangan baku</td></tr>
+    <tr><td>Rata-rata sampai +1σ</td><td>10–17,3</td><td>15, 16, 17</td><td>Di atas rata-rata, tetapi masih dalam satu simpangan baku</td></tr>
+    <tr><td>Di atas +1σ</td><td>&gt;17,3</td><td>25</td><td>Jauh di atas rata-rata</td></tr>
+  </tbody></table></div>
+  <div class="two-definitions">
+    <article><small>SESUAI DIGUNAKAN</small><strong>Mencari penyimpangan</strong><p>Cocok untuk menunjukkan wilayah yang berada jauh di atas atau di bawah rata-rata, terutama ketika rata-rata merupakan acuan analisis yang bermakna.</p></article>
+    <article><small>KETERBATASAN</small><strong>Peka terhadap distribusi dan pencilan</strong><p>Rata-rata dan simpangan baku dapat berubah karena nilai ekstrem. Interpretasi juga kurang tepat apabila distribusi sangat menceng atau rata-rata tidak mewakili kondisi umum.</p></article>
+  </div>
+
+  <figure class="visual-board">
+    <svg viewBox="0 0 960 440" role="img" aria-labelledby="class-title class-desc">
+      <title id="class-title">Nilai yang sama diklasifikasikan dengan empat metode</title><desc id="class-desc">Sepuluh nilai dibagi menggunakan equal interval, quantile, natural breaks, dan standard deviation sehingga batas kelas dan jumlah anggota berbeda.</desc>
+      <rect width="960" height="440" fill="#fff"/>
+      <g font-family="system-ui,sans-serif" fill="#26323e">
+        <text x="28" y="38" font-size="18" font-weight="700">Nilai: 2, 3, 4, 5, 6, 7, 15, 16, 17, 25</text>
+        <text x="28" y="92" font-weight="700" fill="#075175">Equal interval</text><rect x="225" y="64" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="64" width="210" height="46" fill="#75aeca"/><rect x="645" y="64" width="210" height="46" fill="#075175"/><text x="330" y="86" text-anchor="middle">2–9</text><text x="330" y="103" text-anchor="middle" font-size="12">6 objek</text><text x="540" y="86" text-anchor="middle">10–17</text><text x="540" y="103" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="86" text-anchor="middle" fill="#fff">18–25</text><text x="750" y="103" text-anchor="middle" fill="#fff" font-size="12">1 objek</text>
+        <text x="28" y="172" font-weight="700" fill="#075175">Quantile</text><rect x="225" y="144" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="144" width="210" height="46" fill="#75aeca"/><rect x="645" y="144" width="210" height="46" fill="#075175"/><text x="330" y="166" text-anchor="middle">2–5</text><text x="330" y="183" text-anchor="middle" font-size="12">4 objek</text><text x="540" y="166" text-anchor="middle">6–15</text><text x="540" y="183" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="166" text-anchor="middle" fill="#fff">16–25</text><text x="750" y="183" text-anchor="middle" fill="#fff" font-size="12">3 objek</text>
+        <text x="28" y="252" font-weight="700" fill="#075175">Natural breaks</text><rect x="225" y="224" width="210" height="46" fill="#d6e8ed"/><rect x="435" y="224" width="210" height="46" fill="#75aeca"/><rect x="645" y="224" width="210" height="46" fill="#075175"/><text x="330" y="246" text-anchor="middle">2–7</text><text x="330" y="263" text-anchor="middle" font-size="12">6 objek</text><text x="540" y="246" text-anchor="middle">15–17</text><text x="540" y="263" text-anchor="middle" font-size="12">3 objek</text><text x="750" y="246" text-anchor="middle" fill="#fff">25</text><text x="750" y="263" text-anchor="middle" fill="#fff" font-size="12">1 objek</text>
+        <text x="28" y="332" font-weight="700" fill="#075175">Standard deviation</text><rect x="225" y="304" width="157" height="46" fill="#edf1f2"/><rect x="382" y="304" width="157" height="46" fill="#d6e8ed"/><rect x="539" y="304" width="158" height="46" fill="#75aeca"/><rect x="697" y="304" width="158" height="46" fill="#075175"/><text x="303" y="326" text-anchor="middle">&lt;2,7</text><text x="303" y="343" text-anchor="middle" font-size="12">di bawah −1σ</text><text x="460" y="326" text-anchor="middle">2,7–10</text><text x="460" y="343" text-anchor="middle" font-size="12">di bawah μ</text><text x="618" y="326" text-anchor="middle">10–17,3</text><text x="618" y="343" text-anchor="middle" font-size="12">di atas μ</text><text x="776" y="326" text-anchor="middle" fill="#fff">&gt;17,3</text><text x="776" y="343" text-anchor="middle" fill="#fff" font-size="12">di atas +1σ</text>
+        <text x="225" y="406" font-size="14" fill="#5d6b76">Data tetap sama; metode mengubah batas kelas, jumlah anggota, dan pesan visual peta.</text>
+      </g>
+    </svg>
+    <figcaption>Perbandingan pembentukan kelas dari satu kumpulan data yang sama. <em>Equal interval</em> menyamakan lebar rentang; <em>quantile</em> menyeimbangkan jumlah anggota; <em>natural breaks</em> mengikuti kesenjangan nilai; <em>standard deviation</em> menggunakan jarak terhadap rata-rata.</figcaption>
+  </figure>
+
+  <h3>4.2.6 Pedoman pemilihan metode</h3>
+  <div class="table-wrap"><table><thead><tr><th>Tujuan utama</th><th>Metode yang dapat dipertimbangkan</th><th>Pemeriksaan yang diperlukan</th></tr></thead><tbody>
+    <tr><td>Membandingkan nilai terhadap rentang tetap atau membandingkan beberapa tahun</td><td>Equal interval atau batas manual yang sama</td><td>Pastikan batas kelas konsisten pada seluruh peta.</td></tr>
+    <tr><td>Membagi wilayah menjadi kelompok peringkat dengan anggota seimbang</td><td>Quantile</td><td>Periksa nilai yang sama dan nilai berdekatan di sekitar batas kelas.</td></tr>
+    <tr><td>Menunjukkan kelompok yang terbentuk pada satu kumpulan data</td><td>Natural breaks (Jenks)</td><td>Periksa histogram dan hindari perbandingan langsung dengan peta yang mempunyai batas berbeda.</td></tr>
+    <tr><td>Menunjukkan penyimpangan dari kondisi rata-rata</td><td>Standard deviation</td><td>Periksa pencilan, kemencengan distribusi, dan kelayakan rata-rata sebagai acuan.</td></tr>
+  </tbody></table></div>
+  <p class="analysis-question"><strong>Prinsip utama:</strong> tidak terdapat satu metode yang selalu paling benar. Metode yang tepat adalah metode yang sesuai dengan distribusi data, tujuan analisis, dan pesan yang harus dibaca dari peta.</p>
+
+  <div class="source-image-pair">
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html"><img src="https://docs.qgis.org/3.44/en/_images/categorisation_result.png" alt="Hasil klasifikasi kategori pada QGIS"></a><figcaption>Klasifikasi kategorikal memakai nilai unik. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</figcaption></figure>
+    <figure><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/vector_properties.html"><img src="https://docs.qgis.org/3.44/en/_images/graduatedsymbol_ng_line.png" alt="Panel simbol bertingkat pada QGIS"></a><figcaption>Simbol bertingkat digunakan untuk atribut numerik. Sumber: <a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/vector_properties.html">QGIS User Guide — Vector Properties</a>.</figcaption></figure>
+  </div>
+  <p>Klasifikasi menjelaskan <strong>kelompok nilai</strong>, tetapi belum menjawab ukuran geometris suatu objek. Jarak, panjang, keliling, dan luas diperoleh melalui pengukuran spasial.</p>
+
+  <h2 id="pengukuran">5. Pengukuran spasial</h2>
+  <p>Pengukuran spasial digunakan untuk menjawab pertanyaan seperti: berapa jarak sekolah ke jalan utama, berapa panjang sungai, atau berapa luas sawah? Jenis geometri menentukan besaran yang dapat dihitung, sedangkan sistem referensi koordinat menentukan satuan dan ketelitian hasilnya.</p>
+  <h3>5.1 Besaran geometris</h3>
+  <div class="operation-list">
+    <article><strong>Jarak</strong><p>Panjang garis lurus antara dua lokasi atau panjang lintasan melalui beberapa segmen.</p></article>
+    <article><strong>Panjang</strong><p>Total panjang geometri garis, misalnya panjang sungai atau ruas jalan.</p></article>
+    <article><strong>Keliling</strong><p>Total panjang batas poligon, misalnya batas desa atau perimeter danau.</p></article>
+    <article><strong>Luas</strong><p>Ukuran bidang yang ditutupi poligon, misalnya luas sawah atau kawasan terdampak.</p></article>
+    <article><strong>Jumlah dan kepadatan</strong><p>Jumlah titik atau objek dalam suatu wilayah, misalnya jumlah sekolah dan kepadatan titik kejadian.</p></article>
+    <article><strong>Volume</strong><p>Besaran tiga dimensi yang dihitung dari permukaan dan bidang acuan, misalnya volume galian atau tampungan.</p></article>
+  </div>
+
+  <div class="table-wrap"><table><thead><tr><th>Jenis data</th><th>Pengukuran yang umum</th><th>Contoh hasil</th></tr></thead><tbody>
+    <tr><td>Titik</td><td>Jumlah, kepadatan, dan jarak antartitik</td><td>12 sekolah; 3 sekolah/km²; jarak 850 m</td></tr>
+    <tr><td>Garis</td><td>Jumlah segmen, panjang, dan arah</td><td>Panjang jalan 4,2 km</td></tr>
+    <tr><td>Poligon</td><td>Luas dan keliling</td><td>Luas sawah 2,1 km²</td></tr>
+    <tr><td>Raster</td><td>Jumlah sel, luas per kelas, serta statistik nilai</td><td>2.500 sel kelas hutan × luas satu sel</td></tr>
+  </tbody></table></div>
+
+  <figure class="visual-board">
+    <svg viewBox="0 0 960 360" role="img" aria-labelledby="measure-title measure-desc">
+      <title id="measure-title">Perbedaan jarak, panjang, keliling, dan luas</title><desc id="measure-desc">Empat panel menunjukkan objek yang diukur dan hasil yang diperoleh.</desc>
+      <rect width="960" height="360" fill="#f5f8fa"/>
+      <g font-family="system-ui,sans-serif" text-anchor="middle">
+        <g transform="translate(25 35)"><rect width="210" height="270" rx="7" fill="#fff" stroke="#c5d1d7"/><text x="105" y="34" font-weight="700" fill="#075175">JARAK</text><circle cx="52" cy="125" r="10" fill="#b64c42"/><circle cx="160" cy="90" r="10" fill="#b64c42"/><line x1="62" y1="122" x2="150" y2="93" stroke="#075175" stroke-width="4" stroke-dasharray="8"/><text x="105" y="170">A → B</text><text x="105" y="200" fill="#5d6b76" font-size="14">1,8 km</text></g>
+        <g transform="translate(260 35)"><rect width="210" height="270" rx="7" fill="#fff" stroke="#c5d1d7"/><text x="105" y="34" font-weight="700" fill="#075175">PANJANG</text><path d="M34 155 C70 70,120 185,176 80" fill="none" stroke="#0a6f85" stroke-width="8"/><text x="105" y="200">garis sungai</text><text x="105" y="230" fill="#5d6b76" font-size="14">4,2 km</text></g>
+        <g transform="translate(495 35)"><rect width="210" height="270" rx="7" fill="#fff" stroke="#c5d1d7"/><text x="105" y="34" font-weight="700" fill="#075175">KELILING</text><polygon points="48,92 150,70 176,155 84,190 36,148" fill="#e5f1f4" stroke="#b64c42" stroke-width="7"/><text x="105" y="230" fill="#5d6b76" font-size="14">batas = 6,4 km</text></g>
+        <g transform="translate(730 35)"><rect width="205" height="270" rx="7" fill="#fff" stroke="#c5d1d7"/><text x="102" y="34" font-weight="700" fill="#075175">LUAS</text><polygon points="48,92 148,70 173,155 82,190 35,148" fill="#75aeca" stroke="#075175" stroke-width="3"/><text x="102" y="230" fill="#5d6b76" font-size="14">bidang = 2,1 km²</text></g>
+      </g>
+    </svg>
+    <figcaption>Ilustrasi objek dan besaran yang diukur dalam SIG.</figcaption>
+  </figure>
+
+  <h3 id="crs-pengukuran">5.2 Mengapa CRS harus diperiksa sebelum mengukur?</h3>
+  <p>Koordinat pada layar dapat berupa derajat atau meter. Perangkat lunak tetap dapat menampilkan keduanya sebagai peta, tetapi angka hasil pengukuran tidak mempunyai arti yang sama.</p>
+  <div class="two-definitions">
+    <article><small>KOORDINAT GEOGRAFIS</small><strong>Lintang dan bujur dalam derajat</strong><p>Contoh: 110,360° BT dan 7,780° LS. Selisih koordinat 0,010 berarti 0,010 derajat, bukan 0,010 meter.</p></article>
+    <article><small>KOORDINAT PROYEKSI</small><strong>Posisi pada bidang datar dalam meter</strong><p>Contoh: E = 435.000 m dan N = 9.139.500 m. Selisih koordinat dapat dihitung sebagai jarak planar dalam meter.</p></article>
+  </div>
+
+  <figure class="visual-board">
+    <svg viewBox="0 0 960 360" role="img" aria-labelledby="crs-title crs-desc">
+      <title id="crs-title">Koordinat derajat diubah menjadi koordinat meter sebelum pengukuran planar</title><desc id="crs-desc">Dua lokasi ditampilkan pada kisi geografis dan kisi proyeksi untuk membedakan satuan koordinat dan hasil pengukuran.</desc>
+      <rect width="960" height="360" fill="#f5f8fa"/>
+      <g font-family="system-ui,sans-serif">
+        <g transform="translate(35 42)"><rect width="330" height="250" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="165" y="30" text-anchor="middle" font-weight="700" fill="#075175">CRS GEOGRAFIS</text><g stroke="#d6e0e4"><line x1="45" y1="55" x2="45" y2="210"/><line x1="145" y1="55" x2="145" y2="210"/><line x1="245" y1="55" x2="245" y2="210"/><line x1="45" y1="75" x2="285" y2="75"/><line x1="45" y1="145" x2="285" y2="145"/><line x1="45" y1="210" x2="285" y2="210"/></g><circle cx="120" cy="165" r="10" fill="#b64c42"/><circle cx="225" cy="165" r="10" fill="#075175"/><line x1="130" y1="165" x2="215" y2="165" stroke="#26323e" stroke-width="3" stroke-dasharray="6"/><text x="172" y="150" text-anchor="middle" font-size="14">selisih 0,010°</text><text x="165" y="235" text-anchor="middle" font-size="14" fill="#5d6b76">satuan sudut: derajat</text></g>
+        <text x="480" y="175" text-anchor="middle" font-size="44" fill="#075175">→</text><text x="480" y="210" text-anchor="middle" font-size="14" fill="#5d6b76">proyeksi</text>
+        <g transform="translate(595 42)"><rect width="330" height="250" rx="8" fill="#fff" stroke="#9bb1bc"/><text x="165" y="30" text-anchor="middle" font-weight="700" fill="#075175">CRS PROYEKSI</text><g stroke="#d6e0e4"><line x1="45" y1="55" x2="45" y2="210"/><line x1="145" y1="55" x2="145" y2="210"/><line x1="245" y1="55" x2="245" y2="210"/><line x1="45" y1="75" x2="285" y2="75"/><line x1="45" y1="145" x2="285" y2="145"/><line x1="45" y1="210" x2="285" y2="210"/></g><circle cx="95" cy="165" r="10" fill="#b64c42"/><circle cx="245" cy="165" r="10" fill="#075175"/><line x1="105" y1="165" x2="235" y2="165" stroke="#26323e" stroke-width="3"/><text x="170" y="150" text-anchor="middle" font-size="14">jarak 1.100 m</text><text x="165" y="235" text-anchor="middle" font-size="14" fill="#5d6b76">satuan panjang: meter</text></g>
+      </g>
+    </svg>
+    <figcaption>Ilustrasi perubahan satuan koordinat. Angka 0,010° tidak dibaca sebagai jarak 0,010 m; data perlu diproyeksikan atau diukur secara geodesik.</figcaption>
+  </figure>
+
+  <h3>5.3 Pengukuran planar dan geodesik</h3>
+  <div class="table-wrap"><table><thead><tr><th>Keperluan</th><th>Cara menghitung</th><th>Contoh</th></tr></thead><tbody>
+    <tr><td>Pengukuran lokal pada wilayah yang tidak terlalu luas</td><td><strong>Planimetrik:</strong> pengukuran dilakukan pada bidang proyeksi yang sesuai.</td><td>Luas persil, panjang jalan dalam satu kota, atau jarak antargedung.</td></tr>
+    <tr><td>Pengukuran melintasi wilayah yang luas</td><td><strong>Geodesik:</strong> pengukuran mengikuti bentuk elipsoid bumi.</td><td>Jarak antarkota, lintasan antarpulau, atau luas wilayah yang sangat besar.</td></tr>
+  </tbody></table></div>
+  <p><strong>Contoh untuk Yogyakarta:</strong> data lintang–bujur dapat ditampilkan menggunakan EPSG:4326. Untuk pengukuran planar lokal, data dapat diproyeksikan ke UTM zona 49 Selatan (EPSG:32749). Daerah lain di Indonesia dapat berada pada zona UTM yang berbeda, sehingga CRS dipilih berdasarkan lokasi data.</p>
+  <p class="analysis-question"><strong>Urutan yang benar:</strong> periksa CRS → tentukan satuan yang diperlukan → pilih pengukuran planar atau geodesik → hitung dan tuliskan satuannya.</p>
+  <h2 id="kasus">6. Contoh</h2>
+  <h3>Memilih wilayah yang memenuhi tiga kriteria</h3>
+  <p>Pemerintah daerah ingin mengetahui wilayah yang perlu diperiksa lebih lanjut untuk penambahan layanan kesehatan. Dalam contoh pembelajaran ini, suatu wilayah masuk daftar awal apabila memenuhi seluruh kriteria berikut:</p>
+  <ol>
+    <li>kepadatan penduduk sekurang-kurangnya 3.000 jiwa/km²;</li>
+    <li>tidak mempunyai puskesmas aktif; dan</li>
+    <li>jarak lurus ke puskesmas aktif terdekat lebih dari 5 km.</li>
+  </ol>
+  <p><em>Nilai ambang tersebut hanya digunakan untuk latihan dan bukan standar resmi pelayanan kesehatan.</em></p>
+
+  <div class="table-wrap"><table><thead><tr><th>Wilayah</th><th>Penduduk</th><th>Luas (km²)</th><th>Puskesmas aktif</th><th>Jarak terdekat (km)</th></tr></thead><tbody>
+    <tr><td>A</td><td>12.000</td><td>6</td><td>1</td><td>1,2</td></tr>
+    <tr><td>B</td><td>9.000</td><td>3</td><td>0</td><td>4,8</td></tr>
+    <tr><td>C</td><td>15.000</td><td>10</td><td>2</td><td>1,0</td></tr>
+    <tr><td>D</td><td>7.000</td><td>2</td><td>0</td><td>6,2</td></tr>
+  </tbody></table></div>
+
+  <h3>Langkah 1 — Menghitung kepadatan penduduk</h3>
+  <p class="equation">Kepadatan penduduk = jumlah penduduk ÷ luas wilayah</p>
+  <div class="table-wrap"><table><thead><tr><th>Wilayah</th><th>Perhitungan</th><th>Kepadatan</th><th>Kelas latihan</th></tr></thead><tbody>
+    <tr><td>A</td><td>12.000 ÷ 6</td><td>2.000 jiwa/km²</td><td>Sedang</td></tr>
+    <tr><td>B</td><td>9.000 ÷ 3</td><td>3.000 jiwa/km²</td><td>Tinggi</td></tr>
+    <tr><td>C</td><td>15.000 ÷ 10</td><td>1.500 jiwa/km²</td><td>Rendah</td></tr>
+    <tr><td>D</td><td>7.000 ÷ 2</td><td>3.500 jiwa/km²</td><td>Tinggi</td></tr>
+  </tbody></table></div>
+  <p>Kelas latihan menggunakan batas rendah &lt;2.000, sedang 2.000–2.999, dan tinggi ≥3.000 jiwa/km². Karena batas berasal dari kriteria latihan, metode ini termasuk <strong>batas manual</strong>, bukan quantile atau natural breaks.</p>
+
+  <h3>Langkah 2 — Menelusuri data dengan tiga syarat</h3>
+  <p>Ketiga kriteria diterjemahkan menjadi ekspresi berikut:</p>
+  <p class="equation"><code>kepadatan &gt;= 3000 AND puskesmas_aktif = 0 AND jarak_km &gt; 5</code></p>
+  <div class="table-wrap"><table><thead><tr><th>Wilayah</th><th>Kepadatan ≥3.000?</th><th>Puskesmas = 0?</th><th>Jarak &gt;5 km?</th><th>Hasil</th></tr></thead><tbody>
+    <tr><td>A</td><td>Tidak</td><td>Tidak</td><td>Tidak</td><td>Tidak terpilih</td></tr>
+    <tr><td>B</td><td>Ya</td><td>Ya</td><td>Tidak</td><td>Tidak terpilih</td></tr>
+    <tr><td>C</td><td>Tidak</td><td>Tidak</td><td>Tidak</td><td>Tidak terpilih</td></tr>
+    <tr class="selected-row"><td>D</td><td>Ya</td><td>Ya</td><td>Ya</td><td><strong>Terpilih</strong></td></tr>
+  </tbody></table></div>
+  <p><strong>Kesimpulan contoh:</strong> hanya Wilayah D memenuhi ketiga syarat. Wilayah B tidak terpilih karena jaraknya 4,8 km, meskipun kepadatannya tinggi dan tidak mempunyai puskesmas aktif. Hasil ini merupakan daftar awal untuk pemeriksaan lebih lanjut, bukan keputusan otomatis untuk membangun fasilitas.</p>
+
+  <h2 id="latihan">7. Latihan</h2>
+
+  <h3>Latihan A — penelusuran atribut dan spasial</h3>
+  <p>Pilih sekolah yang berstatus aktif, mempunyai sekurang-kurangnya 400 siswa, dan berada di dalam zona banjir.</p>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Status</th><th>Jumlah siswa</th><th>Di dalam zona banjir?</th></tr></thead><tbody>
+    <tr><td>S1</td><td>Aktif</td><td>350</td><td>Ya</td></tr>
+    <tr><td>S2</td><td>Aktif</td><td>620</td><td>Ya</td></tr>
+    <tr><td>S3</td><td>Perbaikan</td><td>510</td><td>Ya</td></tr>
+    <tr><td>S4</td><td>Aktif</td><td>480</td><td>Tidak</td></tr>
+    <tr><td>S5</td><td>Aktif</td><td>430</td><td>Ya</td></tr>
+  </tbody></table></div>
+  <ol>
+    <li>Tuliskan ekspresi penelusurannya.</li>
+    <li>Tentukan ID sekolah yang terpilih.</li>
+    <li>Jelaskan objek mana yang gugur pada setiap syarat.</li>
+  </ol>
+  <p><strong>Pembahasan Latihan A</strong></p>
+  <p class="equation"><code>status = 'Aktif' AND siswa &gt;= 400 AND dalam_banjir = 'Ya'</code></p>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Status aktif?</th><th>Siswa ≥400?</th><th>Di zona banjir?</th><th>Hasil</th></tr></thead><tbody>
+    <tr><td>S1</td><td>Ya</td><td><strong>Tidak</strong></td><td>Ya</td><td>Tidak terpilih</td></tr>
+    <tr class="selected-row"><td>S2</td><td>Ya</td><td>Ya</td><td>Ya</td><td><strong>Terpilih</strong></td></tr>
+    <tr><td>S3</td><td><strong>Tidak</strong></td><td>Ya</td><td>Ya</td><td>Tidak terpilih</td></tr>
+    <tr><td>S4</td><td>Ya</td><td>Ya</td><td><strong>Tidak</strong></td><td>Tidak terpilih</td></tr>
+    <tr class="selected-row"><td>S5</td><td>Ya</td><td>Ya</td><td>Ya</td><td><strong>Terpilih</strong></td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> S2 dan S5 memenuhi seluruh syarat.</p>
+
+  <h3>Latihan B — membandingkan metode klasifikasi</h3>
+  <p>Gunakan nilai 2, 3, 4, 5, 6, 7, 15, 16, 17, dan 25 seperti pada contoh klasifikasi di bagian 4.2.</p>
+  <ol>
+    <li>Bagi nilai menjadi tiga kelas menggunakan <em>equal interval</em>.</li>
+    <li>Bagi nilai menjadi tiga kelas menggunakan <em>quantile</em>.</li>
+    <li>Sebutkan satu perbedaan penting antara kedua hasil.</li>
+    <li>Pilih metode untuk membuat peta peringkat sepertiga bawah, tengah, dan atas.</li>
+  </ol>
+  <p><strong>Pembahasan Latihan B</strong></p>
+  <div class="table-wrap"><table><thead><tr><th>Metode</th><th>Kelas 1</th><th>Kelas 2</th><th>Kelas 3</th><th>Makna hasil</th></tr></thead><tbody>
+    <tr><td><em>Equal interval</em></td><td>2–9<br><strong>6 objek</strong></td><td>10–17<br><strong>3 objek</strong></td><td>18–25<br><strong>1 objek</strong></td><td>Lebar rentang sama; jumlah anggota dapat berbeda.</td></tr>
+    <tr><td><em>Quantile</em></td><td>2–5<br><strong>4 objek</strong></td><td>6–15<br><strong>3 objek</strong></td><td>16–25<br><strong>3 objek</strong></td><td>Jumlah anggota hampir sama; lebar rentang dapat berbeda.</td></tr>
+  </tbody></table></div>
+  <p><strong>Hasil:</strong> gunakan <em>quantile</em> apabila tujuan peta adalah membentuk kelompok peringkat bawah, tengah, dan atas.</p>
+
+  <h3>Latihan C — pengukuran dan satuan koordinat</h3>
+  <p>Empat titik sudut sebidang tanah disimpan dalam CRS proyeksi bersatuan meter:</p>
+  <div class="table-wrap"><table><thead><tr><th>Titik</th><th>Easting (m)</th><th>Northing (m)</th></tr></thead><tbody>
+    <tr><td>P</td><td>400.000</td><td>9.130.000</td></tr>
+    <tr><td>Q</td><td>401.500</td><td>9.130.000</td></tr>
+    <tr><td>R</td><td>401.500</td><td>9.131.000</td></tr>
+    <tr><td>S</td><td>400.000</td><td>9.131.000</td></tr>
+  </tbody></table></div>
+  <ol>
+    <li>Hitung panjang sisi P–Q dan Q–R.</li>
+    <li>Hitung luas bidang P–Q–R–S dalam m² dan km².</li>
+    <li>Jelaskan mengapa perhitungan yang sama tidak boleh langsung diterapkan apabila koordinat masih dinyatakan dalam derajat.</li>
+  </ol>
+  <p><strong>Pembahasan Latihan C</strong></p>
+  <div class="table-wrap"><table><thead><tr><th>Besaran</th><th>Perhitungan</th><th>Hasil</th></tr></thead><tbody>
+    <tr><td>Panjang P–Q</td><td>401.500 − 400.000</td><td><strong>1.500 m</strong></td></tr>
+    <tr><td>Panjang Q–R</td><td>9.131.000 − 9.130.000</td><td><strong>1.000 m</strong></td></tr>
+    <tr><td>Luas bidang</td><td>1.500 m × 1.000 m</td><td><strong>1.500.000 m² = 1,5 km²</strong></td></tr>
+  </tbody></table></div>
+  <p><strong>Catatan satuan:</strong> pengurangan koordinat menghasilkan meter karena data menggunakan CRS proyeksi bersatuan meter. Jika koordinat masih berupa lintang dan bujur, selisihnya bersatuan derajat; data perlu diproyeksikan ke CRS yang sesuai atau diukur secara geodesik.</p>
+
+  <h2 id="ringkasan">8. Ringkasan</h2>
+  <ul class="summary-list">
+    <li><b>Penelusuran data</b><span>menemukan objek melalui kriteria atribut atau hubungan spasial; istilah <em>retrieval</em> digunakan dalam RPS.</span></li>
+    <li><b>Klasifikasi dan reklasifikasi</b><span>mengelompokkan nilai untuk penyajian atau menghasilkan nilai tematik baru pada lokasi yang sama.</span></li>
+    <li><b>Pengukuran</b><span>menghasilkan jarak, panjang, keliling, luas, jumlah, kepadatan, atau volume dari data spasial.</span></li>
+    <li><b>CRS</b><span>menentukan satuan dan karakter distorsi, sehingga harus dipilih sebelum mengukur.</span></li>
+    <li><b>Interpretasi</b><span>selalu menghubungkan hasil operasi dengan pertanyaan awal dan keterbatasan data.</span></li>
+  </ul>
+
+  <h2 id="referensi">9. Referensi</h2>
+  <ul class="reference">
+    <li><a href="https://ltb.itc.utwente.nl/498/concept/81478">University of Twente, ITC Living Textbook — Classification, Measurement and Retrieval Functions</a>.</li>
+    <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/working_with_vector/attribute_table.html">QGIS User Guide — Working with the Attribute Table</a>.</li>
+    <li><a href="https://docs.qgis.org/3.44/en/docs/training_manual/vector_classification/classification.html">QGIS Training Manual — Classification</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/help/mapping/layer-properties/data-classification-methods.htm">ArcGIS Pro Documentation — Data Classification Methods</a>.</li>
+    <li><a href="https://www.fao.org/4/w0615e/w0615e06.htm">FAO — The Functioning of a GIS: Generalisation, Classification, Searching, and Retrieval</a>.</li>
+    <li><a href="https://ftp.itc.nl/pub/ilwis/pdf/usrch07.pdf">ITC — ILWIS User's Guide, Chapter 7: Spatial Data Analysis</a>.</li>
+    <li><a href="https://maps.unomaha.community/Peterson/gis/notes/GISAnal1.html">University of Nebraska Omaha — GIS Analysis Functions</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/creating-and-using-layer-selections.htm">ArcGIS Pro Documentation — Creating and Using Layer Selections</a>.</li>
+    <li><a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/select-layer-by-location.htm">ArcGIS Pro Documentation — Select Layer by Location</a>.</li>
+    <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/introduction/qgis_configuration.html">QGIS User Guide — Measurement Settings and Ellipsoid</a>.</li>
+    <li><a href="https://epsg.io/32749">EPSG:32749 — WGS 84 / UTM Zone 49S</a>.</li>
+  </ul>
+  <footer>Sistem Informasi Geospasial · Waljiyanto dan Ni Putu Praja Chintya</footer>
+</main>
+<aside class="toc" aria-label="Pada halaman ini"><strong>Pada halaman ini</strong><a href="#tujuan">Tujuan pembelajaran</a><a href="#alur">Kerangka analisis</a><a href="#retrieval">Penelusuran data</a><a href="#klasifikasi">Klasifikasi data</a><a href="#metode-kelas">Metode pembentukan kelas</a><a href="#pengukuran">Pengukuran spasial</a><a href="#crs-pengukuran">CRS dan pengukuran</a><a href="#kasus">Contoh lengkap</a><a href="#latihan">Latihan</a><a href="#ringkasan">Ringkasan</a><a href="#referensi">Referensi</a></aside>
+</div>
+</body>
+</html>
